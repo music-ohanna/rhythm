@@ -25,6 +25,6 @@
 - 원격 저장소 푸시 및 GitHub Pages 배포는 수행하지 않음 (사용자 최종 승인 대기).
 
 ## 5. 커밋 정보
-- **Commit Hash**: `5522eaa`
+- **Commit Hash**: `27104f1`
 - **Commit Message**: `feat: SPEC-001 구현 완료 및 HANDOFF/STATUS 갱신 (READY_FOR_AUDIT)`
 
