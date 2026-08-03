@@ -41,11 +41,93 @@
         }
         .paper-bg {
             background-color: #ffffff;
-            background-image: 
-                linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
-            background-size: 20px 20px;
         }
+
+        .playback-controls {
+            min-height: 32px;
+            padding: 2px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 700;
+            justify-content: center !important;
+            gap: 18px !important;
+        }
+        .tempo-range { width: min(220px, 30vw); accent-color: #2563eb; }
+        .tempo-value { min-width: 54px; color: #0f172a; font-variant-numeric: tabular-nums; }
+        .metronome-toggle { accent-color: #2563eb; }
+        .instrument-label { display:flex; align-items:center; gap:5px; white-space:nowrap; }
+        .instrument-select { height:25px; min-width:104px; padding:0 24px 0 8px; border:1px solid #cbd5e1; border-radius:8px; background:#fff; color:#334155; font-size:12px; font-weight:800; cursor:pointer; }
+        .view-toggles { display:flex; align-items:center; gap:12px; padding-left:16px; border-left:1px solid #cbd5e1; }
+        .view-option { display:flex; align-items:center; gap:5px; color:#334155; font-size:12px; font-weight:800; cursor:pointer; white-space:nowrap; }
+        .view-option input { width:14px; height:14px; accent-color:#2563eb; cursor:pointer; }
+        .submission-download-btn { padding:4px 10px; border:1px solid #94a3b8; border-radius:8px; background:#ffffff; color:#334155; font-size:12px; font-weight:900; white-space:nowrap; }
+        .submission-download-btn:hover { background:#eef2ff; border-color:#6366f1; color:#4338ca; }
+        .measure-navigator {
+            display:flex; align-items:center; justify-content:center; gap:10px;
+            min-height:42px; margin-bottom:6px; padding:3px 6px;
+            border:1px solid #cbd5e1; border-radius:12px; background:#f8fafc;
+            touch-action:manipulation;
+        }
+        .measure-project-label { color:#475569; font-size:12px; font-weight:900; white-space:nowrap; }
+        .measure-tabs { display:grid; grid-template-columns:repeat(4,minmax(70px,96px)); gap:6px; }
+        .measure-tab {
+            min-height:34px; padding:3px 9px; border:1px solid #cbd5e1; border-radius:9px;
+            background:#ffffff; color:#334155; font-size:12px; font-weight:900; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; gap:6px; touch-action:manipulation;
+        }
+        .measure-tab:hover { background:#eff6ff; border-color:#93c5fd; }
+        .measure-tab.active { background:#2563eb; color:#ffffff; border-color:#1d4ed8; box-shadow:0 2px 6px rgba(37,99,235,.24); }
+        .measure-status { width:7px; height:7px; flex:0 0 7px; border-radius:9999px; background:#cbd5e1; }
+        .measure-tab.partial .measure-status { background:#f59e0b; }
+        .measure-tab.complete .measure-status { background:#22c55e; }
+        .measure-tab.active .measure-status { box-shadow:0 0 0 2px rgba(255,255,255,.55); }
+        .measure-arrow {
+            width:36px; height:36px; flex:0 0 36px; border:1px solid #93c5fd; border-radius:9999px;
+            background:#eff6ff; color:#1d4ed8; font-size:24px; font-weight:900; line-height:1;
+            display:flex; align-items:center; justify-content:center; cursor:pointer; touch-action:manipulation;
+            box-shadow:0 2px 6px rgba(37,99,235,.14);
+        }
+        .measure-arrow:hover { background:#dbeafe; transform:translateY(-1px); }
+        .measure-arrow:disabled { visibility:hidden; pointer-events:none; }
+        .measure-arrow-canvas {
+            position:absolute; top:50%; z-index:42; transform:translateY(-50%);
+            background:rgba(239,246,255,.94); backdrop-filter:blur(2px);
+        }
+        .measure-arrow-canvas.previous { left:10px; right:auto; }
+        .measure-arrow-canvas.next { right:10px; }
+        .measure-arrow-canvas:hover { transform:translateY(-50%) scale(1.05); }
+        .guide-cell.notation-disabled { opacity:.42; background:#e2e8f0 !important; cursor:not-allowed; }
+        .next-measure-preview { display:flex; align-items:center; gap:6px; min-width:210px; height:34px; padding:2px 7px; border:1px solid #cbd5e1; border-radius:9px; background:#fff; }
+        .next-preview-label { width:72px; color:#475569; font-size:10px; font-weight:900; line-height:1.15; text-align:center; }
+        #nextMeasurePreview { width:122px; height:28px; display:block; }
+        .choice-dialog { position:fixed; inset:0; z-index:10020; display:none; align-items:center; justify-content:center; background:rgba(15,23,42,.42); padding:20px; }
+        .choice-dialog.show { display:flex; }
+        .choice-card { width:min(430px,calc(100vw - 32px)); border:2px solid #2563eb; border-radius:18px; background:#fff; padding:22px; box-shadow:0 18px 45px rgba(15,23,42,.3); text-align:center; }
+        .practice-card { width:min(560px,calc(100vw - 28px)); text-align:left; }
+        .practice-stage-list { display:grid; gap:10px; margin:16px 0; }
+        .practice-stage-button { width:100%; border:1px solid #cbd5e1; border-radius:12px; background:#f8fafc; padding:12px 14px; text-align:left; color:#0f172a; cursor:pointer; }
+        .practice-stage-button:hover { background:#eff6ff; border-color:#60a5fa; }
+        .practice-stage-button strong { display:block; color:#1d4ed8; font-size:15px; margin-bottom:3px; }
+        .practice-stage-button span { color:#475569; font-size:12px; line-height:1.45; }
+        #practiceStatus { position:absolute; top:8px; left:50%; z-index:41; transform:translateX(-50%); display:none; align-items:center; gap:8px; max-width:calc(100% - 120px); padding:6px 10px; border:1px solid #93c5fd; border-radius:9999px; background:rgba(239,246,255,.95); color:#1e3a8a; font-size:11px; font-weight:800; box-shadow:0 2px 8px rgba(37,99,235,.15); }
+        #practiceStatus.show { display:flex; }
+        #practiceStatus button { flex:0 0 auto; border:0; border-radius:9999px; background:#2563eb; color:#fff; padding:4px 9px; font-weight:900; cursor:pointer; }
+        .palette-draggable { cursor:grab; touch-action:none; }
+        .palette-draggable:active { cursor:grabbing; }
+        .palette-drag-ghost { position:fixed; z-index:100060; width:58px; height:58px; display:flex; align-items:center; justify-content:center; border:2px solid #2563eb; border-radius:14px; background:rgba(255,255,255,.95); box-shadow:0 10px 24px rgba(15,23,42,.24); pointer-events:none; transform:translate(-50%,-50%) scale(1.08); }
+        #alertOverlay { top:50% !important; left:50% !important; z-index:100080 !important; width:min(620px,calc(100vw - 28px)); min-height:76px; padding:18px 22px !important; border-radius:20px !important; line-height:1.55; text-align:left; white-space:normal; box-shadow:0 22px 55px rgba(15,23,42,.34); transform:translate(-50%,-50%) scale(.96) !important; }
+        #alertOverlay.opacity-100 { opacity:1 !important; transform:translate(-50%,-50%) scale(1) !important; }
+        .choice-title { margin:0 0 8px; color:#0f172a; font-size:20px; font-weight:900; }
+        .choice-description { margin:0 0 18px; color:#475569; font-size:14px; line-height:1.55; }
+        .choice-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .choice-button { min-height:46px; border:1px solid #cbd5e1; border-radius:11px; background:#f8fafc; color:#334155; font-size:14px; font-weight:900; cursor:pointer; touch-action:manipulation; }
+        .choice-button.primary { background:#2563eb; border-color:#1d4ed8; color:#fff; }
+        .submission-name-input { width:100%; margin:2px 0 18px; padding:11px 13px; border:2px solid #cbd5e1; border-radius:11px; color:#0f172a; font-size:15px; font-weight:700; outline:none; }
+        .submission-name-input:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.12); }
+        .play-buttons { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
         
         /* 선택 안내 팝업 스타일 */
         .selection-popup {
@@ -157,24 +239,33 @@
         .-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x,0),var(--tw-translate-y))}.translate-y-\[-20px\]{transform:translateY(-20px)}.translate-y-0{transform:translateY(0)}
         .opacity-0{opacity:0}.opacity-100{opacity:1}.transition{transition:all .15s ease}.transition-all{transition:all .15s ease}.duration-300{transition-duration:.3s}.active\:scale-95:active{transform:scale(.95)}
         @media (min-width:768px){.md\:p-3{padding:.75rem}.md\:text-sm{font-size:.875rem}.md\:text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}.md\:text-2xl{font-size:1.5rem}.md\:h-9{height:2.25rem}.md\:h-10{height:2.5rem}.md\:w-9{width:2.25rem}}
-        /* 스마트폰 세로 화면에서는 강제 회전하지 않고, 가로 사용 안내만 표시합니다. */
+        /* 스마트폰 세로 화면: 한 마디 악보를 유지하면서 도구와 재생부를 세로로 재배치합니다. */
         @media (max-width: 768px) and (orientation: portrait) {
-            body::before {
-                content: "📱 휴대폰을 가로로 돌려 사용해 주세요.";
-                position: fixed;
-                inset: 0;
-                background: #ffffff;
-                color: #0f172a;
-                z-index: 99999;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 24px;
-                font-weight: 800;
-                line-height: 1.4;
-                text-align: center;
-                padding: 30px;
-            }
+            body { height:auto !important; min-height:100dvh; padding:6px !important; overflow-x:hidden; overflow-y:auto; touch-action:pan-y; }
+            header { flex-wrap:wrap; gap:5px; align-items:center; }
+            header h1 { width:100%; font-size:18px !important; line-height:1.15; }
+            header h1 > span { display:none; }
+            header > div { width:100%; justify-content:space-between; gap:5px; }
+            header > div > div:first-child { min-width:0; overflow-x:auto; padding-bottom:2px; touch-action:pan-x; }
+            .text-tool-btn { flex:0 0 auto; padding:5px 8px !important; border-width:1px; font-size:10px !important; white-space:nowrap; }
+            .measure-navigator { gap:4px; min-height:42px; padding:3px 4px; margin-bottom:4px; }
+            .measure-project-label, .next-measure-preview { display:none; }
+            .measure-tabs { flex:1; grid-template-columns:repeat(4,minmax(0,1fr)); gap:3px; }
+            .measure-tab { min-height:32px; padding:2px 3px; font-size:10px; gap:3px; }
+            .measure-status { width:6px; height:6px; flex-basis:6px; }
+            .measure-arrow { width:34px; height:34px; flex-basis:34px; font-size:22px; }
+            #canvasArea { flex:none !important; width:100%; height:360px; min-height:360px; border-radius:12px; }
+            #timeSigArea { width:64px; height:90px; left:0; }
+            footer { width:100%; overflow:visible; }
+            footer > .grid-cols-8 { grid-template-columns:repeat(8,minmax(66px,1fr)); overflow-x:auto; overflow-y:hidden; touch-action:pan-x; }
+            .guide-cell { min-height:28px; }
+            .playback-controls { flex-wrap:wrap; gap:6px !important; padding:5px 6px; }
+            .tempo-range { width:118px; }
+            .view-toggles { order:5; width:100%; justify-content:center; padding:4px 0 0; border-left:0; border-top:1px solid #cbd5e1; gap:10px; }
+            .submission-download-btn { order:4; padding:4px 7px; font-size:11px; }
+            .play-buttons { grid-template-columns:1fr 1fr; gap:5px; height:42px !important; }
+            .play-buttons button { font-size:12px !important; line-height:1.15; padding:3px 5px; }
+            #toast { max-width:calc(100vw - 28px); top:10%; padding:9px 14px; font-size:14px; }
         }
 
         @media screen and (max-width: 900px) and (orientation: landscape) {
@@ -194,6 +285,11 @@
             .guide-cell {
                 min-height: 28px;
             }
+            .measure-navigator { min-height:34px; margin-bottom:3px; padding:2px 4px; }
+            .measure-project-label { font-size:10px; }
+            .measure-tabs { grid-template-columns:repeat(4,minmax(58px,76px)); gap:4px; }
+            .measure-tab { min-height:28px; padding:2px 6px; font-size:11px; }
+            .next-measure-preview { display:none; }
         }
 
 
@@ -391,7 +487,7 @@
 
 
         /* 재생 버튼 상태를 선명하게 표시 */
-        #playBtn {
+        #playBtn, #playAllBtn {
             background: #2563eb !important;
             color: #ffffff !important;
             opacity: 1 !important;
@@ -400,20 +496,48 @@
             transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
         }
         #playBtn:hover { background: #1d4ed8 !important; }
-        #playBtn.playing {
+        #playBtn.playing, #playAllBtn.playing {
             background: #dc2626 !important;
             color: #ffffff !important;
             opacity: 1 !important;
             border-color: #b91c1c;
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
         }
-        #playBtn.playing:hover { background: #b91c1c !important; }
+        #playBtn.playing:hover, #playAllBtn.playing:hover { background: #b91c1c !important; }
+        #playAllBtn { background:#0f766e !important; border-color:#0f5f59 !important; }
+        #playAllBtn:hover { background:#115e59 !important; }
+        #playAllBtn.playing { background:#dc2626 !important; border-color:#b91c1c !important; }
+        .current-play-icon { color:#ffffff; }
+        .project-play-icon { color:#fde047; }
 
     </style>
 </head>
 <body class="h-screen flex flex-col p-2 md:p-3 overflow-hidden">
 
     <div id="toast">메시지</div>
+
+    <div id="playLengthDialog" class="choice-dialog" role="dialog" aria-modal="true" aria-labelledby="playLengthTitle">
+        <div class="choice-card">
+            <h2 id="playLengthTitle" class="choice-title">완성한 마디까지만 연주할까요?</h2>
+            <p id="playLengthDescription" class="choice-description"></p>
+            <div class="choice-actions">
+                <button id="playLengthNo" type="button" class="choice-button">아니오</button>
+                <button id="playLengthYes" type="button" class="choice-button primary">예</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="submissionDialog" class="choice-dialog" role="dialog" aria-modal="true" aria-labelledby="submissionTitle">
+        <div class="choice-card">
+            <h2 id="submissionTitle" class="choice-title">작품 제출 파일 만들기</h2>
+            <p class="choice-description">교사가 파일을 구분할 수 있도록 학생 이름과 작품명을 입력하세요.</p>
+            <input id="submissionNameInput" class="submission-name-input" type="text" maxlength="60" value="이름 - 작품명" aria-label="학생 이름과 작품명">
+            <div class="choice-actions">
+                <button id="submissionCancel" type="button" class="choice-button">취소</button>
+                <button id="submissionSave" type="button" class="choice-button primary">HTML 저장</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 최초 접속 튜토리얼 팝업 -->
     <div id="tutorialOverlay" aria-live="polite" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
@@ -474,14 +598,17 @@
                 <button id="btn-undo" onclick="undoLastAction()" class="text-tool-btn text-xs md:text-sm" title="마지막 작업 되돌리기">
                     <span class="text-base">↩️</span> 되돌리기
                 </button>
-                <button id="btn-delete-note" onclick="toggleDeleteMode()" class="text-tool-btn text-xs md:text-sm" title="선택 삭제 모드: 한 번 누르면 켜지고, 다시 누르면 꺼집니다. 켠 상태에서 음표·쉼표를 연속으로 삭제할 수 있습니다.">
+                <button id="btn-delete-note" onclick="toggleDeleteMode()" class="text-tool-btn text-xs md:text-sm" title="선택 삭제 모드: 음표·쉼표를 한 번 선택하고 같은 기호를 다시 누르면 삭제됩니다. 버튼을 다시 누르면 종료됩니다.">
                     <span class="text-base">🧽</span> <span id="delete-label">선택 삭제</span>
                 </button>
-                <button id="btn-clear-all" onclick="confirmClear()" class="text-tool-btn text-xs md:text-sm" title="악보 전체 삭제">
-                    <span class="text-base">🗑️</span> 전체 삭제
+                <button id="btn-clear-all" onclick="confirmClear()" class="text-tool-btn text-xs md:text-sm" title="현재 마디의 모든 기호 삭제">
+                    <span class="text-base">🗑️</span> 현재 마디 삭제
                 </button>
                 <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs md:text-sm" title="도움말 다시 보기">
                     <span class="text-base">❔</span> 도움말
+                </button>
+                <button id="btn-stage-practice" onclick="openPracticePanel()" class="text-tool-btn text-xs md:text-sm" title="예시부터 독립 창작까지 단계적으로 연습">
+                    <span class="text-base">🎯</span> 단계 연습
                 </button>
             </div>
 
@@ -490,9 +617,24 @@
                 <button onclick="setTimeSig(4,4)" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white text-slate-800 font-bold border border-slate-200 hover:bg-slate-100 text-xs md:text-sm shadow-sm transition">4/4</button>
                 <button onclick="setTimeSig(3,4)" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white text-slate-800 font-bold border border-slate-200 hover:bg-slate-100 text-xs md:text-sm shadow-sm transition">3/4</button>
                 <button onclick="setTimeSig(2,4)" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white text-slate-800 font-bold border border-slate-200 hover:bg-slate-100 text-xs md:text-sm shadow-sm transition">2/4</button>
+                <button onclick="setTimeSig(6,8)" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white text-slate-800 font-bold border border-slate-200 hover:bg-slate-100 text-xs md:text-sm shadow-sm transition">6/8</button>
             </div>
         </div>
     </header>
+
+    <nav id="measureNavigator" class="measure-navigator" aria-label="최대 4마디 작품 탐색">
+        <span class="measure-project-label">최대 4마디 · 한 마디 집중 편집</span>
+        <div class="measure-tabs" role="tablist" aria-label="편집할 마디 선택">
+            <button class="measure-tab active" type="button" role="tab" aria-selected="true" data-measure-index="0" onclick="switchMeasure(0)"><span>1마디</span><i class="measure-status" aria-hidden="true"></i></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="1" onclick="switchMeasure(1)"><span>2마디</span><i class="measure-status" aria-hidden="true"></i></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="2" onclick="switchMeasure(2)"><span>3마디</span><i class="measure-status" aria-hidden="true"></i></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="3" onclick="switchMeasure(3)"><span>4마디</span><i class="measure-status" aria-hidden="true"></i></button>
+        </div>
+        <div class="next-measure-preview" aria-label="다음 마디 미리보기">
+            <span id="nextPreviewLabel" class="next-preview-label">다음 2마디</span>
+            <canvas id="nextMeasurePreview" width="244" height="56" aria-hidden="true"></canvas>
+        </div>
+    </nav>
 
     <!-- 세로 해상도 다이어트형 드로잉 영역 -->
     <main id="canvasArea" class="relative flex-1 paper-bg rounded-2xl border-2 border-slate-400 shadow-md overflow-hidden cursor-default">
@@ -504,7 +646,23 @@
         <div id="timeSigArea" class="absolute top-[23%] left-4 transform -translate-y-1/2 w-24 h-28 cursor-pointer z-30" onclick="inputTimeSig()"></div>
         <div id="cursorIndicator"></div>
         <div id="popupContainer" class="z-50 text-slate-900"></div>
+        <div id="practiceStatus" role="status"><span id="practiceStatusText"></span><button id="practiceStatusAction" type="button" onclick="handlePracticeStatusAction()">정답 확인</button></div>
+        <button id="previousMeasureButton" class="measure-arrow measure-arrow-canvas previous" type="button" onclick="switchMeasure(activeMeasureIndex - 1)" aria-label="이전 마디로 이동" title="이전 마디">‹</button>
+        <button id="nextMeasureButton" class="measure-arrow measure-arrow-canvas next" type="button" onclick="switchMeasure(activeMeasureIndex + 1)" aria-label="다음 마디로 이동" title="다음 마디">›</button>
     </main>
+
+    <div id="practiceOverlay" class="choice-dialog" role="dialog" aria-modal="true" aria-labelledby="practiceTitle">
+        <div class="choice-card practice-card">
+            <h2 id="practiceTitle" class="choice-title">예시 → 따라 하기 → 독립 창작</h2>
+            <p class="choice-description">처음에는 완성된 한 마디를 보고 들은 뒤, 같은 리듬을 직접 만들고, 마지막에는 안내 없이 창작합니다.</p>
+            <div class="practice-stage-list">
+                <button class="practice-stage-button" type="button" onclick="showPracticeExample()"><strong>1. 예시 보기·듣기</strong><span>현재 박자에 맞는 예시 한 마디를 악보와 소리로 확인합니다.</span></button>
+                <button class="practice-stage-button" type="button" onclick="startGuidedPractice()"><strong>2. 따라 만들기</strong><span>예시를 기억하여 직접 입력하고, 정답 확인에서 원인과 수정 방법을 안내받습니다.</span></button>
+                <button class="practice-stage-button" type="button" onclick="startIndependentCreation()"><strong>3. 독립 창작</strong><span>도움 표시를 닫고 자신의 리듬을 자유롭게 만들고 들어봅니다.</span></button>
+            </div>
+            <div class="flex justify-end"><button type="button" class="tutorial-btn" onclick="closePracticePanel()">닫기</button></div>
+        </div>
+    </div>
 
     <!-- 하단 보정 컨트롤 레이아웃 -->
     <footer class="mt-1.5 flex flex-col gap-1.5 shrink-0">
@@ -522,7 +680,7 @@
             <div class="guide-cell bg-slate-200 text-slate-900 text-xs font-extrabold border-r border-slate-200">음표</div>
             <div class="guide-cell bg-white" onclick="addNoteSmart('whole', false)">
                 <svg class="w-7 h-7" viewBox="0 0 100 100">
-                    <ellipse cx="50" cy="50" rx="22" ry="10" fill="none" stroke="#000000" stroke-width="2.6" transform="rotate(-15, 50, 50)"/>
+                    <ellipse cx="50" cy="50" rx="16" ry="7" fill="none" stroke="#000000" stroke-width="4" transform="rotate(-5, 50, 50)"/>
                 </svg>
             </div>
             <div class="guide-cell bg-white" onclick="addNoteSmart('half', false)">
@@ -541,18 +699,18 @@
                 <svg class="w-7 h-7" viewBox="0 0 100 100">
                     <ellipse cx="44" cy="65" rx="13" ry="8.5" fill="#000000" transform="rotate(-18, 44, 65)"/>
                     <line x1="56" y1="63" x2="56" y2="15" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
-                    <path d="M56,16 C68,19 74,28 72,37 C70,44 62,46 61,40 C64,32 63,25 56,23 Z" fill="#000000"/>
+                    <path d="M56,16 C64,18 72,24 73,32 C74,41 69,50 62,55 C66,46 67,38 64,31 C62,26 59,23 56,22 Z" fill="#000000"/>
                 </svg>
             </div>
             <div class="guide-cell bg-white" onclick="addNoteSmart('sixteenth', false)">
                 <svg class="w-7 h-7" viewBox="0 0 100 100">
                     <ellipse cx="44" cy="66" rx="13" ry="8.5" fill="#000000" transform="rotate(-18, 44, 66)"/>
                     <line x1="56" y1="64" x2="56" y2="16" stroke="#000000" stroke-width="4.3" stroke-linecap="round"/>
-                    <path d="M56,16 C68,19 75,28 72,37 C70,44 62,46 61,40 C64,32 63,25 56,23 Z" fill="#000000"/>
-                    <path d="M56,29 C69,32 75,41 72,51 C70,58 62,60 61,54 C64,46 63,39 56,36 Z" fill="#000000"/>
+                    <path d="M56,16 C64,18 71,23 72,29 C73,35 70,40 65,44 C67,37 66,31 63,27 C61,24 59,23 56,22 Z" fill="#000000"/>
+                    <path d="M56,31 C64,33 70,38 71,44 C72,49 69,53 65,56 C67,50 66,44 63,40 C61,37 59,36 56,36 Z" fill="#000000"/>
                 </svg>
             </div>
-            <div class="guide-cell bg-white" onclick="addNoteSmart('triplet', false)">
+            <div id="tripletNoteCell" class="guide-cell bg-white" onclick="addNoteSmart('triplet', false)">
                 <svg class="w-7 h-7" viewBox="0 0 100 100">
                     <line x1="20" y1="28" x2="80" y2="28" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
                     <ellipse cx="25" cy="68" rx="10" ry="6.5" fill="#000000" transform="rotate(-18, 25, 68)"/>
@@ -608,12 +766,43 @@
                 </svg>
             </div>
             <div class="guide-cell bg-white text-gray-300 text-xs">—</div>
-            <div class="guide-cell text-[10px] text-slate-500 font-bold leading-tight flex items-center justify-center bg-slate-50">자유 필기<br>체크 변환</div>
+            <div class="guide-cell bg-slate-50" aria-hidden="true"></div>
         </div>
 
-        <div class="flex gap-2 h-9 md:h-10 shrink-0">
+        <div class="playback-controls flex justify-between items-center gap-2 shrink-0">
+            <label class="flex items-center gap-2">
+                <span>빠르기</span>
+                <input id="tempoSlider" class="tempo-range" type="range" min="40" max="160" step="1" value="60" oninput="setTempo(this.value)" aria-label="빠르기 조절">
+                <span id="tempoValue" class="tempo-value">♩ = 60</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer">
+                <input id="metronomeToggle" class="metronome-toggle" type="checkbox" checked onchange="setMetronomeEnabled(this.checked)" aria-label="짧은 틱 소리 메트로놈">
+                <span>메트로놈</span>
+            </label>
+            <label class="instrument-label">
+                <span>악기</span>
+                <select id="rhythmInstrument" class="instrument-select" onchange="setRhythmInstrument(this.value)" aria-label="리듬 악기 선택">
+                    <option value="synth">기본음</option>
+                    <option value="janggu">장구</option>
+                    <option value="kkwaenggwari">꽹과리</option>
+                    <option value="woodblock">우드블록</option>
+                    <option value="drum">드럼</option>
+                </select>
+            </label>
+            <div class="view-toggles" role="group" aria-label="보기 선택">
+                <label class="view-option"><input id="viewToggleV" type="checkbox" checked onchange="setDisplayLayer('v', this.checked)">V자 리듬</label>
+                <label class="view-option"><input id="viewToggleBlocks" type="checkbox" checked onchange="setDisplayLayer('blocks', this.checked)">정간보</label>
+                <label class="view-option"><input id="viewToggleAccents" type="checkbox" checked onchange="setDisplayLayer('accents', this.checked)">강약 표시</label>
+            </div>
+            <button id="btn-export-score" onclick="downloadPlayableScoreHtml()" class="submission-download-btn" title="교사가 브라우저에서 재생할 수 있는 작품 HTML 파일 저장">⬇️ 작품 제출</button>
+        </div>
+
+        <div class="play-buttons h-9 md:h-10 shrink-0">
             <button id="playBtn" onclick="togglePlay()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-md flex items-center justify-center gap-2 text-base md:text-lg font-bold active:scale-95 transition">
-                ▶️ 전체 연주
+                <span class="current-play-icon">▶</span> 현재 마디 연주 (♩ = 60)
+            </button>
+            <button id="playAllBtn" onclick="toggleProjectPlay()" class="flex-1 text-white rounded-xl shadow-md flex items-center justify-center gap-2 text-base md:text-lg font-bold active:scale-95 transition">
+                <span class="project-play-icon">▶▶</span> 작품 전체 연주
             </button>
         </div>
     </footer>
@@ -665,13 +854,15 @@
         })();
 
         window.PRELOADED_SCORE_STATE = window.PRELOADED_SCORE_STATE || "";
+        window.EXPORTED_MEASURE_COUNT = Number(window.EXPORTED_MEASURE_COUNT) || 0;
+        window.EXPORTED_SUBMISSION_LABEL = window.EXPORTED_SUBMISSION_LABEL || "";
         const SVG = {
             headFilled: "M-11,4 C-11,10 -3,11 6,6 C12,3 12,-3 5,-7 C-3,-11 -11,-3 -11,4 Z",
             headEmpty: "M-11,4 C-11,10 -3,11 6,6 C12,3 12,-3 5,-7 C-3,-11 -11,-3 -11,4 Z M-6,2 C-6,-1 -1,-6 2.5,-4.5 C5.5,-3 4.5,3.5 1.5,4 C-2,4.5 -6,4.5 -6,2 Z",
             whole: "M-20,2 C-20,9 -6,11 11,6 C20,2.5 21,-5.5 13,-9.5 C3,-13 -13,-5.5 -20,2 Z M-10,1 C-10,-1.5 1.5,-8.5 9,-6 C13.5,-4.5 12.5,4.5 8,5 C3,5.5 -10,4.5 -10,1 Z",
-            flag8: "M 11 -48 C 22 -45 28 -37 26 -29 C 24 -22 18 -19 16 -24 C 18 -31 18 -38 11 -42 Z", 
-            flag16_1: "M 11 -48 C 23 -45 30 -38 27 -30 C 25 -24 18 -21 16 -26 C 19 -32 18 -38 11 -42 Z", 
-            flag16_2: "M 11 -35 C 24 -32 30 -24 28 -16 C 26 -9 19 -6 16 -11 C 19 -18 18 -24 11 -28 Z",
+            flag8: "M 11 -48 C 19 -46 27 -40 28 -32 C 29 -23 24 -14 17 -9 C 21 -18 22 -26 19 -33 C 17 -38 14 -41 11 -42 Z",
+            flag16_1: "M 11 -48 C 19 -46 26 -41 27 -35 C 28 -29 25 -24 20 -20 C 22 -27 21 -33 18 -37 C 16 -40 14 -41 11 -42 Z",
+            flag16_2: "M 11 -33 C 19 -31 25 -26 26 -20 C 27 -15 24 -11 20 -8 C 22 -14 21 -20 18 -24 C 16 -27 14 -28 11 -28 Z",
             flag32_3: "M 11 -22 C 24 -19 30 -11 28 -3 C 26 4 19 7 16 2 C 19 -5 18 -11 11 -15 Z",
             restWhole: "M-15,0 L15,0 L15,10 L-15,10 Z", 
             restHalf: "M-15,0 L15,0 L15,-10 L-15,-10 Z",
@@ -747,11 +938,24 @@
             en: {whole:'whole note (4)', half:'half note (2)', quarter:'quarter note (1)', eighth:'eighth note (1/2)', sixteenth:'sixteenth note (1/4)', triplet:'triplet (1 beat)', dot:'dot'},
             zh: {whole:'全音符(4)', half:'二分音符(2)', quarter:'四分音符(1)', eighth:'八分音符(1/2)', sixteenth:'十六分音符(1/4)', triplet:'三连音(1拍)', dot:'附点'}
         };
+        const compoundGuideLabelText = {
+            ko: {whole:'온음표(8)', half:'2분음표(4)', quarter:'4분음표(2)', eighth:'8분음표(1)', sixteenth:'16분음표(1/2)', triplet:'셋잇단음표(사용 안 함)', dot:'점'},
+            en: {whole:'whole note (8)', half:'half note (4)', quarter:'quarter note (2)', eighth:'eighth note (1)', sixteenth:'sixteenth note (1/2)', triplet:'triplet (unavailable)', dot:'dot'},
+            zh: {whole:'全音符(8)', half:'二分音符(4)', quarter:'四分音符(2)', eighth:'八分音符(1)', sixteenth:'十六分音符(1/2)', triplet:'三连音(不可用)', dot:'附点'}
+        };
         function applyGuideLabelLanguage() {
+            const labels = isCompoundSixEight() ? compoundGuideLabelText : guideLabelText;
             document.querySelectorAll('.notation-label').forEach(el => {
                 const key = el.dataset.labelKey;
-                el.textContent = (guideLabelText[guideLabelLanguage] && guideLabelText[guideLabelLanguage][key]) || guideLabelText.ko[key] || el.textContent;
+                el.textContent = (labels[guideLabelLanguage] && labels[guideLabelLanguage][key]) || labels.ko[key] || el.textContent;
             });
+            const tripletCell = document.getElementById('tripletNoteCell');
+            if (tripletCell) {
+                const unavailable = isCompoundSixEight();
+                tripletCell.classList.toggle('notation-disabled', unavailable);
+                tripletCell.setAttribute('aria-disabled', unavailable ? 'true' : 'false');
+                tripletCell.title = unavailable ? '6/8박자는 8분음표 3개가 한 큰박을 이루므로 셋잇단음표를 사용하지 않습니다.' : '셋잇단음표 입력';
+            }
         }
         function cycleLabelLanguage() {
             guideLabelLanguage = guideLabelLanguage === 'ko' ? 'en' : (guideLabelLanguage === 'en' ? 'zh' : 'ko');
@@ -868,6 +1072,36 @@
         const MAX_VISIBLE_MEASURES = 1;             // 한 마디 안에서만 입력·출력
 
         let audioCtx;
+        let rhythmInstrument = 'synth';
+        const rhythmSampleUrls = {
+            woodblock: 'assets/audio/woodblock.ogg',
+            'janggu-strong': 'assets/audio/janggu-strong.wav',
+            'janggu-medium': 'assets/audio/janggu-medium.wav',
+            'janggu-weak': 'assets/audio/janggu-weak.wav',
+            'kkwaenggwari-strong': 'assets/audio/kkwaenggwari-strong.wav',
+            'kkwaenggwari-medium': 'assets/audio/kkwaenggwari-medium.wav',
+            'kkwaenggwari-weak': 'assets/audio/kkwaenggwari-weak.wav',
+            drum: 'assets/audio/drum.flac'
+        };
+        // 국립국악원 WAV에는 약 0.2초의 선행 무음이 있어 실제 타격 직전부터 재생합니다.
+        const rhythmSampleOffsets = {
+            'janggu-strong': 0.193,
+            'janggu-medium': 0.197,
+            'janggu-weak': 0.195,
+            'kkwaenggwari-strong': 0.193,
+            'kkwaenggwari-medium': 0.203,
+            'kkwaenggwari-weak': 0.193
+        };
+        const rhythmSampleBuffers = new Map();
+        const rhythmSampleLoading = new Map();
+        const scheduledAudioNodes = new Set();
+
+        function trackScheduledAudioNode(node) {
+            scheduledAudioNodes.add(node);
+            node.addEventListener('ended', () => scheduledAudioNodes.delete(node), {once: true});
+            return node;
+        }
+
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -882,12 +1116,18 @@
         let dragStartCell = -1;
         let dragEndCell = -1;
 
+        const PROJECT_MEASURE_COUNT = 4;
+        let scoreMeasures = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
+        let measureUndoStacks = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
+        let activeMeasureIndex = 0;
         let points = []; 
-        let notes = []; 
-        let undoStack = [];
+        let notes = scoreMeasures[0];
+        let undoStack = measureUndoStacks[0];
         let currentTool = 'input';
         let deleteMode = false; 
         let deleteSticky = false;
+        let deleteCandidateNote = null;
+        let dotCandidateNote = null;
         let deletePressTimer = null;
         let deleteLongPressHandled = false;
         let tieMode = false;
@@ -902,6 +1142,240 @@
         let currentPlaybackX = 0;
         let playbackAnimFrame;
         let isFirstIteration = true; 
+        let isProjectPlaying = false;
+        let projectPlaybackMeasureCount = PROJECT_MEASURE_COUNT;
+        let playbackReturnMeasureIndex = 0;
+        let tempo = 60;
+        let metronomeEnabled = true;
+        let displayLayers = {v: true, blocks: true, accents: true};
+
+        function queuePlaybackTimeout(callback, delayMs) {
+            const timer = setTimeout(() => {
+                playTimeouts = playTimeouts.filter(item => item !== timer);
+                callback();
+            }, Math.max(0, delayMs));
+            playTimeouts.push(timer);
+            return timer;
+        }
+
+        function syncActiveMeasureState() {
+            scoreMeasures[activeMeasureIndex] = notes;
+            measureUndoStacks[activeMeasureIndex] = undoStack;
+        }
+
+        function updateMeasureNavigator() {
+            syncActiveMeasureState();
+            document.querySelectorAll('.measure-tab').forEach((button) => {
+                const index = Number(button.dataset.measureIndex);
+                const measureNotes = scoreMeasures[index] || [];
+                const timeline = getTimelineGapsFor(measureNotes);
+                const isComplete = measureNotes.length > 0 && !timeline.hasOverlap && !timeline.hasOverflow && timeline.gapTotal <= 0.005;
+                const isPartial = measureNotes.length > 0 && !isComplete;
+                button.classList.toggle('active', index === activeMeasureIndex);
+                button.classList.toggle('complete', isComplete);
+                button.classList.toggle('partial', isPartial);
+                button.setAttribute('aria-selected', index === activeMeasureIndex ? 'true' : 'false');
+                const stateLabel = isComplete ? '완성' : (isPartial ? '작성 중' : '비어 있음');
+                button.setAttribute('aria-label', `${index + 1}마디, ${stateLabel}`);
+                button.title = `${index + 1}마디 · ${stateLabel}`;
+            });
+            const previousButton = document.getElementById('previousMeasureButton');
+            const nextButton = document.getElementById('nextMeasureButton');
+            if (previousButton) previousButton.disabled = activeMeasureIndex <= 0;
+            if (nextButton) nextButton.disabled = activeMeasureIndex >= PROJECT_MEASURE_COUNT - 1;
+            drawNextMeasurePreview();
+        }
+
+        function drawNextMeasurePreview() {
+            const canvas = document.getElementById('nextMeasurePreview');
+            const label = document.getElementById('nextPreviewLabel');
+            if (!canvas || !label) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            ctx.clearRect(0, 0, width, height);
+            ctx.strokeStyle = '#334155';
+            ctx.fillStyle = '#0f172a';
+
+            if (activeMeasureIndex >= PROJECT_MEASURE_COUNT - 1) {
+                label.textContent = '다음 마디';
+                ctx.font = 'bold 20px system-ui';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#64748b';
+                ctx.fillText('작품 끝', width / 2, height / 2);
+                return;
+            }
+
+            const nextIndex = activeMeasureIndex + 1;
+            const nextNotes = scoreMeasures[nextIndex] || [];
+            label.textContent = `다음 ${nextIndex + 1}마디`;
+            const startX = 10;
+            const endX = width - 10;
+            const staffY = 29;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(startX, staffY);
+            ctx.lineTo(endX, staffY);
+            ctx.stroke();
+            ctx.fillRect(endX - 2, 10, 4, 38);
+
+            if (!nextNotes.length) {
+                ctx.font = 'bold 17px system-ui';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillStyle = '#94a3b8';
+                ctx.fillText('비어 있음', width / 2, staffY - 4);
+                return;
+            }
+
+            const measureBeats = getMeasureDurationBeats();
+            nextNotes.filter(note => !note.tiedTo).forEach(note => {
+                const x = startX + 8 + (note.beatOffset / measureBeats) * (endX - startX - 18);
+                if (note.isRest) {
+                    ctx.strokeStyle = '#64748b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(x - 4, staffY - 8);
+                    ctx.lineTo(x + 4, staffY + 2);
+                    ctx.moveTo(x + 4, staffY - 8);
+                    ctx.lineTo(x - 4, staffY + 2);
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = '#0f172a';
+                    ctx.beginPath();
+                    ctx.ellipse(x, staffY, 7, 5, -0.25, 0, Math.PI * 2);
+                    ctx.fill();
+                    if (note.type !== 'whole') ctx.fillRect(x + 5, staffY - 22, 3, 22);
+                }
+            });
+        }
+
+        function switchMeasure(index) {
+            const nextIndex = Math.max(0, Math.min(PROJECT_MEASURE_COUNT - 1, Number(index) || 0));
+            if (nextIndex === activeMeasureIndex) return;
+            if (isPlaying || isCountingIn) stopPerformance();
+            syncActiveMeasureState();
+            activeMeasureIndex = nextIndex;
+            notes = scoreMeasures[activeMeasureIndex] || [];
+            undoStack = measureUndoStacks[activeMeasureIndex] || [];
+            dotCandidateNote = null;
+            setDeleteMode(false, false);
+            tieMode = false;
+            tieSourceNote = null;
+            const tieBtn = document.getElementById('btn-tie-note');
+            if (tieBtn) tieBtn.classList.remove('active');
+            drawAll();
+            showToast(`${activeMeasureIndex + 1}마디를 편집합니다.`, true);
+        }
+
+        function showProjectPlaybackMeasure(index) {
+            syncActiveMeasureState();
+            activeMeasureIndex = index;
+            notes = scoreMeasures[index] || [];
+            undoStack = measureUndoStacks[index] || [];
+            updateMeasureNavigator();
+            drawAll();
+        }
+
+        function setDisplayLayer(layer, enabled) {
+            if (!(layer in displayLayers)) return;
+            displayLayers[layer] = !!enabled;
+            drawAll();
+        }
+
+        function isCompoundSixEight() {
+            return timeSignature.top === 6 && timeSignature.bottom === 8;
+        }
+
+        function getMeasureDurationBeats() {
+            return isCompoundSixEight() ? 3 : timeSignature.top;
+        }
+
+        function getDisplayPulseCount() {
+            return isCompoundSixEight() ? 6 : timeSignature.top;
+        }
+
+        function getDisplayPulseDuration() {
+            return isCompoundSixEight() ? 0.5 : 1;
+        }
+
+        function updatePlayButtonLabel() {
+            const playBtn = document.getElementById('playBtn');
+            const playAllBtn = document.getElementById('playAllBtn');
+            if (playBtn) playBtn.innerHTML = (!isProjectPlaying && (isPlaying || isCountingIn))
+                ? '<span class="current-play-icon">■</span> 연주 중지'
+                : `<span class="current-play-icon">▶</span> 현재 마디 연주 (♩ = ${tempo})`;
+            if (playAllBtn) playAllBtn.innerHTML = isProjectPlaying
+                ? '<span class="project-play-icon">■</span> 작품 연주 중지'
+                : '<span class="project-play-icon">▶▶</span> 작품 전체 연주';
+        }
+
+        function setTempo(value) {
+            tempo = Math.max(40, Math.min(160, Number(value) || 60));
+            const tempoValue = document.getElementById('tempoValue');
+            if (tempoValue) tempoValue.textContent = `♩ = ${tempo}`;
+            updatePlayButtonLabel();
+        }
+
+        function setMetronomeEnabled(enabled) {
+            metronomeEnabled = !!enabled;
+        }
+
+        async function loadRhythmSample(instrument) {
+            if (!rhythmSampleUrls[instrument]) return null;
+            if (rhythmSampleBuffers.has(instrument)) return rhythmSampleBuffers.get(instrument);
+            if (rhythmSampleLoading.has(instrument)) return rhythmSampleLoading.get(instrument);
+            initAudio();
+            const loading = fetch(rhythmSampleUrls[instrument])
+                .then(response => {
+                    if (!response.ok) throw new Error(`sample ${response.status}`);
+                    return response.arrayBuffer();
+                })
+                .then(data => audioCtx.decodeAudioData(data))
+                .then(buffer => {
+                    rhythmSampleBuffers.set(instrument, buffer);
+                    rhythmSampleLoading.delete(instrument);
+                    return buffer;
+                })
+                .catch(error => {
+                    rhythmSampleLoading.delete(instrument);
+                    console.warn('악기 음원 로드 실패:', instrument, error);
+                    return null;
+                });
+            rhythmSampleLoading.set(instrument, loading);
+            return loading;
+        }
+
+        function getInstrumentSampleKeys(instrument = rhythmInstrument) {
+            if (instrument === 'janggu' || instrument === 'kkwaenggwari') {
+                return ['strong', 'medium', 'weak'].map(accent => `${instrument}-${accent}`);
+            }
+            return rhythmSampleUrls[instrument] ? [instrument] : [];
+        }
+
+        function getInstrumentLabel(instrument = rhythmInstrument) {
+            return {
+                synth: '기본음',
+                woodblock: '우드블록',
+                janggu: '장구',
+                kkwaenggwari: '꽹과리',
+                drum: '드럼'
+            }[instrument] || '기본음';
+        }
+
+        async function setRhythmInstrument(instrument) {
+            const supported = instrument === 'synth' || getInstrumentSampleKeys(instrument).length > 0;
+            rhythmInstrument = supported ? instrument : 'synth';
+            if (rhythmInstrument === 'synth') {
+                showToast('리듬 악기를 기본음으로 바꿨습니다.', true);
+                return;
+            }
+            const sampleKeys = getInstrumentSampleKeys();
+            const buffers = await Promise.all(sampleKeys.map(loadRhythmSample));
+            const instrumentLabel = getInstrumentLabel();
+            showToast(buffers.every(Boolean) ? `${instrumentLabel} 실음으로 바꿨습니다.` : '음원을 불러오지 못해 기본음으로 재생합니다.', true);
+        }
 
         function getBeat(type, dotted) {
             let base = 0;
@@ -931,17 +1405,19 @@
         }
 
         function getVisibleTimelineBeats(extraEnd = null) {
-            return timeSignature.top;
+            return getMeasureDurationBeats();
         }
 
         function getMeasureEndForOffset(offset) {
-            return (Math.floor((offset + 0.0001) / timeSignature.top) + 1) * timeSignature.top;
+            const measureDuration = getMeasureDurationBeats();
+            return (Math.floor((offset + 0.0001) / measureDuration) + 1) * measureDuration;
         }
 
         function crossesMeasureLine(start, duration) {
             const end = start + duration;
-            const startMeasure = Math.floor((start + 0.0001) / timeSignature.top);
-            const endMeasure = Math.floor((end - 0.0001) / timeSignature.top);
+            const measureDuration = getMeasureDurationBeats();
+            const startMeasure = Math.floor((start + 0.0001) / measureDuration);
+            const endMeasure = Math.floor((end - 0.0001) / measureDuration);
             return endMeasure > startMeasure;
         }
 
@@ -949,7 +1425,7 @@
         function showMeasureOverflowWarning() {
             initAudio();
             const sig = `${timeSignature.top}/${timeSignature.bottom}`;
-            const msg = `${sig}박자를 초과했습니다. 한 마디 안에서만 입력하세요.`;
+            const msg = `${sig} 한 마디의 길이를 넘습니다. <strong>원인:</strong> 선택한 음가가 남은 칸보다 깁니다. <strong>수정:</strong> 뒤 기호를 선택 삭제하거나 더 짧은 음표·쉼표를 사용하고, 마디가 완성되었다면 오른쪽 화살표로 다음 마디로 이동하세요.`;
             showValidationAlert(msg);
         }
 
@@ -997,6 +1473,61 @@
             return pieces;
         }
 
+        function getStructuralBeatLength() {
+            return isCompoundSixEight() ? 1.5 : 1;
+        }
+
+        function getNextStructuralBeatBoundary(offset) {
+            const beatLength = getStructuralBeatLength();
+            return (Math.floor((offset + 0.0001) / beatLength) + 1) * beatLength;
+        }
+
+        function getNotatableDurationSpecs() {
+            return [
+                {beats: 4, type: 'whole', dotted: false},
+                {beats: 3, type: 'half', dotted: true},
+                {beats: 2, type: 'half', dotted: false},
+                {beats: 1.5, type: 'quarter', dotted: true},
+                {beats: 1, type: 'quarter', dotted: false},
+                {beats: 0.75, type: 'eighth', dotted: true},
+                {beats: 0.5, type: 'eighth', dotted: false},
+                {beats: 0.375, type: 'sixteenth', dotted: true},
+                {beats: 0.25, type: 'sixteenth', dotted: false},
+                {beats: 0.125, type: 'thirtysecond', dotted: false}
+            ];
+        }
+
+        function decomposeNotatableSegment(start, duration) {
+            const pieces = [];
+            let offset = start;
+            let remaining = duration;
+            let guard = 0;
+            const specs = getNotatableDurationSpecs();
+            while (remaining > 0.001 && guard < 32) {
+                const spec = specs.find(candidate => candidate.beats <= remaining + 0.001) || specs[specs.length - 1];
+                pieces.push({beatOffset: offset, type: spec.type, dotted: spec.dotted});
+                offset += spec.beats;
+                remaining -= spec.beats;
+                guard++;
+            }
+            return pieces;
+        }
+
+        // 박의 중간에서 시작한 음가가 다음 박 경계를 넘을 때만 경계에서 자동 분할합니다.
+        // 6/8은 3+3 겹박 구조이므로 점4분음표(1.5) 단위의 큰박 경계를 사용합니다.
+        function splitAcrossStructuralBeatBoundary(start, duration) {
+            const beatLength = getStructuralBeatLength();
+            const aligned = Math.abs(start / beatLength - Math.round(start / beatLength)) < 0.001;
+            if (aligned) return null;
+            const boundary = getNextStructuralBeatBoundary(start);
+            const end = start + duration;
+            if (end <= boundary + 0.001) return null;
+            return [
+                ...decomposeNotatableSegment(start, boundary - start),
+                ...decomposeNotatableSegment(boundary, end - boundary)
+            ];
+        }
+
         function sameGridPosition(a, b, tolerance = 0.001) {
             return Math.abs(a - b) < tolerance;
         }
@@ -1007,8 +1538,9 @@
 
         function isInsideOneMeasure(start, duration) {
             const end = start + duration;
-            const startMeasure = Math.floor((start + 0.0001) / timeSignature.top);
-            const endMeasure = Math.floor((end - 0.0001) / timeSignature.top);
+            const measureDuration = getMeasureDurationBeats();
+            const startMeasure = Math.floor((start + 0.0001) / measureDuration);
+            const endMeasure = Math.floor((end - 0.0001) / measureDuration);
             return startMeasure === endMeasure;
         }
 
@@ -1069,7 +1601,7 @@
         }
 
         function findTripletInsertionSlot(isRest) {
-            for (let beatStart = 0; beatStart < timeSignature.top; beatStart++) {
+            for (let beatStart = 0; beatStart < getMeasureDurationBeats(); beatStart++) {
                 const slots = [0, 1, 2].map(slot => ({
                     slot,
                     offset: getTripletSlotOffset(beatStart, slot),
@@ -1092,7 +1624,7 @@
         }
 
         function addTripletSlotAtOffset(isRest, beatOffset) {
-            if (beatOffset < -0.001 || beatOffset + (1 / 3) > timeSignature.top + 0.001) {
+            if (beatOffset < -0.001 || beatOffset + (1 / 3) > getMeasureDurationBeats() + 0.001) {
                 showMeasureOverflowWarning();
                 return false;
             }
@@ -1100,7 +1632,7 @@
             notes = notes.filter(n => !(n.type === 'triplet' && Math.abs(n.beatOffset - beatOffset) < 0.02));
             removeOverlappingRange(beatOffset, beatOffset + (1 / 3));
             notes.push({type: 'triplet', isRest, beatOffset, dotted: false});
-            playTone(523.25, 0.08, 0.18);
+            playRhythmTone(0.18);
             drawAll();
             showToast(isRest ? '셋잇단 자리의 8분쉼표로 입력했습니다.' : '셋잇단 자리의 8분음표로 입력했습니다.', true);
             return true;
@@ -1154,7 +1686,7 @@
             const duration = getBeat(type, dotted);
             const newStart = beatOffset;
             const newEnd = beatOffset + duration;
-            const maxLimit = timeSignature.top;
+            const maxLimit = getMeasureDurationBeats();
 
             if (newStart < -0.001 || newEnd > maxLimit + 0.001 || crossesMeasureLine(newStart, duration)) {
                 showMeasureOverflowWarning();
@@ -1163,10 +1695,27 @@
 
             pushUndoState();
             removeOverlappingRange(newStart, newEnd);
-            notes.push({type, isRest, beatOffset, dotted});
+            const splitPieces = splitAcrossStructuralBeatBoundary(newStart, duration);
+            if (splitPieces && splitPieces.length > 1) {
+                splitPieces.forEach((piece, index) => {
+                    notes.push({
+                        type: piece.type,
+                        isRest,
+                        beatOffset: piece.beatOffset,
+                        dotted: piece.dotted,
+                        tied: !isRest && index < splitPieces.length - 1,
+                        tiedTo: !isRest && index > 0
+                    });
+                });
+            } else {
+                notes.push({type, isRest, beatOffset, dotted});
+            }
             normalizeSequentialRests();
-            playTone(523.25, 0.08, 0.18);
+            playRhythmTone(0.18);
             drawAll();
+            if (splitPieces && splitPieces.length > 1) {
+                showToast(isRest ? '박 경계에 맞춰 쉼표를 자동 분할했습니다.' : '박 경계에 맞춰 음표를 나누고 붙임줄로 연결했습니다.', true);
+            }
             warnIfInternalGapAfterInput();
             return true;
         }
@@ -1184,6 +1733,14 @@
             return `${dotted ? '점' : ''}${labelMap[type] || ''}`;
         }
 
+        function getScoreLayout() {
+            const width = rhythmCanvas.width || rhythmCanvas.parentElement.clientWidth || window.innerWidth;
+            const compact = width < 700;
+            const startX = compact ? Math.max(78, width * 0.20) : 200;
+            const endX = width - (compact ? Math.max(18, width * 0.045) : 100);
+            return {startX, endX, measureWidth: Math.max(120, endX - startX)};
+        }
+
         function resize() {
             const parent = rhythmCanvas.parentElement;
             rhythmCanvas.width = parent.clientWidth;
@@ -1193,7 +1750,8 @@
             
             // 전역 뷰포트 상대높이 스케일링 설정
             staffY = rhythmCanvas.height * 0.23;      
-            visualizerY = rhythmCanvas.height * 0.51; 
+            // 음표와 V자 리듬을 한눈에 연결해 볼 수 있도록 V자 영역을 악보 쪽으로 당깁니다.
+            visualizerY = rhythmCanvas.height * 0.47;
             blockY = rhythmCanvas.height * 0.74;      
             
             drawAll();
@@ -1228,10 +1786,12 @@
             notes = prev.notes || [];
             if (prev.timeSignature) timeSignature = prev.timeSignature;
             stopPerformance();
+            applyGuideLabelLanguage();
             normalizeTiesAfterDelete();
             setDeleteMode(false, false);
             tieMode = false;
             tieSourceNote = null;
+            dotCandidateNote = null;
             const tieBtn = document.getElementById('btn-tie-note');
             if (tieBtn) tieBtn.classList.remove('active');
             drawAll();
@@ -1248,6 +1808,7 @@
         function setDeleteMode(active, sticky = true) {
             deleteMode = active;
             deleteSticky = active ? true : false;
+            if (!deleteMode) deleteCandidateNote = null;
             if (deleteMode) { tieMode = false; tieSourceNote = null; }
             currentTool = deleteMode ? 'delete-note' : 'input';
             const tieBtn = document.getElementById('btn-tie-note');
@@ -1289,7 +1850,7 @@
 
         function toggleDeleteMode() {
             setDeleteMode(!deleteMode, true);
-            showToast(deleteMode ? '삭제 모드: 지우려는 음표·쉼표를 계속 누르세요. 다시 누르면 입력 모드로 돌아갑니다.' : '입력 모드로 돌아왔습니다.', true);
+            showToast(deleteMode ? '삭제 모드: 기호를 한 번 선택하고 같은 기호를 다시 누르면 삭제됩니다.' : '삭제 선택을 취소하고 입력 모드로 돌아왔습니다.', true);
         }
 
         function toggleTieMode() {
@@ -1384,9 +1945,19 @@
         function eraseNoteAtPosition(p) {
             const target = findNoteAtPosition(p);
             if (!target) {
+                deleteCandidateNote = null;
+                drawAll();
                 showValidationAlert("삭제할 음표나 쉼표를 직접 눌러 주세요.");
                 return false;
             }
+            if (deleteCandidateNote !== target) {
+                deleteCandidateNote = target;
+                drawAll();
+                showToast('삭제할 기호를 선택했습니다. 같은 기호를 한 번 더 누르면 삭제됩니다.', true);
+                return true;
+            }
+            deleteCandidateNote = null;
+            if (dotCandidateNote === target) dotCandidateNote = null;
             if (target.type === 'triplet') {
                 pushUndoState();
                 const beatStart = getTripletBeatStart(target);
@@ -1395,7 +1966,7 @@
                 playTone(300, 0.08, 0.12);
                 turnOffDeleteModeAfterUse();
                 drawAll();
-                showToast(deleteMode ? "삭제했습니다. 계속 삭제하려면 다음 음표를 누르세요." : "삭제했습니다. 실수했다면 되돌리기를 누르세요.", true);
+                showToast(deleteMode ? "삭제했습니다. 다른 기호도 같은 방식으로 선택할 수 있습니다." : "삭제했습니다. 실수했다면 되돌리기를 누르세요.", true);
                 return true;
             }
             pushUndoState();
@@ -1404,18 +1975,175 @@
             playTone(300, 0.08, 0.12);
             turnOffDeleteModeAfterUse();
             drawAll();
-            showToast(deleteMode ? "삭제했습니다. 계속 삭제하려면 다음 음표를 누르세요." : "삭제했습니다. 실수했다면 되돌리기를 누르세요.", true);
+            showToast(deleteMode ? "삭제했습니다. 다른 기호도 같은 방식으로 선택할 수 있습니다." : "삭제했습니다. 실수했다면 되돌리기를 누르세요.", true);
             return true;
         }
 
         function setTimeSig(top, bottom) {
-            if (notes.length) pushUndoState();
+            if (isPlaying || isCountingIn) stopPerformance();
+            syncActiveMeasureState();
             timeSignature.top = top; timeSignature.bottom = bottom;
-            notes = []; 
+            scoreMeasures = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
+            measureUndoStacks = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
+            activeMeasureIndex = 0;
+            notes = scoreMeasures[0];
+            undoStack = measureUndoStacks[0];
+            dotCandidateNote = null;
             initAudio();
             playTone(800, 0.05, 0.05);
+            applyGuideLabelLanguage();
             drawAll();
-            showToast(`${top}/${bottom} 박자로 변경되었습니다.`, true);
+            showToast(`${top}/${bottom} 박자로 변경하고 4마디를 새로 시작합니다.`, true);
+        }
+
+        let guidedPracticeTarget = null;
+        function getAuthoredMeasureNotes(measureNotes = notes) {
+            return (measureNotes || []).filter(note => !note.autoRest);
+        }
+        function getPracticeTarget() {
+            if (isCompoundSixEight()) {
+                return Array.from({length: 6}, (_, index) => ({type:'eighth', isRest:false, beatOffset:index * 0.5, dotted:false}));
+            }
+            return [
+                {type:'quarter', isRest:false, beatOffset:0, dotted:false},
+                {type:'eighth', isRest:false, beatOffset:1, dotted:false},
+                {type:'eighth', isRest:false, beatOffset:1.5, dotted:false},
+                {type:'eighth', isRest:true, beatOffset:2, dotted:false},
+                {type:'eighth', isRest:false, beatOffset:2.5, dotted:false},
+                {type:'eighth', isRest:false, beatOffset:3, dotted:false, tied:true},
+                {type:'eighth', isRest:false, beatOffset:3.5, dotted:false, tiedTo:true}
+            ].filter(note => note.beatOffset + getBeat(note.type, note.dotted) <= getMeasureDurationBeats() + 0.001);
+        }
+
+        function getPracticeTargetLabel() {
+            if (isCompoundSixEight()) return '8분음표 3개 + 8분음표 3개 (강·약·약 | 중강·약·약)';
+            if (timeSignature.top === 2) return '4분음표 → 8분음표 2개';
+            if (timeSignature.top === 3) return '4분음표 → 8분음표 2개 → 8분쉼표+8분음표';
+            return '1박 4분음표 · 2박 8분음표 2개 · 3박 8분쉼표+8분음표 · 4박 붙임줄 8분음표 2개';
+        }
+
+        function openPracticePanel() {
+            document.getElementById('practiceOverlay')?.classList.add('show');
+        }
+
+        function closePracticePanel() {
+            document.getElementById('practiceOverlay')?.classList.remove('show');
+        }
+
+        async function showPracticeExample() {
+            stopPerformance();
+            pushUndoState();
+            const example = getPracticeTarget();
+            notes.splice(0, notes.length, ...example.map(note => ({...note})));
+            guidedPracticeTarget = example.map(note => ({...note}));
+            dotCandidateNote = null;
+            syncActiveMeasureState();
+            closePracticePanel();
+            showPracticeStatus('example');
+            drawAll();
+            showToast(`예시: ${getPracticeTargetLabel()}`, true);
+            await startPerformance();
+        }
+
+        function startGuidedPractice() {
+            stopPerformance();
+            pushUndoState();
+            guidedPracticeTarget = getPracticeTarget().map(note => ({...note}));
+            notes.splice(0, notes.length);
+            dotCandidateNote = null;
+            syncActiveMeasureState();
+            closePracticePanel();
+            showPracticeStatus('guided');
+            drawAll();
+            showToast('예시를 기억해 한 마디를 직접 입력한 뒤 정답 확인을 누르세요.', true);
+        }
+
+        function hidePracticeStatus() {
+            document.getElementById('practiceStatus')?.classList.remove('show');
+        }
+
+        let practiceStatusMode = 'guided';
+        function showPracticeStatus(mode) {
+            practiceStatusMode = mode;
+            const status = document.getElementById('practiceStatus');
+            const text = document.getElementById('practiceStatusText');
+            const action = document.getElementById('practiceStatusAction');
+            if (mode === 'example') {
+                if (text) text.textContent = '예시를 보고 들어보세요.';
+                if (action) action.textContent = '따라 만들기';
+            } else {
+                if (text) text.textContent = '연한 회색 기호를 따라 입력하세요.';
+                if (action) action.textContent = '정답 확인';
+            }
+            if (status) status.classList.add('show');
+        }
+
+        function handlePracticeStatusAction() {
+            if (practiceStatusMode === 'example') startGuidedPractice();
+            else checkGuidedPractice();
+        }
+
+        function startIndependentCreation() {
+            stopPerformance();
+            guidedPracticeTarget = null;
+            hidePracticeStatus();
+            closePracticePanel();
+            const nextEmpty = scoreMeasures.findIndex((measure, index) => index > activeMeasureIndex && getAuthoredMeasureNotes(measure).length === 0);
+            if (nextEmpty >= 0) switchMeasure(nextEmpty);
+            showToast('독립 창작 단계입니다. 원하는 리듬을 만들고 반복 재생하며 수정해 보세요.', true);
+        }
+
+        function describePracticeEvent(note) {
+            const typeLabel = {whole:'온음표', half:'2분음표', quarter:'4분음표', eighth:'8분음표', sixteenth:'16분음표'}[note.type] || '음표';
+            return `${note.dotted ? '점' : ''}${typeLabel}${note.isRest ? '쉼표' : ''}`.replace('음표쉼표', '쉼표');
+        }
+
+        function checkGuidedPractice() {
+            if (!guidedPracticeTarget) {
+                showValidationAlert('따라 만들기 단계가 아닙니다. <strong>단계 연습 → 2. 따라 만들기</strong>를 먼저 선택하세요.');
+                return;
+            }
+            const actual = getAuthoredMeasureNotes(notes).slice().sort((a,b) => a.beatOffset - b.beatOffset);
+            const target = guidedPracticeTarget.slice().sort((a,b) => a.beatOffset - b.beatOffset);
+            if (!actual.length) {
+                showValidationAlert(`아직 입력된 기호가 없습니다. 예시의 첫 기호인 <strong>${describePracticeEvent(target[0])}</strong>부터 입력하세요.`);
+                return;
+            }
+            for (let index = 0; index < target.length; index++) {
+                const expected = target[index];
+                const current = actual[index];
+                const order = index + 1;
+                if (!current) {
+                    showValidationAlert(`<strong>기호 수 오류:</strong> ${order}번째 기호가 비어 있습니다. 예시의 <strong>${describePracticeEvent(expected)}</strong>를 이어서 입력하세요.`);
+                    return;
+                }
+                if (!!current.isRest !== !!expected.isRest) {
+                    showValidationAlert(`<strong>음표·쉼표 종류 오류:</strong> ${order}번째는 현재 ${current.isRest ? '쉼표' : '음표'}이지만 예시는 ${expected.isRest ? '쉼표' : '음표'}입니다. 선택 삭제로 지운 뒤 <strong>${describePracticeEvent(expected)}</strong>를 입력하세요.`);
+                    return;
+                }
+                if (current.type !== expected.type || !!current.dotted !== !!expected.dotted) {
+                    showValidationAlert(`<strong>음가 오류:</strong> ${order}번째는 현재 <strong>${describePracticeEvent(current)}</strong>, 예시는 <strong>${describePracticeEvent(expected)}</strong>입니다. 길이가 다른 기호이므로 선택 삭제 후 예시와 같은 음가로 다시 입력하세요.`);
+                    return;
+                }
+                if (Math.abs(current.beatOffset - expected.beatOffset) > 0.001) {
+                    showValidationAlert(`<strong>위치 오류:</strong> ${order}번째 기호의 시작 위치가 예시와 다릅니다. 앞부분의 빈칸이나 잘못된 음가가 원인입니다. 앞 기호부터 확인하여 빈칸을 채우거나 잘못된 기호를 수정하세요.`);
+                    return;
+                }
+                if (!!current.tied !== !!expected.tied || !!current.tiedTo !== !!expected.tiedTo) {
+                    if (expected.tied || expected.tiedTo) {
+                        showValidationAlert(`<strong>붙임줄 오류:</strong> 마지막 두 8분음표의 종류와 위치는 맞지만 붙임줄 연결이 없습니다. 위의 <strong>붙임줄</strong> 버튼을 누른 뒤 두 음표를 왼쪽부터 차례로 선택하세요.`);
+                    } else {
+                        showValidationAlert(`<strong>붙임줄 오류:</strong> 예시에서 연결하지 않은 음표에 붙임줄이 있습니다. 되돌리기로 연결을 취소한 뒤 다시 확인하세요.`);
+                    }
+                    return;
+                }
+            }
+            if (actual.length > target.length) {
+                showValidationAlert(`예시보다 기호가 ${actual.length - target.length}개 많습니다. 끝에 추가된 기호를 선택 삭제한 뒤 다시 확인하세요.`);
+                return;
+            }
+            playTone(880, 0.12, 0.12, 'sine');
+            showToast('예시 리듬과 같습니다! 이제 단계 연습에서 독립 창작으로 넘어가세요.', true);
         }
         
         function inputTimeSig() {
@@ -1437,9 +2165,10 @@
         function confirmClear() { 
             if (notes.length) pushUndoState();
             notes=[]; 
+            dotCandidateNote = null;
             stopPerformance(); 
             drawAll(); 
-            showToast("깨끗이 지워졌습니다.", true); 
+            showToast(`${activeMeasureIndex + 1}마디를 지웠습니다.`, true);
         }
 
         function clearDrawings() {
@@ -1485,13 +2214,13 @@
                 alertOverlay.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
                 warningShowing = false;
                 warningTimer = null;
-            }, 3000);
+            }, 5200);
         }
 
         // 절대적 박자 타임라인 내부 빈 공간(Gap)을 먼저 찾아서 정밀 배치해 주는 알고리즘
         function findFirstVacantOffset(duration) {
             const step = 0.25; 
-            const limit = timeSignature.top;
+            const limit = getMeasureDurationBeats();
             for (let offset = 0; offset <= limit - duration + 0.001; offset += step) {
                 let hasOverlap = false;
                 for (let n of notes) {
@@ -1512,12 +2241,18 @@
         function addNoteSmart(type, isRest) {
             initAudio();
 
+            if (type === 'triplet' && isCompoundSixEight()) {
+                playTone(180, 0.08, 0.05, 'sine');
+                showValidationAlert('6/8박자는 8분음표 3개씩 묶이는 겹박자라 셋잇단음표를 넣지 않습니다. 8분음표 또는 16분음표 조합을 사용해 주세요.');
+                return;
+            }
+
             // 셋잇단음표는 항상 3개의 음표 세트로만 입력합니다.
             // 8분쉼표/8분음표가 셋잇단 내부로 끼어들어 부분 셋잇단처럼 보이지 않게 막습니다.
 
             const duration = (type === 'triplet') ? 1.0 : getBeat(type, false);
             const vacantOffset = findFirstVacantOffset(duration);
-            if (vacantOffset === -1 || vacantOffset + duration > timeSignature.top + 0.001) {
+            if (vacantOffset === -1 || vacantOffset + duration > getMeasureDurationBeats() + 0.001) {
                 showMeasureOverflowWarning();
                 return;
             }
@@ -1528,7 +2263,7 @@
                 notes.push({type: 'triplet', isRest: false, beatOffset: vacantOffset, dotted: false});
                 notes.push({type: 'triplet', isRest: false, beatOffset: vacantOffset + 0.333333, dotted: false});
                 notes.push({type: 'triplet', isRest: false, beatOffset: vacantOffset + 0.666666, dotted: false});
-                playTone(523.25, 0.08, 0.18);
+                playRhythmTone(0.18);
                 drawAll();
             } else {
                 addDurationAtOffset(type, isRest, vacantOffset, false);
@@ -1546,7 +2281,7 @@
             const secondDuration = getBeat(secondType, secondDotted);
             const newStart = beatOffset;
             const newEnd = beatOffset + firstDuration + secondDuration;
-            const limit = timeSignature.top;
+            const limit = getMeasureDurationBeats();
 
             if (newEnd > limit + 0.001) {
                 showMeasureOverflowWarning();
@@ -1563,7 +2298,7 @@
 
             notes.push({type: firstType, isRest: false, beatOffset, dotted: firstDotted, tied: true});
             notes.push({type: secondType, isRest: false, beatOffset: beatOffset + firstDuration, dotted: secondDotted, tiedTo: true});
-            playTone(523.25, 0.08, 0.18);
+            playRhythmTone(0.18);
             drawAll();
         }
 
@@ -1585,13 +2320,13 @@
         function toggleLastDot() {
             if (notes.length === 0) return;
             initAudio();
-            const target = getLastEditableNote();
+            const target = dotCandidateNote && notes.includes(dotCandidateNote) ? dotCandidateNote : getLastEditableNote();
             if (!target) {
                 showValidationAlert('셋잇단음표에는 점을 붙이지 않아요. 다른 음표를 선택해 주세요.');
                 return;
             }
 
-            const limit = timeSignature.top;
+            const limit = getMeasureDurationBeats();
             const oldDuration = getBeat(target.type, target.dotted);
             const nextDuration = getBeat(target.type, !target.dotted);
             const newStart = target.beatOffset;
@@ -1599,7 +2334,8 @@
             const newEnd = newStart + nextDuration;
 
             if (newEnd > limit + 0.001) {
-                showMeasureOverflowWarning();
+                const neededEighths = Math.round((newEnd - limit) / 0.5);
+                showValidationAlert(`${timeSignature.top}/${timeSignature.bottom} 마디 끝을 ${neededEighths > 0 ? `8분음표 ${neededEighths}칸만큼 ` : ''}넘습니다. <strong>원인:</strong> ${describePracticeEvent(target)}가 마디 끝에 너무 가깝습니다. <strong>수정:</strong> 앞쪽의 점을 붙일 음표를 악보에서 선택하거나, 뒤 기호를 선택 삭제해 빈칸을 만든 뒤 다시 누르세요.`);
                 return;
             }
 
@@ -1613,27 +2349,27 @@
             if (conflict) {
                 const targetBeat = Math.floor(newStart + 0.0001) + 1;
                 if (Math.floor((newEnd - 0.001) + 0.0001) > Math.floor(newStart + 0.0001)) {
-                    showValidationAlert(`${targetBeat}박 안의 남은 칸이 부족해요. 뒤 음표나 쉼표를 먼저 지워 주세요.`);
+                    showValidationAlert(`${targetBeat}박 안의 남은 칸이 부족합니다. <strong>원인:</strong> 점을 붙이면 뒤 기호와 겹칩니다. <strong>수정:</strong> 겹치는 뒤 음표나 쉼표를 선택 삭제한 뒤 다시 점을 누르세요.`);
                 } else {
-                    showValidationAlert('점을 붙이면 다음 음표와 겹쳐요. 뒤 음표나 쉼표를 먼저 지워 주세요.');
+                    showValidationAlert('점을 붙이면 다음 음표와 겹칩니다. <strong>수정:</strong> 뒤 음표나 쉼표를 선택 삭제한 뒤 다시 점을 누르세요.');
                 }
                 return;
             }
 
+            pushUndoState();
             target.dotted = !target.dotted;
+            dotCandidateNote = null;
             normalizeSequentialRests();
             playTone(600, 0.08, 0.18);
             drawAll();
-            showToast(target.dotted ? '마지막 음표에 점을 붙였습니다.' : '마지막 음표의 점을 뺐습니다.', true);
+            showToast(target.dotted ? '선택한 음표에 점을 붙였습니다.' : '선택한 음표의 점을 뺐습니다.', true);
         }
 
         drawingCanvas.addEventListener('pointerdown', e => {
             initAudio();
             const pos = getPos(e);
             
-            const startX = 200;
-            const endX = rhythmCanvas.width - 100;
-            const measureWidth = endX - startX;
+            const {startX, endX, measureWidth} = getScoreLayout();
             const totalSelectionUnits = getVisibleTimelineBeats() * GRID_SELECTION_UNITS_PER_BEAT;
             const selectionUnitWidth = measureWidth / totalSelectionUnits;
 
@@ -1644,6 +2380,14 @@
 
             if (deleteMode) {
                 eraseNoteAtPosition(pos);
+                return;
+            }
+
+            const notationTarget = findNoteAtPosition(pos);
+            if (notationTarget && !notationTarget.autoRest && notationTarget.type !== 'triplet') {
+                dotCandidateNote = notationTarget;
+                drawAll();
+                showToast(`${describePracticeEvent(notationTarget)}를 선택했습니다. 점 버튼을 누르면 점음표로 바뀝니다.`, true);
                 return;
             }
 
@@ -1730,7 +2474,7 @@
         function addTiedDurationAtOffset(beatOffset, duration) {
             const newStart = beatOffset;
             const newEnd = beatOffset + duration;
-            const maxLimit = timeSignature.top;
+            const maxLimit = getMeasureDurationBeats();
 
             if (newEnd > maxLimit + 0.001) {
                 showMeasureOverflowWarning();
@@ -1751,7 +2495,7 @@
                 });
             });
 
-            playTone(523.25, 0.08, 0.18);
+            playRhythmTone(0.18);
             drawAll();
             showToast('선택한 길이를 붙임줄 음표로 바로 입력했습니다.', true);
         }
@@ -1779,9 +2523,7 @@
         function showGridSelectionPopup(minCell, maxCell, unitCount) {
             popupContainer.innerHTML = '';
             
-            const startX = 200;
-            const endX = rhythmCanvas.width - 100;
-            const measureWidth = endX - startX;
+            const {startX, endX, measureWidth} = getScoreLayout();
             const totalSelectionUnits = getVisibleTimelineBeats() * GRID_SELECTION_UNITS_PER_BEAT;
             const selectionUnitWidth = measureWidth / totalSelectionUnits;
             
@@ -1993,7 +2735,7 @@
             if (isDigitThree) {
                 analogDrawings.pop(); // 직접 드로잉한 '3' 자국 소거
                 addNoteSmart('triplet', false); // 표준 셋잇단음표 생성 실행
-                showToast("숫자 '3' 제스처 감지: 셋잇단음표가 자동 입력되었습니다!", true);
+                if (!isCompoundSixEight()) showToast("숫자 '3' 제스처 감지: 셋잇단음표가 자동 입력되었습니다!", true);
                 return;
             }
 
@@ -2072,9 +2814,9 @@
 
         function closePopup() { popupContainer.innerHTML = ''; }
 
-        function getTimelineGaps() {
+        function getTimelineGapsFor(sourceNotes) {
             const limit = getVisibleTimelineBeats();
-            const sorted = notes
+            const sorted = sourceNotes
                 .filter(n => !n.autoRest)
                 .slice()
                 .sort((a, b) => a.beatOffset - b.beatOffset);
@@ -2100,6 +2842,10 @@
 
             const gapTotal = gaps.reduce((sum, g) => sum + g.duration, 0);
             return {gaps, gapTotal, hasOverlap, hasOverflow};
+        }
+
+        function getTimelineGaps() {
+            return getTimelineGapsFor(notes);
         }
 
         function formatBeatAmount(value) {
@@ -2157,17 +2903,24 @@
         }
 
         function encodeScoreState() {
+            syncActiveMeasureState();
+            const serializeNotes = measureNotes => measureNotes.filter(n => !n.autoRest).map(n => ({
+                type: n.type,
+                isRest: !!n.isRest,
+                beatOffset: Math.round(n.beatOffset * 1000000) / 1000000,
+                dotted: !!n.dotted,
+                tied: !!n.tied,
+                tiedTo: !!n.tiedTo
+            }));
             const payload = {
-                v: 1,
+                v: 3,
                 t: timeSignature,
-                n: notes.filter(n => !n.autoRest).map(n => ({
-                    type: n.type,
-                    isRest: !!n.isRest,
-                    beatOffset: Math.round(n.beatOffset * 1000000) / 1000000,
-                    dotted: !!n.dotted,
-                    tied: !!n.tied,
-                    tiedTo: !!n.tiedTo
-                }))
+                a: activeMeasureIndex,
+                m: scoreMeasures.map(serializeNotes),
+                p: tempo,
+                i: rhythmInstrument,
+                e: metronomeEnabled,
+                d: displayLayers
             };
             return btoa(unescape(encodeURIComponent(JSON.stringify(payload))))
                 .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -2177,17 +2930,43 @@
             try {
                 const padded = encoded.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((encoded.length + 3) % 4);
                 const payload = JSON.parse(decodeURIComponent(escape(atob(padded))));
-                if (!payload || !payload.t || !Array.isArray(payload.n)) return false;
+                if (!payload || !payload.t || (!Array.isArray(payload.n) && !Array.isArray(payload.m))) return false;
                 timeSignature = {top: Number(payload.t.top) || 4, bottom: Number(payload.t.bottom) || 4};
-                notes = payload.n.map(n => ({
+                const deserializeNotes = source => (Array.isArray(source) ? source : []).map(n => ({
                     type: n.type,
                     isRest: !!n.isRest,
                     beatOffset: Number(n.beatOffset) || 0,
                     dotted: !!n.dotted,
                     tied: !!n.tied,
                     tiedTo: !!n.tiedTo
-                })).filter(n => n.beatOffset >= 0 && n.beatOffset < timeSignature.top + 0.001);
+                })).filter(n => n.beatOffset >= 0 && n.beatOffset < getMeasureDurationBeats() + 0.001);
+                const savedMeasures = Array.isArray(payload.m) ? payload.m : [payload.n];
+                scoreMeasures = Array.from({length: PROJECT_MEASURE_COUNT}, (_, index) => deserializeNotes(savedMeasures[index]));
+                measureUndoStacks = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
+                activeMeasureIndex = Math.max(0, Math.min(PROJECT_MEASURE_COUNT - 1, Number(payload.a) || 0));
+                notes = scoreMeasures[activeMeasureIndex];
+                undoStack = measureUndoStacks[activeMeasureIndex];
+                if (Number.isFinite(Number(payload.p))) {
+                    setTempo(Number(payload.p));
+                    const tempoControl = document.getElementById('tempoSlider');
+                    if (tempoControl) tempoControl.value = String(tempo);
+                }
+                if (typeof payload.e === 'boolean') {
+                    setMetronomeEnabled(payload.e);
+                    const metronomeToggle = document.getElementById('metronomeToggle');
+                    if (metronomeToggle) metronomeToggle.checked = metronomeEnabled;
+                }
+                if (payload.d && typeof payload.d === 'object') {
+                    Object.keys(displayLayers).forEach(key => {
+                        if (typeof payload.d[key] === 'boolean') displayLayers[key] = payload.d[key];
+                    });
+                }
+                const savedInstrument = typeof payload.i === 'string' ? payload.i : 'synth';
+                const instrumentSelect = document.getElementById('rhythmInstrument');
+                if (instrumentSelect) instrumentSelect.value = savedInstrument;
+                setRhythmInstrument(savedInstrument);
                 normalizeSequentialRests();
+                applyGuideLabelLanguage();
                 drawAll();
                 return true;
             } catch (e) {
@@ -2205,6 +2984,228 @@
                 prompt('작품 링크를 복사하세요. 같은 HTML 주소에서 열면 악보가 복원됩니다.', url);
             }
         }
+
+        function bindPaletteDragAndDrop() {
+            document.querySelectorAll('.guide-cell[onclick]').forEach(cell => {
+                const source = cell.getAttribute('onclick') || '';
+                const match = source.match(/addNoteSmart\('([^']+)',\s*(true|false)\)/);
+                if (!match || match[1] === 'triplet') return;
+                const type = match[1];
+                const isRest = match[2] === 'true';
+                cell.classList.add('palette-draggable');
+                cell.title = `${cell.title ? `${cell.title} · ` : ''}누르거나 악보의 원하는 위치로 끌어 놓으세요.`;
+
+                cell.addEventListener('click', event => {
+                    if (cell.dataset.suppressClick !== '1') return;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    cell.dataset.suppressClick = '0';
+                }, true);
+
+                cell.addEventListener('pointerdown', event => {
+                    if (event.button !== 0) return;
+                    const start = {x:event.clientX, y:event.clientY};
+                    let active = false;
+                    let ghost = null;
+
+                    const move = moveEvent => {
+                        const distance = Math.hypot(moveEvent.clientX - start.x, moveEvent.clientY - start.y);
+                        if (!active && distance < 8) return;
+                        if (!active) {
+                            active = true;
+                            ghost = document.createElement('div');
+                            ghost.className = 'palette-drag-ghost';
+                            ghost.innerHTML = cell.innerHTML;
+                            document.body.appendChild(ghost);
+                        }
+                        moveEvent.preventDefault();
+                        ghost.style.left = `${moveEvent.clientX}px`;
+                        ghost.style.top = `${moveEvent.clientY}px`;
+                    };
+
+                    const finish = upEvent => {
+                        document.removeEventListener('pointermove', move);
+                        document.removeEventListener('pointerup', finish);
+                        document.removeEventListener('pointercancel', cancel);
+                        if (ghost) ghost.remove();
+                        if (!active) return;
+                        cell.dataset.suppressClick = '1';
+                        setTimeout(() => { cell.dataset.suppressClick = '0'; }, 120);
+                        const canvasRect = document.getElementById('canvasArea')?.getBoundingClientRect();
+                        if (canvasRect && upEvent.clientX >= canvasRect.left && upEvent.clientX <= canvasRect.right && upEvent.clientY >= canvasRect.top && upEvent.clientY <= canvasRect.bottom) {
+                            dropPaletteNotation(type, isRest, upEvent.clientX, canvasRect);
+                        } else {
+                            showValidationAlert('<strong>놓을 위치 오류:</strong> 기호를 한 줄 악보 안쪽에 놓아 주세요. 아래 입력표로 되돌려 놓으면 악보는 바뀌지 않습니다.');
+                        }
+                    };
+
+                    const cancel = () => {
+                        document.removeEventListener('pointermove', move);
+                        document.removeEventListener('pointerup', finish);
+                        document.removeEventListener('pointercancel', cancel);
+                        if (ghost) ghost.remove();
+                    };
+
+                    document.addEventListener('pointermove', move, {passive:false});
+                    document.addEventListener('pointerup', finish, {once:true});
+                    document.addEventListener('pointercancel', cancel, {once:true});
+                });
+            });
+        }
+
+        function dropPaletteNotation(type, isRest, clientX, canvasRect) {
+            const duration = getBeat(type, false);
+            const {startX, measureWidth} = getScoreLayout();
+            const totalBeats = getMeasureDurationBeats();
+            const localX = clientX - canvasRect.left;
+            const rawOffset = ((localX - startX) / measureWidth) * totalBeats - 0.125;
+            const snappedOffset = Math.round(rawOffset / 0.25) * 0.25;
+            const beatOffset = Math.max(0, Math.min(totalBeats - duration, snappedOffset));
+            const changed = addDurationAtOffset(type, isRest, beatOffset, false);
+            if (changed !== false) {
+                const unitLabel = isCompoundSixEight() ? `${Math.round(beatOffset / 0.5) + 1}번째 8분박` : `${Math.floor(beatOffset) + 1}박`;
+                showToast(`${unitLabel} 위치를 ${describePracticeEvent({type,isRest,dotted:false})}(으)로 바꿨습니다.`, true);
+            }
+        }
+
+        window.addEventListener('load', bindPaletteDragAndDrop);
+
+        function getCompletedSubmissionMeasureCount() {
+            syncActiveMeasureState();
+            let completedCount = 0;
+            while (completedCount < PROJECT_MEASURE_COUNT && !validateMeasureForPlayback(scoreMeasures[completedCount], completedCount)) {
+                completedCount++;
+            }
+            return completedCount;
+        }
+
+        function arrayBufferToBase64(buffer) {
+            const bytes = new Uint8Array(buffer);
+            let binary = '';
+            const chunkSize = 0x8000;
+            for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+                binary += String.fromCharCode(...bytes.subarray(offset, offset + chunkSize));
+            }
+            return btoa(binary);
+        }
+
+        async function fetchAudioAsDataUri(url) {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`audio ${response.status}`);
+            const buffer = await response.arrayBuffer();
+            const extension = url.split('.').pop().toLowerCase();
+            const mime = extension === 'wav' ? 'audio/wav' : (extension === 'flac' ? 'audio/flac' : 'audio/ogg');
+            return `data:${mime};base64,${arrayBufferToBase64(buffer)}`;
+        }
+
+        function applyExportedSubmissionMode() {
+            if (!window.EXPORTED_SUBMISSION_LABEL) return;
+            document.title = `${window.EXPORTED_SUBMISSION_LABEL} · 리듬 작품`;
+            document.body.classList.add('exported-submission');
+            const heading = document.querySelector('header h1');
+            if (heading && !document.getElementById('submissionBadge')) {
+                const badge = document.createElement('span');
+                badge.id = 'submissionBadge';
+                badge.textContent = `제출 작품 · ${window.EXPORTED_SUBMISSION_LABEL}`;
+                badge.style.cssText = 'margin-left:10px;padding:4px 9px;border-radius:999px;background:#dcfce7;color:#166534;font-size:12px;font-weight:800;white-space:nowrap;';
+                heading.appendChild(badge);
+            }
+            const exportButton = document.getElementById('btn-export-score');
+            if (exportButton) exportButton.style.display = 'none';
+            document.querySelectorAll('header button:not(#btn-help-tutorial), .guide-cell[onclick]').forEach(control => {
+                control.setAttribute('aria-disabled', 'true');
+                control.style.pointerEvents = 'none';
+                control.style.opacity = '0.48';
+            });
+            const instrumentSelect = document.getElementById('rhythmInstrument');
+            if (instrumentSelect) {
+                instrumentSelect.disabled = true;
+                instrumentSelect.title = '학생이 제출할 때 선택한 악기입니다.';
+            }
+        }
+
+        function askSubmissionLabel() {
+            const dialog = document.getElementById('submissionDialog');
+            const input = document.getElementById('submissionNameInput');
+            const saveButton = document.getElementById('submissionSave');
+            const cancelButton = document.getElementById('submissionCancel');
+            dialog.classList.add('show');
+            input.focus();
+            input.select();
+            return new Promise(resolve => {
+                const finish = value => {
+                    dialog.classList.remove('show');
+                    saveButton.onclick = null;
+                    cancelButton.onclick = null;
+                    input.onkeydown = null;
+                    resolve(value);
+                };
+                saveButton.onclick = () => finish((input.value || '').trim());
+                cancelButton.onclick = () => finish(null);
+                input.onkeydown = event => {
+                    if (event.key === 'Enter') finish((input.value || '').trim());
+                    if (event.key === 'Escape') finish(null);
+                };
+            });
+        }
+
+        async function downloadPlayableScoreHtml() {
+            if (isPlaying || isCountingIn) stopPerformance();
+            const completedCount = getCompletedSubmissionMeasureCount();
+            if (completedCount < 1) {
+                const warning = validateMeasureForPlayback(scoreMeasures[0], 0) || '1마디를 먼저 완성하세요.';
+                switchMeasure(0);
+                showValidationAlert(warning);
+                return;
+            }
+            const unfinishedLaterIndex = scoreMeasures.findIndex((measureNotes, index) => index >= completedCount && measureNotes.length > 0);
+            if (unfinishedLaterIndex >= 0) {
+                switchMeasure(unfinishedLaterIndex);
+                showValidationAlert(validateMeasureForPlayback(scoreMeasures[unfinishedLaterIndex], unfinishedLaterIndex) || `${unfinishedLaterIndex + 1}마디를 완성하세요.`);
+                return;
+            }
+
+            const enteredLabel = await askSubmissionLabel();
+            if (enteredLabel === null) return;
+            const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
+            showToast('재생 가능한 작품 파일을 만드는 중입니다.', true);
+
+            let html = `<!DOCTYPE html>\n${document.documentElement.outerHTML}`;
+            const encodedState = encodeScoreState();
+            const safeLabelLiteral = JSON.stringify(submissionLabel)
+                .replace(/</g, '\\u003c')
+                .replace(/\u2028/g, '\\u2028')
+                .replace(/\u2029/g, '\\u2029');
+            const preloadMarker = 'window.PRELOADED_SCORE_STATE = window.PRELOADED_SCORE_STATE || "";';
+            const preloadValues = `window.PRELOADED_SCORE_STATE = "${encodedState}";\n        window.EXPORTED_MEASURE_COUNT = ${completedCount};\n        window.EXPORTED_SUBMISSION_LABEL = ${safeLabelLiteral};`;
+            html = html.replace(preloadMarker, preloadValues);
+
+            try {
+                for (const sampleKey of getInstrumentSampleKeys(rhythmInstrument)) {
+                    const assetUrl = rhythmSampleUrls[sampleKey];
+                    if (!assetUrl) continue;
+                    const dataUri = await fetchAudioAsDataUri(assetUrl);
+                    html = html.split(assetUrl).join(dataUri);
+                }
+            } catch (error) {
+                console.warn('제출 파일 실음 포함 실패:', error);
+                showValidationAlert('악기 실음을 포함하지 못했습니다. 잠시 후 다시 저장해 주세요.');
+                return;
+            }
+
+            const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+            const link = document.createElement('a');
+            const safeFileName = submissionLabel.replace(/[\\/:*?"<>|]+/g, '_').replace(/\s+/g, ' ').trim() || '리듬 작품';
+            link.href = URL.createObjectURL(blob);
+            link.download = `${safeFileName}.html`;
+            link.dataset.allowAppSave = 'true';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(link.href), 1500);
+            showToast(`${completedCount}마디 재생 작품을 저장했습니다.`, true);
+        }
+
         function loadScoreFromHash() {
             const match = location.hash.match(/score=([^&]+)/);
             if (match) {
@@ -2214,7 +3215,10 @@
             }
         }
         window.addEventListener('hashchange', loadScoreFromHash);
-        window.addEventListener('load', () => setTimeout(loadScoreFromHash, 150));
+        window.addEventListener('load', () => setTimeout(() => {
+            loadScoreFromHash();
+            applyExportedSubmissionMode();
+        }, 150));
 
         function restPiecesForDuration(duration) {
             const pieces = [];
@@ -2328,9 +3332,12 @@
             const previous = group[group.length - 1];
             const expectedStart = previous.beatOffset + getBeat(previous.type, previous.dotted);
             if (Math.abs(candidate.beatOffset - expectedStart) > 0.01) return false;
-            const beatStart = Math.floor(group[0].beatOffset + 0.001);
+            const beatStart = isCompoundSixEight()
+                ? Math.floor((group[0].beatOffset + 0.001) / 1.5) * 1.5
+                : Math.floor(group[0].beatOffset + 0.001);
+            const beamGroupDuration = isCompoundSixEight() ? 1.5 : 1;
             const candidateEnd = candidate.beatOffset + getBeat(candidate.type, candidate.dotted);
-            if (candidateEnd > beatStart + 1 + 0.001) return false;
+            if (candidateEnd > beatStart + beamGroupDuration + 0.001) return false;
 
             // 16분음표가 8분음표처럼 보이는 혼동을 줄이기 위해 빔 묶음 규칙을 단순화합니다.
             // 허용: 8분+8분, 16분+16분(또는 여러 16분), 점8분+16분.
@@ -2353,11 +3360,10 @@
         }
 
         function drawAll() {
+            syncActiveMeasureState();
             rhythmCtx.clearRect(0, 0, rhythmCanvas.width, rhythmCanvas.height);
             
-            const startX = 200; 
-            const endX = rhythmCanvas.width - 100; 
-            const measureWidth = endX - startX;
+            const {startX, endX, measureWidth} = getScoreLayout();
             const totalBeats = getVisibleTimelineBeats();
             const visibleMeasures = getVisibleMeasureCount();
 
@@ -2396,7 +3402,7 @@
             // 마디선: 붙임줄 때문에 다음 마디가 생기면 같은 폭 안에서 마디선을 나누어 보여줍니다.
             rhythmCtx.fillStyle = '#0f172a';
             for (let m = 1; m <= visibleMeasures; m++) {
-                const barX = startX + (m * timeSignature.top / totalBeats) * measureWidth;
+                const barX = startX + (m * getMeasureDurationBeats() / totalBeats) * measureWidth;
                 rhythmCtx.fillRect(barX - 1.5, staffY - 40, m === visibleMeasures ? 5 : 3, 80);
             }
             
@@ -2415,23 +3421,29 @@
                 rhythmCtx.beginPath();
                 rhythmCtx.moveTo(cx, staffY - 15);
                 rhythmCtx.lineTo(cx, blockY + blockHeight/2 + 15);
-                
+
+                const isCompoundEighthLine = isCompoundSixEight() && c % 2 === 0;
                 rhythmCtx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
-                rhythmCtx.lineWidth = c % subdivisionsPerBeat === 0 ? 1.8 : 0.8;
+                rhythmCtx.lineWidth = isCompoundEighthLine || c % subdivisionsPerBeat === 0 ? 1.6 : 0.8;
                 rhythmCtx.setLineDash([4, 4]);
                 rhythmCtx.stroke();
 
                 // 가이드 숫자 (V자 리듬 가이드 바로 아래 정렬)
-                if (c % subdivisionsPerBeat === 0 && c < totalCells) {
+                const isLabelPosition = isCompoundSixEight() ? c % 2 === 0 : c % subdivisionsPerBeat === 0;
+                if (displayLayers.v && isLabelPosition && c < totalCells) {
                     rhythmCtx.fillStyle = '#ef4444';
                     rhythmCtx.font = 'bold 15px "Noto Sans KR"';
                     rhythmCtx.textAlign = 'center';
-                    rhythmCtx.fillText(`${((c / subdivisionsPerBeat) % timeSignature.top) + 1}`, cx + (cellWidth * 2), visualizerY + 28);
+                    rhythmCtx.textBaseline = 'top';
+                    const label = isCompoundSixEight() ? ((c / 2) % 3) + 1 : ((c / subdivisionsPerBeat) % timeSignature.top) + 1;
+                    const labelCenterOffset = isCompoundSixEight() ? cellWidth : cellWidth * 2;
+                    rhythmCtx.fillText(`${label}`, cx + labelCenterOffset, visualizerY + 44);
                 }
             }
             rhythmCtx.restore();
 
             // 3. 음표 및 표준화 쉼표 렌더링
+            drawGuidedPracticeGhosts(staffY, startX, measureWidth, totalBeats, cellWidth);
             let i = 0;
             const renderedTripletBeats = new Set();
             while (i < displayNotes.length) {
@@ -2470,32 +3482,52 @@
                 i++;
             }
 
+            drawDeleteCandidateHighlight(staffY);
+            drawDotCandidateHighlight(staffY);
             drawAllTies(staffY);
 
             // 4. Newman 시간 블록 (Rhythm Ladder)
-            drawTimeBlocks(startX, measureWidth, totalBeats, blockY, blockHeight, displayNotes);
+            if (displayLayers.blocks) {
+                drawTimeBlocks(startX, measureWidth, totalBeats, blockY, blockHeight, displayNotes);
+            }
 
             // 5. 연한 회색의 백그라운드 기본 V 격자 가이드선 우선 렌더링
-            rhythmCtx.save();
-            rhythmCtx.strokeStyle = '#e2e8f0';
-            rhythmCtx.lineWidth = 2.5;
-            rhythmCtx.lineCap = 'round';
-            rhythmCtx.lineJoin = 'round';
-            for (let b = 0; b < totalBeats; b++) {
-                const bStartX = startX + b * beatWidth;
-                const bEndX = startX + (b + 1) * beatWidth;
-                const bMidX = (bStartX + bEndX) / 2;
-                
-                rhythmCtx.beginPath();
-                rhythmCtx.moveTo(bStartX + 8, visualizerY - 14);
-                rhythmCtx.lineTo(bMidX, visualizerY + 12);
-                rhythmCtx.lineTo(bEndX - 8, visualizerY - 14);
-                rhythmCtx.stroke();
+            if (displayLayers.v) {
+                rhythmCtx.save();
+                rhythmCtx.strokeStyle = '#e2e8f0';
+                rhythmCtx.lineWidth = 2.5;
+                rhythmCtx.lineCap = 'round';
+                rhythmCtx.lineJoin = 'round';
+                if (isCompoundSixEight()) {
+                    for (let pulse = 0; pulse < 6; pulse++) {
+                        const p1 = getSixEightVPointInPulse(pulse, 0, startX, measureWidth, visualizerY);
+                        const p2 = getSixEightVPointInPulse(pulse, 1, startX, measureWidth, visualizerY);
+                        rhythmCtx.beginPath();
+                        rhythmCtx.moveTo(p1.x, p1.y);
+                        rhythmCtx.lineTo(p2.x, p2.y);
+                        rhythmCtx.stroke();
+                    }
+                } else {
+                    for (let b = 0; b < totalBeats; b++) {
+                        const bStartX = startX + b * beatWidth;
+                        const bEndX = startX + (b + 1) * beatWidth;
+                        const bMidX = (bStartX + bEndX) / 2;
+                        const vMargin = Math.min(34, beatWidth * 0.18);
+
+                        rhythmCtx.beginPath();
+                        rhythmCtx.moveTo(bStartX + vMargin, visualizerY - 30);
+                        rhythmCtx.lineTo(bMidX, visualizerY + 30);
+                        rhythmCtx.lineTo(bEndX - vMargin, visualizerY - 30);
+                        rhythmCtx.stroke();
+                    }
+                }
+                rhythmCtx.restore();
             }
-            rhythmCtx.restore();
 
             // 6. 활성화된 음표들에 기초한 선명하고 곧은 V자 리듬 분석 가이드선 렌더링
-            drawV자RhythmVisualizer(startX, measureWidth, totalBeats, visualizerY, cellWidth, beatWidth, displayNotes);
+            if (displayLayers.v) {
+                drawV자RhythmVisualizer(startX, measureWidth, totalBeats, visualizerY, cellWidth, beatWidth, displayNotes);
+            }
 
             // 7. 연주 재생 커서선
             if (isPlaying) {
@@ -2504,7 +3536,10 @@
 
             // 8. 예비박 가이드 오버레이 및 정간보 하단 셈여림 표시: 4/4는 강-약-중강-약, 3/4는 강-약-약
             // 격자 수직선을 관통하지 않고 칸의 시작 수직 점선(첫 박 시작 위치)에 완벽 매칭되도록 cx 오프셋 정정
-            drawCountInCircles(startX, beatWidth, totalBeats, blockY, blockHeight);
+            if (displayLayers.accents) {
+                drawCountInCircles(startX, beatWidth, totalBeats, blockY, blockHeight);
+            }
+            if (!isPlaying && !isCountingIn) updateMeasureNavigator();
         }
 
         function drawQuarterRestSymbol(ctx, color = '#0f172a') {
@@ -2592,7 +3627,7 @@
             );
         }
 
-        function drawTieCurve(fromNote, toNote, staffY) {
+        function drawTieCurve(fromNote, toNote, staffY, color = '#0f172a', alpha = 1) {
             if (!fromNote || !toNote) return;
             const fromX = fromNote.x + 10.5;
             const toX = toNote.x - 10.5;
@@ -2603,7 +3638,8 @@
             const depth = Math.max(8, Math.min(17, width * 0.13));
 
             rhythmCtx.save();
-            rhythmCtx.strokeStyle = '#0f172a';
+            rhythmCtx.strokeStyle = color;
+            rhythmCtx.globalAlpha = alpha;
             rhythmCtx.lineWidth = 2.35;
             rhythmCtx.lineCap = 'round';
             rhythmCtx.lineJoin = 'round';
@@ -2632,12 +3668,108 @@
             });
         }
 
+        function drawDeleteCandidateHighlight(staffY) {
+            if (!deleteMode || !deleteCandidateNote || !Number.isFinite(deleteCandidateNote.x)) return;
+            if (!notes.includes(deleteCandidateNote)) {
+                deleteCandidateNote = null;
+                return;
+            }
+            rhythmCtx.save();
+            rhythmCtx.strokeStyle = '#f97316';
+            rhythmCtx.fillStyle = 'rgba(249, 115, 22, 0.08)';
+            rhythmCtx.lineWidth = 2.5;
+            rhythmCtx.setLineDash([6, 4]);
+            const boxX = deleteCandidateNote.x - 22;
+            const boxY = staffY - 61;
+            drawRoundedRect(rhythmCtx, boxX, boxY, 44, 78, 9, true, true);
+            rhythmCtx.restore();
+        }
+
+        function drawDotCandidateHighlight(staffY) {
+            if (!dotCandidateNote || deleteMode || tieMode || !Number.isFinite(dotCandidateNote.x)) return;
+            if (!notes.includes(dotCandidateNote)) {
+                dotCandidateNote = null;
+                return;
+            }
+            rhythmCtx.save();
+            rhythmCtx.strokeStyle = '#2563eb';
+            rhythmCtx.fillStyle = 'rgba(37, 99, 235, 0.07)';
+            rhythmCtx.lineWidth = 2.5;
+            rhythmCtx.setLineDash([5, 3]);
+            drawRoundedRect(rhythmCtx, dotCandidateNote.x - 22, staffY - 61, 44, 78, 9, true, true);
+            rhythmCtx.restore();
+        }
+
+        function drawGuidedPracticeGhosts(staffY, startX, measureWidth, totalBeats, cellWidth) {
+            if (practiceStatusMode !== 'guided' || !guidedPracticeTarget?.length) return;
+            const ghosts = guidedPracticeTarget.map(note => {
+                const duration = getBeat(note.type, note.dotted);
+                const ghost = {...note, practiceGhost:true, beatDuration:duration};
+                ghost.startX = startX + (ghost.beatOffset / totalBeats) * measureWidth;
+                ghost.endX = startX + ((ghost.beatOffset + duration) / totalBeats) * measureWidth;
+                ghost.x = ghost.startX + Math.min(cellWidth / 2, (ghost.endX - ghost.startX) / 2);
+                return ghost;
+            });
+
+            let index = 0;
+            while (index < ghosts.length) {
+                const start = ghosts[index];
+                if (isBeamableStandardNote(start)) {
+                    const group = [start];
+                    let nextIndex = index + 1;
+                    while (nextIndex < ghosts.length && canJoinBeamGroup(group, ghosts[nextIndex])) {
+                        group.push(ghosts[nextIndex]);
+                        nextIndex++;
+                    }
+                    if (group.length > 1) {
+                        drawBeamGroup(group, staffY, '#94a3b8', 0.42);
+                        index = nextIndex;
+                        continue;
+                    }
+                }
+                drawSingleNote(start, staffY);
+                index++;
+            }
+
+            ghosts.filter(note => note.tied).forEach(from => {
+                const expectedStart = from.beatOffset + getBeat(from.type, from.dotted);
+                const to = ghosts.find(candidate => candidate.tiedTo && Math.abs(candidate.beatOffset - expectedStart) < 0.01);
+                if (to) drawTieCurve(from, to, staffY, '#94a3b8', 0.48);
+            });
+        }
+
+        // 하단 입력표에서 사용한 음표 비례를 실제 악보에도 동일하게 적용합니다.
+        function drawLearnedNoteHead(ctx, filled = true) {
+            ctx.save();
+            ctx.rotate(-0.31);
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 13, 8.5, 0, 0, Math.PI * 2);
+            if (filled) {
+                ctx.fill();
+            } else {
+                ctx.lineWidth = 2.1;
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        function drawLearnedStem(ctx) {
+            ctx.save();
+            ctx.lineWidth = 4.0;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(11.2, 1.5);
+            ctx.lineTo(11.2, -48);
+            ctx.stroke();
+            ctx.restore();
+        }
+
         function drawSingleNote(n, staffY) {
             const x = n.x;
             rhythmCtx.save();
             rhythmCtx.translate(x, staffY);
-            const noteColor = n.autoRest ? AUTO_REST_COLOR : '#0f172a';
-            rhythmCtx.globalAlpha = n.autoRest ? 0.72 : 1;
+            const noteColor = n.practiceGhost ? '#94a3b8' : (n.autoRest ? AUTO_REST_COLOR : '#0f172a');
+            rhythmCtx.globalAlpha = n.practiceGhost ? 0.42 : (n.autoRest ? 0.72 : 1);
             rhythmCtx.fillStyle = noteColor;
             rhythmCtx.strokeStyle = noteColor;
             rhythmCtx.lineWidth = 3.2;
@@ -2647,77 +3779,47 @@
             if (!n.isRest) {
                 if (n.type === 'half') {
                     // 2분음표는 가운데 가로선이 보이도록 흰색 채움 없이 얇은 외곽선으로 그립니다.
-                    rhythmCtx.save();
-                    rhythmCtx.rotate(-0.28);
-                    rhythmCtx.lineWidth = 2.0;
-                    rhythmCtx.beginPath();
-                    rhythmCtx.ellipse(0, 0, 12.5, 7.2, 0, 0, Math.PI * 2);
-                    rhythmCtx.stroke();
-                    rhythmCtx.restore();
-                    rhythmCtx.lineWidth = 2.4;
-                    rhythmCtx.beginPath();
-                    rhythmCtx.moveTo(11, 2);
-                    rhythmCtx.lineTo(11, -48);
-                    rhythmCtx.stroke();
+                    drawLearnedNoteHead(rhythmCtx, false);
+                    drawLearnedStem(rhythmCtx);
                 } else if (n.type === 'eighth') {
-                    usedImage = drawNotationImageSymbol(rhythmCtx, 'eighthNote');
+                    usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'eighthNote');
                     if (!usedImage) {
-                        const h = new Path2D(SVG.headFilled);
-                        rhythmCtx.fill(h);
-                        rhythmCtx.beginPath();
-                        rhythmCtx.moveTo(11, 2);
-                        rhythmCtx.lineTo(11, -48);
-                        rhythmCtx.stroke();
+                        drawLearnedNoteHead(rhythmCtx, true);
+                        drawLearnedStem(rhythmCtx);
                         rhythmCtx.fill(new Path2D(SVG.flag8));
                     }
                 } else if (n.type === 'sixteenth') {
-                    usedImage = drawNotationImageSymbol(rhythmCtx, 'sixteenthNote');
+                    usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'sixteenthNote');
                     if (!usedImage) {
-                        const h = new Path2D(SVG.headFilled);
-                        rhythmCtx.fill(h);
-                        rhythmCtx.beginPath();
-                        rhythmCtx.moveTo(11, 2);
-                        rhythmCtx.lineTo(11, -48);
-                        rhythmCtx.stroke();
+                        drawLearnedNoteHead(rhythmCtx, true);
+                        drawLearnedStem(rhythmCtx);
                         rhythmCtx.fill(new Path2D(SVG.flag16_1));
                         rhythmCtx.fill(new Path2D(SVG.flag16_2));
                     }
                 } else if (n.type === 'whole') {
-                    // 온음표도 외곽선만 얇게 그려 중앙 가로선이 관통해 보이게 합니다.
+                    // 참고 이미지처럼 작고 선명한 가로 타원으로 그려 중앙선이 관통해 보이게 합니다.
                     rhythmCtx.save();
-                    rhythmCtx.rotate(-0.18);
-                    rhythmCtx.lineWidth = 2.2;
+                    rhythmCtx.rotate(-0.09);
+                    rhythmCtx.lineWidth = 3.2;
                     rhythmCtx.beginPath();
-                    rhythmCtx.ellipse(0, 0, 19, 8.3, 0, 0, Math.PI * 2);
+                    rhythmCtx.ellipse(0, 0, 14.5, 6.8, 0, 0, Math.PI * 2);
                     rhythmCtx.stroke();
                     rhythmCtx.restore();
                 } else if (n.type === 'quarter') {
-                    usedImage = drawNotationImageSymbol(rhythmCtx, 'quarterNote');
+                    usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'quarterNote');
                     if (!usedImage) {
-                        const h = new Path2D(SVG.headFilled);
-                        rhythmCtx.fill(h);
-                        rhythmCtx.beginPath();
-                        rhythmCtx.moveTo(11, 2);
-                        rhythmCtx.lineTo(11, -48);
-                        rhythmCtx.stroke();
+                        drawLearnedNoteHead(rhythmCtx, true);
+                        drawLearnedStem(rhythmCtx);
                     }
                 } else if (n.type === 'thirtysecond') {
-                    const h = new Path2D(SVG.headFilled);
-                    rhythmCtx.fill(h);
-                    rhythmCtx.beginPath();
-                    rhythmCtx.moveTo(11, 2);
-                    rhythmCtx.lineTo(11, -48);
-                    rhythmCtx.stroke();
+                    drawLearnedNoteHead(rhythmCtx, true);
+                    drawLearnedStem(rhythmCtx);
                     rhythmCtx.fill(new Path2D(SVG.flag16_1));
                     rhythmCtx.fill(new Path2D(SVG.flag16_2));
                     rhythmCtx.fill(new Path2D(SVG.flag32_3));
                 } else if (n.type === 'triplet') {
-                    const h = new Path2D(SVG.headFilled);
-                    rhythmCtx.fill(h);
-                    rhythmCtx.beginPath();
-                    rhythmCtx.moveTo(11, 2);
-                    rhythmCtx.lineTo(11, -48);
-                    rhythmCtx.stroke();
+                    drawLearnedNoteHead(rhythmCtx, true);
+                    drawLearnedStem(rhythmCtx);
                 }
 
                 if (n.dotted) {
@@ -2728,10 +3830,10 @@
                 }
             } else {
                 if (n.type === 'quarter') {
-                    usedImage = drawNotationImageSymbol(rhythmCtx, 'quarterRest');
+                    usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'quarterRest');
                     if (!usedImage) drawQuarterRestSymbol(rhythmCtx, noteColor);
                 } else if (n.type === 'eighth') {
-                    usedImage = drawNotationImageSymbol(rhythmCtx, 'eighthRest');
+                    usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'eighthRest');
                     if (!usedImage) {
                         rhythmCtx.save();
                         rhythmCtx.scale(0.78, 0.78);
@@ -2752,7 +3854,7 @@
                         rhythmCtx.restore();
                     }
                 } else if (n.type === 'sixteenth') {
-                    usedImage = drawNotationImageSymbol(rhythmCtx, 'sixteenthRest');
+                    usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'sixteenthRest');
                     if (!usedImage) {
                         rhythmCtx.save();
                         rhythmCtx.scale(0.76, 0.76);
@@ -2800,12 +3902,13 @@
         }
 
 
-        function drawBeamGroup(group, staffY) {
+        function drawBeamGroup(group, staffY, color = '#0f172a', alpha = 1) {
             if (!group || group.length === 0) return;
             if (group[0].type === 'triplet' && (group.length !== 3 || group.some(n => n.isRest))) return;
             rhythmCtx.save();
-            rhythmCtx.strokeStyle = '#0f172a';
-            rhythmCtx.fillStyle = '#0f172a';
+            rhythmCtx.strokeStyle = color;
+            rhythmCtx.fillStyle = color;
+            rhythmCtx.globalAlpha = alpha;
             rhythmCtx.lineCap = 'butt';
             rhythmCtx.lineJoin = 'round';
 
@@ -2816,12 +3919,8 @@
                 }
                 rhythmCtx.save();
                 rhythmCtx.translate(n.x, staffY);
-                rhythmCtx.lineWidth = 3.2;
-                rhythmCtx.fill(new Path2D(SVG.headFilled));
-                rhythmCtx.beginPath();
-                rhythmCtx.moveTo(11, 2);
-                rhythmCtx.lineTo(11, -48);
-                rhythmCtx.stroke();
+                drawLearnedNoteHead(rhythmCtx, true);
+                drawLearnedStem(rhythmCtx);
                 if (n.dotted) {
                     rhythmCtx.beginPath();
                     rhythmCtx.arc(30, -5, 4, 0, Math.PI * 2);
@@ -2843,9 +3942,9 @@
             };
 
             if (nonRestNotes.length > 1) {
-                const firstStemX = nonRestNotes[0].x + 11;
-                const lastStemX = nonRestNotes[nonRestNotes.length - 1].x + 11;
-                drawBeamBand(firstStemX, lastStemX, staffY - 48, 8);
+                const firstStemX = nonRestNotes[0].x + 11.2;
+                const lastStemX = nonRestNotes[nonRestNotes.length - 1].x + 11.2;
+                drawBeamBand(firstStemX, lastStemX, staffY - 48, 6.5);
 
                 if (group[0].type !== 'triplet') {
                     const maxLines = Math.max(...group.map(beamLineCount));
@@ -2856,22 +3955,22 @@
                             const a = group[idx];
                             const b = group[idx + 1];
                             if (beamLineCount(a) >= line && beamLineCount(b) >= line) {
-                                drawBeamBand(a.x + 11, b.x + 11, y, line === 2 ? 6 : 5);
+                                drawBeamBand(a.x + 11.2, b.x + 11.2, y, line === 2 ? 4.5 : 4);
                                 connected.add(idx);
                                 connected.add(idx + 1);
                             }
                         }
                         group.forEach((n, idx) => {
                             if (beamLineCount(n) < line || connected.has(idx)) return;
-                            const stemX = n.x + 11;
+                            const stemX = n.x + 11.2;
                             const prev = group[idx - 1];
                             const next = group[idx + 1];
                             const neighbor = next || prev;
                             if (!neighbor) return;
                             const direction = next ? 1 : -1;
-                            const neighborDistance = Math.abs((neighbor.x + 11) - stemX);
+                            const neighborDistance = Math.abs((neighbor.x + 11.2) - stemX);
                             const stub = Math.min(22, Math.max(14, neighborDistance * 0.42));
-                            drawBeamBand(stemX, stemX + direction * stub, y, line === 2 ? 6 : 5);
+                            drawBeamBand(stemX, stemX + direction * stub, y, line === 2 ? 4.5 : 4);
                         });
                     }
                 }
@@ -2986,15 +4085,28 @@
                 rhythmCtx.beginPath();
                 rhythmCtx.moveTo(cx, blockY - blockHeight/2);
                 rhythmCtx.lineTo(cx, blockY + blockHeight/2);
-                rhythmCtx.strokeStyle = c % subdivisionsPerBeat === 0 ? '#0f172a' : 'rgba(15, 23, 42, 0.22)';
-                rhythmCtx.lineWidth = c % subdivisionsPerBeat === 0 ? 2 : 1;
+                const isCompoundEighthLine = isCompoundSixEight() && c % 2 === 0;
+                rhythmCtx.strokeStyle = (!isCompoundSixEight() && c % subdivisionsPerBeat === 0) ? '#0f172a' : 'rgba(15, 23, 42, 0.24)';
+                rhythmCtx.lineWidth = isCompoundEighthLine || c % subdivisionsPerBeat === 0 ? 1.6 : 1;
                 rhythmCtx.stroke();
             }
             rhythmCtx.restore();
         }
 
+        function getSixEightVPointInPulse(pulse, localT, startX, measureWidth, visualizerY) {
+            const pulseWidth = measureWidth / 6;
+            const margin = Math.min(8, pulseWidth * 0.08);
+            const x1 = startX + pulse * pulseWidth + margin;
+            const x2 = startX + (pulse + 1) * pulseWidth - margin;
+            const descends = pulse % 2 === 0;
+            const y1 = descends ? visualizerY - 30 : visualizerY + 30;
+            const y2 = descends ? visualizerY + 30 : visualizerY - 30;
+            const t = Math.max(0, Math.min(1, localT));
+            return {x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t};
+        }
+
         function getVPoint(b, t, bStartX, bEndX, bMidX, visualizerY) {
-            const margin = 8;
+            const margin = Math.min(34, (bEndX - bStartX) * 0.18);
             const effectiveStartX = bStartX + margin;
             const effectiveEndX = bEndX - margin;
 
@@ -3002,13 +4114,13 @@
                 const factor = t / 0.5;
                 return {
                     x: effectiveStartX + factor * (bMidX - effectiveStartX),
-                    y: (visualizerY - 14) + factor * 26
+                    y: (visualizerY - 30) + factor * 60
                 };
             } else {
                 const factor = (t - 0.5) / 0.5;
                 return {
                     x: bMidX + factor * (effectiveEndX - bMidX),
-                    y: (visualizerY + 12) - factor * 26
+                    y: (visualizerY + 30) - factor * 60
                 };
             }
         }
@@ -3018,6 +4130,47 @@
         // 8분음표 2개, 16분음표 4개, 32분음표 8개는 한 박 안에서 ∨ 하나를 각각의 조각으로 나눠 그립니다.
         // 조각 사이에는 아주 작은 빈틈을 두어 서로 붙어서 검게 뭉치지 않게 합니다.
         function drawV자RhythmVisualizer(startX, measureWidth, totalBeats, visualizerY, cellWidth, beatWidth, events = notes) {
+            if (isCompoundSixEight()) {
+                events.forEach(n => {
+                    const startBeat = n.beatOffset;
+                    const endBeat = n.beatOffset + n.beatDuration;
+                    const splitIntoPieces = !n.isRest && (n.type === 'triplet' || n.type === 'eighth' || n.type === 'sixteenth' || n.type === 'thirtysecond');
+                    const pieceGap = splitIntoPieces ? 0.035 : 0;
+
+                    rhythmCtx.save();
+                    rhythmCtx.strokeStyle = '#0f172a';
+                    rhythmCtx.setLineDash(n.isRest ? [4, 4] : []);
+                    rhythmCtx.lineWidth = n.isRest ? 3 : 4;
+                    rhythmCtx.lineCap = 'round';
+                    rhythmCtx.lineJoin = 'round';
+
+                    for (let pulse = 0; pulse < 6; pulse++) {
+                        const pulseStart = pulse * 0.5;
+                        const pulseEnd = pulseStart + 0.5;
+                        const t1 = Math.max(startBeat, pulseStart);
+                        const t2 = Math.min(endBeat, pulseEnd);
+                        if (t1 >= t2 - 0.001) continue;
+
+                        let localT1 = (t1 - pulseStart) / 0.5;
+                        let localT2 = (t2 - pulseStart) / 0.5;
+                        if (splitIntoPieces) {
+                            if (t1 > pulseStart + 0.001) localT1 += pieceGap;
+                            if (t2 < pulseEnd - 0.001) localT2 -= pieceGap;
+                        }
+                        if (localT1 >= localT2 - 0.001) continue;
+
+                        const p1 = getSixEightVPointInPulse(pulse, localT1, startX, measureWidth, visualizerY);
+                        const p2 = getSixEightVPointInPulse(pulse, localT2, startX, measureWidth, visualizerY);
+                        rhythmCtx.beginPath();
+                        rhythmCtx.moveTo(p1.x, p1.y);
+                        rhythmCtx.lineTo(p2.x, p2.y);
+                        rhythmCtx.stroke();
+                    }
+                    rhythmCtx.restore();
+                });
+                return;
+            }
+
             const isBeatBoundary = (value) => Math.abs(value - Math.round(value)) < 0.002;
 
             events.forEach(n => {
@@ -3164,6 +4317,152 @@
             osc.stop(audioCtx.currentTime + duration);
         }
 
+        function getRhythmAccentAtOffset(beatOffset) {
+            if (Math.abs(beatOffset) < 0.001) return 'strong';
+            if (isCompoundSixEight() && Math.abs(beatOffset - 1.5) < 0.001) return 'medium';
+            if (!isCompoundSixEight() && timeSignature.top === 4 && Math.abs(beatOffset - 2) < 0.001) return 'medium';
+            return 'weak';
+        }
+
+        function playLoadedRhythmSample(accent = 'weak', when = audioCtx?.currentTime, requestedDuration = 0.5) {
+            if (!audioCtx || rhythmInstrument === 'synth') return false;
+            const hasAccentSamples = rhythmInstrument === 'janggu' || rhythmInstrument === 'kkwaenggwari';
+            const sampleKey = hasAccentSamples ? `${rhythmInstrument}-${accent}` : rhythmInstrument;
+            const buffer = rhythmSampleBuffers.get(sampleKey);
+            if (!buffer) {
+                loadRhythmSample(sampleKey);
+                return false;
+            }
+            const startTime = Math.max(Number(when) || audioCtx.currentTime, audioCtx.currentTime);
+            const source = audioCtx.createBufferSource();
+            trackScheduledAudioNode(source);
+            const gain = audioCtx.createGain();
+            const sampleOffset = rhythmSampleOffsets[sampleKey] || 0;
+            const availableDuration = Math.max(0.05, buffer.duration - sampleOffset);
+            // 짧은 음은 음가 끝에서 자르고, 긴 음은 녹음된 타악기의 자연스러운 울림을 가능한 만큼 유지합니다.
+            const clipDuration = Math.min(availableDuration, Math.max(0.08, Number(requestedDuration) || 0.5));
+            source.buffer = buffer;
+            const accentGain = accent === 'strong' ? 1 : (accent === 'medium' ? 0.88 : 0.76);
+            const baseGain = rhythmInstrument === 'kkwaenggwari' ? 0.54 : (rhythmInstrument === 'janggu' ? 0.78 : 0.82);
+            const fadeStart = startTime + Math.max(0.02, clipDuration - 0.06);
+            gain.gain.setValueAtTime(baseGain * accentGain, startTime);
+            gain.gain.setValueAtTime(baseGain * accentGain, fadeStart);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + clipDuration);
+            source.connect(gain);
+            gain.connect(audioCtx.destination);
+            source.start(startTime, sampleOffset, clipDuration);
+            source.stop(startTime + clipDuration + 0.01);
+            playPercussionSustainTail(requestedDuration, accent, startTime, rhythmInstrument);
+            return true;
+        }
+
+        // 장구와 드럼은 실제 타격음을 반복하지 않고, 긴 음가에서만 약한 공명을 이어 음가의 끝을 들려줍니다.
+        function playPercussionSustainTail(requestedDuration, accent, when, instrument) {
+            if (!audioCtx || (instrument !== 'janggu' && instrument !== 'drum')) return;
+            const duration = Math.max(0, Number(requestedDuration) || 0);
+            if (duration < 0.7) return;
+            const startTime = Math.max(Number(when) || audioCtx.currentTime, audioCtx.currentTime);
+            const tailStart = startTime + Math.min(0.16, duration * 0.18);
+            const tailEnd = startTime + duration;
+            if (tailEnd <= tailStart + 0.08) return;
+
+            const oscillator = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            trackScheduledAudioNode(oscillator);
+            oscillator.type = instrument === 'drum' ? 'sine' : 'triangle';
+            oscillator.frequency.setValueAtTime(instrument === 'drum' ? 92 : 154, tailStart);
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(instrument === 'drum' ? 330 : 540, tailStart);
+            const accentGain = accent === 'strong' ? 1 : (accent === 'medium' ? 0.86 : 0.72);
+            const level = (instrument === 'drum' ? 0.055 : 0.038) * accentGain;
+            gain.gain.setValueAtTime(0.0001, tailStart);
+            gain.gain.exponentialRampToValueAtTime(level, tailStart + 0.045);
+            gain.gain.setValueAtTime(level * 0.72, Math.max(tailStart + 0.05, tailEnd - 0.11));
+            gain.gain.exponentialRampToValueAtTime(0.001, tailEnd);
+            oscillator.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            oscillator.start(tailStart);
+            oscillator.stop(tailEnd + 0.01);
+        }
+
+        // 기본 리듬음은 낮고 둥근 유율음, 선택 악기는 녹음된 실제 타악기 단음을 사용합니다.
+        function playRhythmTone(duration, accent = 'weak', when = audioCtx?.currentTime) {
+            if (!audioCtx) return;
+            if (playLoadedRhythmSample(accent, when, duration)) return;
+            const now = Math.max(Number(when) || audioCtx.currentTime, audioCtx.currentTime);
+            const soundingDuration = Math.max(0.08, Number(duration) || 0.18);
+            const master = audioCtx.createGain();
+            const body = audioCtx.createOscillator();
+            const overtone = audioCtx.createOscillator();
+            trackScheduledAudioNode(body);
+            trackScheduledAudioNode(overtone);
+            const overtoneGain = audioCtx.createGain();
+
+            // 어택은 말렛처럼 선명하게, 본체음은 기보된 음가와 붙임줄 길이만큼 유지합니다.
+            body.type = 'triangle';
+            body.frequency.setValueAtTime(523.25, now);
+            overtone.type = 'sine';
+            overtone.frequency.setValueAtTime(1046.5, now);
+            overtoneGain.gain.setValueAtTime(0.085, now);
+
+            const accentGain = accent === 'strong' ? 1 : (accent === 'medium' ? 0.88 : 0.74);
+            const decayTime = now + Math.min(0.12, soundingDuration * 0.35);
+            const releaseStart = now + Math.max(decayTime - now, soundingDuration - Math.min(0.10, soundingDuration * 0.28));
+            master.gain.setValueAtTime(0.0001, now);
+            master.gain.exponentialRampToValueAtTime(0.32 * accentGain, now + 0.006);
+            master.gain.exponentialRampToValueAtTime(0.075 * accentGain, decayTime);
+            master.gain.setValueAtTime(0.075 * accentGain, releaseStart);
+            master.gain.exponentialRampToValueAtTime(0.001, now + soundingDuration);
+
+            body.connect(master);
+            overtone.connect(overtoneGain);
+            overtoneGain.connect(master);
+            if (audioCtx.createStereoPanner) {
+                const panner = audioCtx.createStereoPanner();
+                panner.pan.setValueAtTime(-0.28, now);
+                master.connect(panner);
+                panner.connect(audioCtx.destination);
+            } else {
+                master.connect(audioCtx.destination);
+            }
+            body.start(now);
+            overtone.start(now);
+            body.stop(now + soundingDuration + 0.015);
+            overtone.stop(now + soundingDuration + 0.015);
+        }
+
+        // 메트로놈은 짧고 높은 틱, 리듬음은 낮고 긴 음으로 분리합니다.
+        function playMetronomeClick(accent = 'weak', when = audioCtx?.currentTime) {
+            if (!audioCtx) return;
+            const now = Math.max(Number(when) || audioCtx.currentTime, audioCtx.currentTime);
+            const settings = {
+                strong: {frequency: 1200, volume: 0.062},
+                medium: {frequency: 980, volume: 0.052},
+                weak: {frequency: 820, volume: 0.045}
+            }[accent] || {frequency: 820, volume: 0.045};
+            const oscillator = audioCtx.createOscillator();
+            trackScheduledAudioNode(oscillator);
+            const gain = audioCtx.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(settings.frequency, now);
+            gain.gain.setValueAtTime(settings.volume, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+            oscillator.connect(gain);
+            if (audioCtx.createStereoPanner) {
+                const panner = audioCtx.createStereoPanner();
+                panner.pan.setValueAtTime(0.28, now);
+                gain.connect(panner);
+                panner.connect(audioCtx.destination);
+            } else {
+                gain.connect(audioCtx.destination);
+            }
+            oscillator.start(now);
+            oscillator.stop(now + 0.04);
+        }
+
         function playWarningTone() {
             if (!audioCtx) return;
             const now = audioCtx.currentTime;
@@ -3186,25 +4485,29 @@
         function drawCountInCircles(startX, beatWidth, totalBeats, blockY, blockHeight) {
             rhythmCtx.save();
             const circlesY = blockY + blockHeight/2 + 25;
-            const beatLabels = Array.from({length: totalBeats}, (_, i) => (i === 0 ? "강" : (totalBeats === 4 && i === 2 ? "중강" : "약")));
+            const compound = isCompoundSixEight();
+            const displayBeatCount = compound ? 6 : totalBeats;
+            const displayBeatWidth = compound ? beatWidth / 2 : beatWidth;
+            const beatLabels = Array.from({length: displayBeatCount}, (_, i) => (
+                i === 0 ? '강' : ((compound && i === 3) || (!compound && totalBeats === 4 && i === 2) ? '중강' : '약')
+            ));
 
-            for (let b = 0; b < totalBeats; b++) {
+            for (let b = 0; b < displayBeatCount; b++) {
                 // 각 박의 시작선이 아니라, 그 박의 첫 번째 칸(16분 셀) 중심 바로 아래에 셈여림 표시를 놓습니다.
-                // beatWidth는 1박, 한 박은 4칸이므로 첫 칸 중심은 시작선에서 beatWidth / 8만큼 오른쪽입니다.
-                const cx = startX + b * beatWidth + (beatWidth / 8);
+                const cx = startX + b * displayBeatWidth + (compound ? displayBeatWidth / 4 : displayBeatWidth / 8);
                 
                 let isActive = false;
                 if (isCountingIn) {
                     isActive = (currentCountInBeat === b + 1);
                 } else if (isPlaying) {
                     const elapsedBeats = (currentPlaybackX - startX) / beatWidth;
-                    isActive = (Math.floor(elapsedBeats) === b);
+                    isActive = compound ? (Math.floor(elapsedBeats / 0.5) === b) : (Math.floor(elapsedBeats) === b);
                 }
 
                 rhythmCtx.strokeStyle = isActive ? '#4f46e5' : '#475569';
                 rhythmCtx.lineWidth = isActive ? 3 : 1.5;
 
-                const beatType = (b === 0) ? 0 : ((totalBeats === 4 && b === 2) ? 2 : 1); // 4/4만 3박을 중강으로 표시, 3/4는 강-약-약
+                const beatType = (b === 0) ? 0 : (((compound && b === 3) || (!compound && totalBeats === 4 && b === 2)) ? 2 : 1);
 
                 if (beatType === 0) {
                     // 첫 박 ◎ (겹동그라미) - 강 (최대 크기)
@@ -3251,89 +4554,171 @@
             rhythmCtx.restore();
         }
 
-        function togglePlay() {
-            if (isPlaying || isCountingIn) {
-                stopPerformance();
-            } else {
-                isFirstIteration = true; 
-                startPerformance();
+        function validateMeasureForPlayback(measureNotes, measureIndex, detailed = false) {
+            const timeline = getTimelineGapsFor(measureNotes);
+            const prefix = `${measureIndex + 1}마디`;
+            if (timeline.hasOverlap || timeline.hasOverflow) return `${prefix}의 음표가 겹치거나 마디 범위를 넘었습니다.`;
+            if (measureNotes.length === 0) return `${prefix}가 비어 있습니다. 음표나 쉼표로 채워 주세요.`;
+            if (timeline.gapTotal > 0.005) return detailed ? getGapWarningMessage(timeline) : `${prefix}에 빈 박이 있습니다. 음표나 쉼표로 채워 주세요.`;
+            return '';
+        }
+
+        async function preparePlaybackAudio() {
+            initAudio();
+            if (rhythmInstrument !== 'synth') {
+                await Promise.all(getInstrumentSampleKeys().map(loadRhythmSample));
             }
         }
 
-        function startPerformance() {
-            const timeline = getTimelineGaps();
+        function beginCountIn(beatDuration, onReady) {
+            const countInBeats = getDisplayPulseCount();
+            const countInBeatDuration = beatDuration * getDisplayPulseDuration();
+            isCountingIn = true;
+            currentCountInBeat = 1;
+            updatePlayButtonLabel();
+            drawAll();
+            const countInStartTime = audioCtx.currentTime + 0.08;
 
-            if (timeline.hasOverlap || timeline.hasOverflow) {
-                initAudio();
-                playTone(180, 0.35, 0.25);
-                showValidationAlert('음표가 서로 겹치거나 마디 범위를 넘었습니다. 겹친 부분을 지워 주세요.');
-                return;
+            for (let b = 0; b < countInBeats; b++) {
+                const delayTime = b * countInBeatDuration;
+                const isMediumAccent = isCompoundSixEight() && b === 3;
+                playMetronomeClick(b === 0 ? 'strong' : (isMediumAccent ? 'medium' : 'weak'), countInStartTime + delayTime);
+                const visualTimer = setTimeout(() => {
+                    if (!isCountingIn) return;
+                    currentCountInBeat = b + 1;
+                    drawAll();
+                }, Math.max(0, (countInStartTime - audioCtx.currentTime + delayTime) * 1000));
+                playTimeouts.push(visualTimer);
             }
 
-            if (notes.length === 0) {
-                initAudio();
-                playTone(180, 0.18, 0.16);
-                showValidationAlert('아직 입력한 리듬이 없습니다. 정간보 칸을 칠해 음표를 만들어 보세요.');
+            const playbackStartTime = countInStartTime + countInBeats * countInBeatDuration;
+            const startTimer = setTimeout(() => {
+                if (!isCountingIn) return;
+                isCountingIn = false;
+                onReady(playbackStartTime);
+            }, Math.max(0, (playbackStartTime - audioCtx.currentTime - 0.10) * 1000));
+            playTimeouts.push(startTimer);
+        }
+
+        async function togglePlay() {
+            if (isPlaying || isCountingIn) {
+                stopPerformance();
                 return;
             }
+            await startPerformance();
+        }
 
-            if (timeline.gapTotal > 0.005) {
+        async function startPerformance() {
+            syncActiveMeasureState();
+            const warning = validateMeasureForPlayback(notes, activeMeasureIndex, true);
+            if (warning) {
                 initAudio();
                 playTone(180, 0.28, 0.22);
-                showValidationAlert(getGapWarningMessage(timeline));
+                showValidationAlert(warning);
                 return;
             }
 
-            initAudio();
+            await preparePlaybackAudio();
+            isProjectPlaying = false;
+            isFirstIteration = true;
             const playBtn = document.getElementById('playBtn');
-            playBtn.innerText = "⏹ 연주 중지";
             playBtn.classList.add('playing');
             playBtn.setAttribute('aria-pressed', 'true');
-
-            const tempo = 60; 
-            const beatDuration = 60 / tempo; 
-            const totalBeats = getVisibleTimelineBeats();
-            const countInBeats = timeSignature.top;
-
+            updatePlayButtonLabel();
             playTimeouts.forEach(t => clearTimeout(t));
             playTimeouts = [];
 
-            if (isFirstIteration) {
-                isCountingIn = true;
-                currentCountInBeat = 1;
-                drawAll();
-
-                for (let b = 0; b < countInBeats; b++) {
-                    const delayTime = b * beatDuration;
-                    const tCountSound = setTimeout(() => {
-                        if (!isCountingIn) return;
-                        currentCountInBeat = b + 1;
-                        playTone(b === 0 ? 1000 : 750, 0.05, 0.045); // 예비박은 작게, 하지만 분명하게
-                        drawAll();
-                    }, delayTime * 1000);
-                    playTimeouts.push(tCountSound);
-                }
-
-                const startActualPlayTime = countInBeats * beatDuration;
-
-                const tStartPlay = setTimeout(() => {
-                    isCountingIn = false;
-                    executeCorePlayback(beatDuration, totalBeats);
-                }, startActualPlayTime * 1000);
-                
-                playTimeouts.push(tStartPlay);
-            } else {
-                isCountingIn = false;
-                executeCorePlayback(beatDuration, totalBeats);
-            }
+            const beatDuration = 60 / tempo;
+            const totalBeats = getVisibleTimelineBeats();
+            beginCountIn(beatDuration, playbackStartTime => {
+                executeCorePlayback(notes, beatDuration, totalBeats, playbackStartTime);
+            });
         }
 
-        function getTiedChainDuration(firstNote) {
+        async function toggleProjectPlay() {
+            if (isPlaying || isCountingIn) {
+                stopPerformance();
+                return;
+            }
+            await startProjectPerformance();
+        }
+
+        function askPlayCompletedMeasures(measureCount) {
+            const dialog = document.getElementById('playLengthDialog');
+            const description = document.getElementById('playLengthDescription');
+            const yesButton = document.getElementById('playLengthYes');
+            const noButton = document.getElementById('playLengthNo');
+            description.textContent = `${measureCount}마디까지 완성했습니다. 지금은 ${measureCount}마디 작품으로 연주하고, 나머지 마디는 비워 둘까요?`;
+            yesButton.textContent = `예, ${measureCount}마디 연주`;
+            noButton.textContent = `아니오, ${measureCount + 1}마디 창작`;
+            dialog.classList.add('show');
+            return new Promise(resolve => {
+                const finish = value => {
+                    dialog.classList.remove('show');
+                    yesButton.onclick = null;
+                    noButton.onclick = null;
+                    resolve(value);
+                };
+                yesButton.onclick = () => finish(true);
+                noButton.onclick = () => finish(false);
+            });
+        }
+
+        async function startProjectPerformance() {
+            syncActiveMeasureState();
+            const requestedReturnMeasureIndex = activeMeasureIndex;
+            let completedPrefixCount = 0;
+            while (completedPrefixCount < PROJECT_MEASURE_COUNT && !validateMeasureForPlayback(scoreMeasures[completedPrefixCount], completedPrefixCount)) {
+                completedPrefixCount++;
+            }
+
+            const remainingMeasuresAreEmpty = scoreMeasures
+                .slice(completedPrefixCount)
+                .every(measureNotes => measureNotes.length === 0);
+
+            const exportedMeasureCount = Math.max(0, Math.min(PROJECT_MEASURE_COUNT, Number(window.EXPORTED_MEASURE_COUNT) || 0));
+            if (exportedMeasureCount >= 1 && completedPrefixCount >= exportedMeasureCount) {
+                projectPlaybackMeasureCount = exportedMeasureCount;
+            } else if (completedPrefixCount >= 2 && completedPrefixCount < PROJECT_MEASURE_COUNT && remainingMeasuresAreEmpty) {
+                const playShortWork = await askPlayCompletedMeasures(completedPrefixCount);
+                if (!playShortWork) {
+                    switchMeasure(completedPrefixCount);
+                    showToast(`${completedPrefixCount + 1}마디부터 계속 창작하세요.`, true);
+                    return;
+                }
+                projectPlaybackMeasureCount = completedPrefixCount;
+            } else if (completedPrefixCount < PROJECT_MEASURE_COUNT) {
+                const warning = validateMeasureForPlayback(scoreMeasures[completedPrefixCount], completedPrefixCount);
+                switchMeasure(completedPrefixCount);
+                initAudio();
+                playTone(180, 0.28, 0.22);
+                showValidationAlert(warning);
+                return;
+            } else {
+                projectPlaybackMeasureCount = PROJECT_MEASURE_COUNT;
+            }
+
+            await preparePlaybackAudio();
+            playbackReturnMeasureIndex = requestedReturnMeasureIndex;
+            isProjectPlaying = true;
+            showProjectPlaybackMeasure(0);
+            const playAllBtn = document.getElementById('playAllBtn');
+            playAllBtn.classList.add('playing');
+            playAllBtn.setAttribute('aria-pressed', 'true');
+            updatePlayButtonLabel();
+            playTimeouts.forEach(t => clearTimeout(t));
+            playTimeouts = [];
+            const beatDuration = 60 / tempo;
+            beginCountIn(beatDuration, playbackStartTime => executeProjectPlayback(beatDuration, playbackStartTime));
+        }
+
+        function getTiedChainDurationFor(measureNotes, firstNote) {
             let duration = getBeat(firstNote.type, firstNote.dotted);
             let current = firstNote;
             let guard = 0;
             while (current.tied && guard < 16) {
-                const target = findTiedTarget(current);
+                const expectedOffset = current.beatOffset + getBeat(current.type, current.dotted);
+                const target = measureNotes.find(candidate => candidate.tiedTo && Math.abs(candidate.beatOffset - expectedOffset) < 0.01);
                 if (!target) break;
                 duration += getBeat(target.type, target.dotted);
                 current = target;
@@ -3342,69 +4727,100 @@
             return duration;
         }
 
-        function executeCorePlayback(beatDuration, totalBeats) {
-            isPlaying = true;
-            currentPlaybackX = 200;
-            
-            const startRealTime = audioCtx.currentTime;
-
-            // 메트로놈 볼륨 최저화 (0.04로 정밀 감쇠)
-            for (let b = 0; b < totalBeats; b++) {
-                const metroTime = b * beatDuration;
-                const tMetro = setTimeout(() => {
-                    if (!isPlaying) return;
-                    playTone(b % timeSignature.top === 0 ? 1200 : 820, 0.035, 0.055);
-                }, metroTime * 1000);
-                playTimeouts.push(tMetro);
+        function scheduleMeasureAudio(measureNotes, startTime, beatDuration) {
+            const metroPulseCount = getDisplayPulseCount();
+            const metroPulseDuration = beatDuration * getDisplayPulseDuration();
+            for (let b = 0; b < metroPulseCount; b++) {
+                if (!metronomeEnabled) continue;
+                const isStrong = b === 0;
+                const isMedium = isCompoundSixEight() ? b === 3 : (metroPulseCount === 4 && b === 2);
+                playMetronomeClick(isStrong ? 'strong' : (isMedium ? 'medium' : 'weak'), startTime + b * metroPulseDuration);
             }
 
-            // 기보된 리듬 음표 소리는 선명하게 발음 (0.18 유지, 붙임줄 연주 지원)
-            notes.forEach((n) => {
-                if (n.tiedTo) return; 
-
-                let duration = getTiedChainDuration(n) * beatDuration;
-
-                if (!n.isRest) {
-                    const tNote = setTimeout(() => {
-                        if (!isPlaying) return;
-                        playTone(523.25, duration * 0.88, 0.18); 
-                    }, (n.beatOffset * beatDuration) * 1000);
-                    playTimeouts.push(tNote);
-                }
+            measureNotes.forEach(n => {
+                if (n.tiedTo || n.isRest) return;
+                const duration = getTiedChainDurationFor(measureNotes, n) * beatDuration;
+                const noteStartTime = startTime + n.beatOffset * beatDuration;
+                const scheduleAheadSeconds = 0.10;
+                queuePlaybackTimeout(() => {
+                    if (!isPlaying) return;
+                    // 콜백 시점의 선택 악기를 사용하므로 연주 중 음색 변경이 다음 음부터 반영됩니다.
+                    playRhythmTone(duration, getRhythmAccentAtOffset(n.beatOffset), noteStartTime);
+                }, (noteStartTime - audioCtx.currentTime - scheduleAheadSeconds) * 1000);
             });
+        }
 
+        function executeCorePlayback(measureNotes, beatDuration, totalBeats, startRealTime = audioCtx.currentTime + 0.08) {
+            isPlaying = true;
+            updatePlayButtonLabel();
+            currentPlaybackX = 200;
+            scheduleMeasureAudio(measureNotes, startRealTime, beatDuration);
             animateCursor(startRealTime, beatDuration, totalBeats);
 
             const loopCycleTime = totalBeats * beatDuration;
-            const endTimeout = setTimeout(() => {
-                if (isPlaying) {
-                    isFirstIteration = false; 
-                    startPerformance(); 
-                }
-            }, loopCycleTime * 1000);
-            playTimeouts.push(endTimeout);
+            const nextStartTime = startRealTime + loopCycleTime;
+            queuePlaybackTimeout(() => {
+                if (isPlaying && !isProjectPlaying) executeCorePlayback(measureNotes, beatDuration, totalBeats, nextStartTime);
+            }, Math.max(0, (nextStartTime - audioCtx.currentTime - 0.10) * 1000));
+        }
+
+        function executeProjectPlayback(beatDuration, startRealTime) {
+            isPlaying = true;
+            const totalBeats = getVisibleTimelineBeats();
+            const measureDuration = totalBeats * beatDuration;
+
+            scoreMeasures.slice(0, projectPlaybackMeasureCount).forEach((measureNotes, index) => {
+                const measureStartTime = startRealTime + index * measureDuration;
+                scheduleMeasureAudio(measureNotes, measureStartTime, beatDuration);
+                queuePlaybackTimeout(() => {
+                    if (!isProjectPlaying) return;
+                    cancelAnimationFrame(playbackAnimFrame);
+                    showProjectPlaybackMeasure(index);
+                    animateCursor(measureStartTime, beatDuration, totalBeats);
+                }, Math.max(0, (measureStartTime - audioCtx.currentTime) * 1000));
+            });
+
+            const projectEndTime = startRealTime + projectPlaybackMeasureCount * measureDuration;
+            queuePlaybackTimeout(() => {
+                if (isProjectPlaying) executeProjectPlayback(beatDuration, projectEndTime);
+            }, Math.max(0, (projectEndTime - audioCtx.currentTime - 0.10) * 1000));
         }
 
         function stopPerformance() {
+            const shouldRestoreMeasure = isProjectPlaying;
+            const restoreIndex = playbackReturnMeasureIndex;
             isPlaying = false;
             isCountingIn = false;
-            isFirstIteration = true; 
+            isFirstIteration = true;
+            isProjectPlaying = false;
             const playBtn = document.getElementById('playBtn');
-            playBtn.innerText = "▶ 전체 연주";
+            const playAllBtn = document.getElementById('playAllBtn');
             playBtn.classList.remove('playing');
             playBtn.setAttribute('aria-pressed', 'false');
-            
+            playAllBtn.classList.remove('playing');
+            playAllBtn.setAttribute('aria-pressed', 'false');
+
             playTimeouts.forEach(t => clearTimeout(t));
             playTimeouts = [];
+            scheduledAudioNodes.forEach(node => {
+                try { node.stop(); } catch (error) { /* 이미 끝난 음원은 무시 */ }
+            });
+            scheduledAudioNodes.clear();
             cancelAnimationFrame(playbackAnimFrame);
+
+            if (shouldRestoreMeasure) {
+                activeMeasureIndex = restoreIndex;
+                notes = scoreMeasures[activeMeasureIndex] || [];
+                undoStack = measureUndoStacks[activeMeasureIndex] || [];
+            }
+            updatePlayButtonLabel();
             drawAll();
         }
 
         function animateCursor(startRealTime, beatDuration, totalBeats) {
             if (!isPlaying) return;
 
-            const startX = 200;
-            const measureWidth = rhythmCanvas.width - 300;
+            const {startX, measureWidth} = getScoreLayout();
 
             const drawCursor = () => {
                 if (!isPlaying) return;
@@ -3441,7 +4857,7 @@
 
 
         // 최초 접속 튜토리얼
-        const TUTORIAL_STORAGE_KEY = 'rhythmNotationTutorialHidden_v9';
+        const TUTORIAL_STORAGE_KEY = 'rhythmNotationTutorialHidden_v11';
         const TUTORIAL_SESSION_KEY = 'rhythmNotationTutorialShown_session_v1';
         const tutorialSteps = [
             {
@@ -3452,9 +4868,19 @@
                 anchor: null
             },
             {
+                title: '단계적으로 연습하기',
+                body: `• 처음에는 <strong>예시 보기·듣기</strong>에서 완성된 한 마디를 악보와 소리로 확인합니다.
+• 4/4 예시는 4분음표, 8분음표, 8분쉼표와 마지막 두 8분음표의 붙임줄을 골고루 사용합니다.
+• <strong>따라 만들기</strong>에서는 같은 리듬을 직접 입력하고 정답 확인을 누릅니다.
+• 오류가 있으면 틀린 위치와 원인, 선택 삭제 후 다시 입력하는 방법을 안내합니다.
+• 마지막에는 <strong>독립 창작</strong>으로 넘어가 안내 없이 자신의 리듬을 만듭니다.`,
+                anchor: 'practice',
+                placement: 'bottom'
+            },
+            {
                 title: '악보 입력',
-                body: `• <strong>마디 1, 즉 왼쪽 첫 마디부터</strong> 차례로 입력하세요.
-• 입력할 위치의 칸을 클릭하면 그 자리에 바로 입력할 수 있습니다.
+                body: `• <strong>마디의 왼쪽부터</strong> 차례로 입력하세요.
+• 아래 음표·쉼표 기호를 누르면 첫 번째 빈자리에 입력됩니다.
 • 수정 방법은 뒤의 안내에서 설명합니다.`,
                 anchor: 'canvas',
                 placement: 'center'
@@ -3462,23 +4888,57 @@
             {
                 title: '음표와 쉼표 입력',
                 body: `• 아래 표에서 원하는 <strong>음표 또는 쉼표</strong>를 선택하세요.
-• 그다음 악보에서 입력할 칸을 클릭하세요.
-• 선택한 기호는 악보에 크게 표시됩니다.`,
+• 누른 기호는 악보의 첫 번째 빈자리에 바로 입력됩니다.
+• 기호를 악보의 원하는 위치로 <strong>끌어 놓으면</strong> 그 위치의 기존 기호를 새 기호로 바꿀 수 있습니다. 마우스와 터치를 모두 지원합니다.
+• 입력 결과는 한 줄 리듬 악보와 V자 리듬에 함께 표시됩니다.`,
                 anchor: 'noteRestButtons',
                 placement: 'top'
             },
             {
+                title: '최대 4마디 작품 만들기',
+                body: `• <strong>1마디–4마디</strong> 탭을 눌러 편집할 마디를 선택합니다.
+• 중앙에는 선택한 한 마디만 크게 표시되어 음표와 V자 리듬을 자세히 볼 수 있습니다.
+• 회색 점은 빈 마디, 주황색 점은 작성 중, 초록색 점은 완성된 마디를 뜻합니다.
+• 좌우 <strong>화살표</strong>로 이전·다음 마디를 바로 이동할 수 있습니다.
+• 넓은 화면에서는 오른쪽의 <strong>다음 마디 미리보기</strong>로 이어질 리듬을 미리 확인할 수 있습니다.
+• 스마트폰 세로 화면에서도 한 마디 악보와 입력표가 화면 폭에 맞게 재배치됩니다.`,
+                anchor: 'measureNavigator',
+                placement: 'bottom'
+            },
+            {
                 title: '점음표 만들기',
-                body: `• 음표를 입력한 뒤 <span class="tutorial-highlight">점</span> 버튼을 누르면 점음표로 바뀝니다.
+                body: `• 방금 입력한 음표는 바로 <span class="tutorial-highlight">점</span> 버튼을 누르면 점음표로 바뀝니다.
+• 앞에서 입력한 음표에 나중에 점을 붙이려면 악보의 해당 음표를 먼저 누르세요. 파란 테두리로 선택된 뒤 점 버튼을 누릅니다.
+• 점을 붙여 뒤 기호와 겹치거나 마디를 넘으면 원인과 수정 방법을 안내합니다.
 • 다시 누르면 점이 해제됩니다.`,
                 anchor: 'dotButton',
                 placement: 'top'
             },
             {
-                title: '전체 연주',
-                body: `• <span class="tutorial-highlight">전체 연주</span>를 누르면 입력한 리듬을 바로 들을 수 있습니다.
-• 박이 부족하거나 초과하면 안내가 나타납니다.`,
+                title: '현재 마디·전체 작품 연주',
+                body: `• <span class="tutorial-highlight">현재 마디 연주</span>는 화면에 보이는 한 마디를 반복해서 들려줍니다.
+• <strong>작품 전체 연주</strong>는 1마디부터 시작해, 중지 버튼을 누를 때까지 완성된 마디를 계속 반복합니다.
+• 기본음은 온음표·점음표·붙임줄로 표시된 실제 길이만큼 소리가 유지됩니다.
+• 장구·드럼은 타격 뒤에 약한 공명음을 이어, 긴 음표의 끝을 들을 수 있게 합니다. 실제 타악기 연주에서는 타격음이 자연스럽게 줄어듭니다.
+• 연주 중에 악기를 바꾸면 연주를 멈추지 않고 다음 음부터 새 음색을 반영합니다.
+• 재생을 시작하면 같은 버튼이 <strong>■ 연주 중지</strong>로 바뀝니다. 다시 누르면 즉시 멈춥니다.
+• 2마디나 3마디까지만 완성했다면 그 길이로 연주할지, 다음 마디를 계속 만들지 선택할 수 있습니다.
+• 비어 있거나 박이 부족한 마디가 있으면 해당 마디 번호를 안내합니다.
+• <strong>작품 제출</strong>은 악보·빠르기·선택 악기 실음을 한 HTML 파일에 담습니다. 교사는 서버나 앱 설치 없이 파일을 브라우저로 열어 반복 재생할 수 있습니다.`,
                 anchor: 'play',
+                placement: 'top'
+            },
+            {
+                title: '빠르기·메트로놈·보기 설정',
+                body: `• <strong>빠르기</strong> 슬라이더로 연주 속도를 조절합니다.
+• <strong>메트로놈</strong>을 해제하면 틱 소리 없이 리듬음만 재생됩니다.
+• <strong>악기</strong>는 기본음·장구·꽹과리·우드블록·드럼 순서로 선택합니다.
+• <strong>기본음</strong>은 송메이커처럼 음높이가 분명한 말렛 계열 음이며 기보된 음가만큼 유지됩니다.
+• <strong>장구</strong>와 <strong>꽹과리</strong>는 강·중강·약에 맞는 국립국악원 실제 타격음을 사용합니다.
+• <strong>우드블록</strong>은 짧고 마른 나무 타격음, <strong>드럼</strong>은 CC0 실제 스네어 타격음이며 강약에 따라 음량이 달라집니다.
+• <strong>V자 리듬·정간보·강약 표시</strong> 체크를 해제하면 해당 안내만 화면에서 숨겨집니다.
+• 보기 체크를 해제해도 입력한 음표와 쉼표는 삭제되지 않습니다.`,
+                anchor: 'playbackControls',
                 placement: 'top'
             },
             {
@@ -3498,21 +4958,25 @@
             {
                 title: '선택 삭제',
                 body: `• <span class="tutorial-highlight">선택 삭제</span>를 누르면 삭제 모드가 켜집니다.
-• 지울 음표나 쉼표를 계속 클릭하면 여러 개를 연속으로 삭제할 수 있습니다.
-• 버튼을 다시 누르면 삭제 모드가 꺼집니다.`,
+• 지울 음표나 쉼표를 한 번 누르면 주황색 테두리로 선택됩니다.
+• 같은 기호를 한 번 더 누르면 삭제되어 실수로 지우는 일을 줄입니다.
+• 선택 삭제 버튼을 다시 누르면 선택을 취소하고 삭제 모드가 꺼집니다.`,
                 anchor: 'delete',
                 placement: 'bottom'
             },
             {
-                title: '전체 삭제',
-                body: `• <span class="tutorial-highlight">전체 삭제</span>는 현재 악보의 모든 입력을 한 번에 지웁니다.
+                title: '현재 마디 삭제',
+                body: `• <span class="tutorial-highlight">현재 마디 삭제</span>는 화면에 보이는 마디의 모든 입력을 한 번에 지웁니다.
+• 다른 세 마디의 내용은 그대로 유지됩니다.
 • 일부만 지우려면 선택 삭제를 사용하세요.`,
                 anchor: 'clear',
                 placement: 'bottom'
             },
             {
                 title: '도움말 다시 보기',
-                body: `• 설명이 다시 필요하면 화면 위쪽의 <span class="tutorial-highlight">도움말</span> 버튼을 누르세요.
+                body: `• 화면 오른쪽의 화살표로 다음 마디 또는 이전 마디로 이동합니다.
+• 6/8박자는 8분음표 3개가 한 큰박을 이루므로 셋잇단음표를 입력하지 않습니다. 필요하면 8분음표·16분음표 조합을 사용하세요.
+• 설명이 다시 필요하면 화면 위쪽의 <span class="tutorial-highlight">도움말</span> 버튼을 누르세요.
 • “다시 보지 않기”를 선택하면 다음 접속부터 자동으로 뜨지 않습니다.
 
 이제 리듬을 자유롭게 창작해 보세요.`,
@@ -3563,11 +5027,14 @@
         function getTutorialAnchor(anchor) {
             if (!anchor) return null;
             if (anchor === 'canvas') return document.getElementById('canvasArea');
+            if (anchor === 'measureNavigator') return document.getElementById('measureNavigator');
             if (anchor === 'play') return document.getElementById('playBtn');
+            if (anchor === 'playbackControls') return document.querySelector('.playback-controls');
             if (anchor === 'delete') return document.getElementById('btn-delete-note');
             if (anchor === 'undo') return document.getElementById('btn-undo');
             if (anchor === 'tie') return document.getElementById('btn-tie-note');
             if (anchor === 'help') return document.getElementById('btn-help-tutorial');
+            if (anchor === 'practice') return document.getElementById('btn-stage-practice');
             if (anchor === 'clear') return document.getElementById('btn-clear-all') || Array.from(document.querySelectorAll('button[onclick]')).find(el => (el.getAttribute('onclick') || '').includes('confirmClear'));
             if (anchor === 'undoClear') {
                 return [document.getElementById('btn-undo'), document.getElementById('btn-clear-all')].filter(Boolean);
