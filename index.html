@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -534,34 +534,6 @@
             </div>
         </div>
     </div>
-
-    <!-- 최초 접속 튜토리얼 팝업 -->
-    <div id="tutorialOverlay" aria-live="polite" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
-        <div id="tutorialGroupHighlight" aria-hidden="true"></div>
-        <div id="tutorialCard" class="tutorial-card">
-            <div id="tutorialCount" class="tutorial-count">1 / 7</div>
-            <h2 id="tutorialTitle" class="tutorial-title">리듬기보 창작 앱</h2>
-            <div id="tutorialBody" class="tutorial-body"></div>
-            <label class="tutorial-never-row">
-                <input id="tutorialNeverAgain" type="checkbox">
-                <span>다시 보지 않기</span>
-            </label>
-            <div class="tutorial-actions">
-                <div class="tutorial-actions-left">
-                    <button id="tutorialSkipBtn" type="button" class="tutorial-btn">건너뛰기</button>
-                </div>
-                <div class="tutorial-actions-right">
-                    <button id="tutorialPrevBtn" type="button" class="tutorial-btn">이전</button>
-                    <button id="tutorialNextBtn" type="button" class="tutorial-btn primary">다음</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="tutorialNotationPreview" aria-hidden="true">
-        <div class="tutorial-preview-title">악보에 이렇게 크게 표시됩니다</div>
-        <div class="tutorial-preview-staff">
-            <svg class="tutorial-preview-note" width="86" height="86" viewBox="0 0 100 100" aria-hidden="true">
 
     <!-- 최초 접속 튜토리얼 팝업 -->
     <div id="tutorialOverlay" aria-live="polite" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
@@ -4764,6 +4736,36 @@
             }, Math.max(0, (playbackStartTime - audioCtx.currentTime - 0.10) * 1000));
             playTimeouts.push(startTimer);
         }
+        // 최초 접속 튜토리얼
+        const TUTORIAL_STORAGE_KEY = 'rhythmNotationTutorialHidden_v11';
+        const TUTORIAL_SESSION_KEY = 'rhythmNotationTutorialShown_session_v1';
+        const tutorialSteps = [
+            {
+                title: '음표·쉼표 넣기',
+                body: '아래 표에서 음표나 쉼표를 눌러 악보에 넣어요.',
+                anchor: 'noteRestButtons',
+                placement: 'top'
+            },
+            {
+                title: '만든 리듬 듣기',
+                body: '듣기 버튼을 눌러 만든 리듬을 소리로 들어요.',
+                anchor: 'play',
+                placement: 'top'
+            },
+            {
+                title: '지우기·되돌리기',
+                body: '잘못 입력했을 때는 지우거나 되돌리기를 눌러요.',
+                anchor: 'undo',
+                placement: 'bottom'
+            },
+            {
+                title: '보기·설정과 도움말',
+                body: '보기·설정에서 표기를 바꾸고, 자세한 설명은 도움말에서 확인해요.',
+                anchor: 'help',
+                placement: 'bottom'
+            }
+        ];
+        let tutorialIndex = 0;
 
         async function togglePlay() {
             if (isPlaying || isCountingIn) {
@@ -5021,135 +5023,7 @@
         }
 
 
-        // 최초 접속 튜토리얼
-        const TUTORIAL_STORAGE_KEY = 'rhythmNotationTutorialHidden_v11';
-        const TUTORIAL_SESSION_KEY = 'rhythmNotationTutorialShown_session_v1';
-        const tutorialSteps = [
-            {
-                title: '리듬기보 창작 앱',
-                body: `이 앱은 리듬을 직접 입력하고, 듣고, 수정하면서 창작할 수 있는 도구입니다.
-
-처음 사용하는 분을 위해 핵심 기능을 차례로 안내합니다.`,
-                anchor: null
-            },
-            {
-                title: '단계적으로 연습하기',
-                body: `• 처음에는 <strong>예시 보기·듣기</strong>에서 완성된 한 마디를 악보와 소리로 확인합니다.
-• 4/4 예시는 4분음표, 8분음표, 8분쉼표와 마지막 두 8분음표의 붙임줄을 골고루 사용합니다.
-• <strong>따라 만들기</strong>에서는 같은 리듬을 직접 입력하고 정답 확인을 누릅니다.
-• 오류가 있으면 틀린 위치와 원인, 선택 삭제 후 다시 입력하는 방법을 안내합니다.
-• 마지막에는 <strong>독립 창작</strong>으로 넘어가 안내 없이 자신의 리듬을 만듭니다.`,
-                anchor: 'practice',
-                placement: 'bottom'
-            },
-            {
-                title: '악보 입력',
-                body: `• <strong>마디의 왼쪽부터</strong> 차례로 입력하세요.
-• 아래 음표·쉼표 기호를 누르면 첫 번째 빈자리에 입력됩니다.
-• 수정 방법은 뒤의 안내에서 설명합니다.`,
-                anchor: 'canvas',
-                placement: 'center'
-            },
-            {
-                title: '음표와 쉼표 입력',
-                body: `• 아래 표에서 원하는 <strong>음표 또는 쉼표</strong>를 선택하세요.
-• 누른 기호는 악보의 첫 번째 빈자리에 바로 입력됩니다.
-• 기호를 악보의 원하는 위치로 <strong>끌어 놓으면</strong> 그 위치의 기존 기호를 새 기호로 바꿀 수 있습니다. 마우스와 터치를 모두 지원합니다.
-• 입력 결과는 한 줄 리듬 악보와 V자 리듬에 함께 표시됩니다.`,
-                anchor: 'noteRestButtons',
-                placement: 'top'
-            },
-            {
-                title: '최대 4마디 작품 만들기',
-                body: `• <strong>1마디–4마디</strong> 탭을 눌러 편집할 마디를 선택합니다.
-• 중앙에는 선택한 한 마디만 크게 표시되어 음표와 V자 리듬을 자세히 볼 수 있습니다.
-• 회색 점은 빈 마디, 주황색 점은 작성 중, 초록색 점은 완성된 마디를 뜻합니다.
-• 좌우 <strong>화살표</strong>로 이전·다음 마디를 바로 이동할 수 있습니다.
-• 넓은 화면에서는 오른쪽의 <strong>다음 마디 미리보기</strong>로 이어질 리듬을 미리 확인할 수 있습니다.
-• 스마트폰 세로 화면에서도 한 마디 악보와 입력표가 화면 폭에 맞게 재배치됩니다.`,
-                anchor: 'measureNavigator',
-                placement: 'bottom'
-            },
-            {
-                title: '점음표 만들기',
-                body: `• 방금 입력한 음표는 바로 <span class="tutorial-highlight">점</span> 버튼을 누르면 점음표로 바뀝니다.
-• 앞에서 입력한 음표에 나중에 점을 붙이려면 악보의 해당 음표를 먼저 누르세요. 파란 테두리로 선택된 뒤 점 버튼을 누릅니다.
-• 점을 붙여 뒤 기호와 겹치거나 마디를 넘으면 원인과 수정 방법을 안내합니다.
-• 다시 누르면 점이 해제됩니다.`,
-                anchor: 'dotButton',
-                placement: 'top'
-            },
-            {
-                title: '현재 마디·전체 작품 연주',
-                body: `• <span class="tutorial-highlight">현재 마디 연주</span>는 화면에 보이는 한 마디를 반복해서 들려줍니다.
-• <strong>작품 전체 연주</strong>는 1마디부터 시작해, 중지 버튼을 누를 때까지 완성된 마디를 계속 반복합니다.
-• 기본음은 온음표·점음표·붙임줄로 표시된 실제 길이만큼 소리가 유지됩니다.
-• 장구·드럼은 타격 뒤에 약한 공명음을 이어, 긴 음표의 끝을 들을 수 있게 합니다. 실제 타악기 연주에서는 타격음이 자연스럽게 줄어듭니다.
-• 연주 중에 악기를 바꾸면 연주를 멈추지 않고 다음 음부터 새 음색을 반영합니다.
-• 재생을 시작하면 같은 버튼이 <strong>■ 연주 중지</strong>로 바뀝니다. 다시 누르면 즉시 멈춥니다.
-• 2마디나 3마디까지만 완성했다면 그 길이로 연주할지, 다음 마디를 계속 만들지 선택할 수 있습니다.
-• 비어 있거나 박이 부족한 마디가 있으면 해당 마디 번호를 안내합니다.
-• <strong>작품 제출</strong>은 악보·빠르기·선택 악기 실음을 한 HTML 파일에 담습니다. 교사는 서버나 앱 설치 없이 파일을 브라우저로 열어 반복 재생할 수 있습니다.`,
-                anchor: 'play',
-                placement: 'top'
-            },
-            {
-                title: '빠르기·메트로놈·보기 설정',
-                body: `• <strong>빠르기</strong> 슬라이더로 연주 속도를 조절합니다.
-• <strong>메트로놈</strong>을 해제하면 틱 소리 없이 리듬음만 재생됩니다.
-• <strong>악기</strong>는 기본음·장구·꽹과리·우드블록·드럼 순서로 선택합니다.
-• <strong>기본음</strong>은 송메이커처럼 음높이가 분명한 말렛 계열 음이며 기보된 음가만큼 유지됩니다.
-• <strong>장구</strong>와 <strong>꽹과리</strong>는 강·중강·약에 맞는 국립국악원 실제 타격음을 사용합니다.
-• <strong>우드블록</strong>은 짧고 마른 나무 타격음, <strong>드럼</strong>은 CC0 실제 스네어 타격음이며 강약에 따라 음량이 달라집니다.
-• <strong>V자 리듬·정간보·강약 표시</strong> 체크를 해제하면 해당 안내만 화면에서 숨겨집니다.
-• 보기 체크를 해제해도 입력한 음표와 쉼표는 삭제되지 않습니다.`,
-                anchor: 'playbackControls',
-                placement: 'top'
-            },
-            {
-                title: '붙임줄',
-                body: `• <span class="tutorial-highlight">붙임줄</span>을 누른 뒤 연결할 두 음표를 차례로 선택하세요.
-• 같은 높이의 인접한 음표를 연결할 때 사용합니다.`,
-                anchor: 'tie',
-                placement: 'bottom'
-            },
-            {
-                title: '되돌리기',
-                body: `• 잘못 입력하거나 방금 한 작업을 취소하려면 <span class="tutorial-highlight">되돌리기</span>를 누르세요.
-• 한 번 누를 때마다 직전 작업으로 돌아갑니다.`,
-                anchor: 'undo',
-                placement: 'bottom'
-            },
-            {
-                title: '선택 삭제',
-                body: `• <span class="tutorial-highlight">선택 삭제</span>를 누르면 삭제 모드가 켜집니다.
-• 지울 음표나 쉼표를 한 번 누르면 주황색 테두리로 선택됩니다.
-• 같은 기호를 한 번 더 누르면 삭제되어 실수로 지우는 일을 줄입니다.
-• 선택 삭제 버튼을 다시 누르면 선택을 취소하고 삭제 모드가 꺼집니다.`,
-                anchor: 'delete',
-                placement: 'bottom'
-            },
-            {
-                title: '현재 마디 삭제',
-                body: `• <span class="tutorial-highlight">현재 마디 삭제</span>는 화면에 보이는 마디의 모든 입력을 한 번에 지웁니다.
-• 다른 세 마디의 내용은 그대로 유지됩니다.
-• 일부만 지우려면 선택 삭제를 사용하세요.`,
-                anchor: 'clear',
-                placement: 'bottom'
-            },
-            {
-                title: '도움말 다시 보기',
-                body: `• 화면 오른쪽의 화살표로 다음 마디 또는 이전 마디로 이동합니다.
-• 6/8박자는 8분음표 3개가 한 큰박을 이루므로 셋잇단음표를 입력하지 않습니다. 필요하면 8분음표·16분음표 조합을 사용하세요.
-• 설명이 다시 필요하면 화면 위쪽의 <span class="tutorial-highlight">도움말</span> 버튼을 누르세요.
-• “다시 보지 않기”를 선택하면 다음 접속부터 자동으로 뜨지 않습니다.
-
-이제 리듬을 자유롭게 창작해 보세요.`,
-                anchor: 'help',
-                placement: 'bottom'
-            }
-        ];
-        let tutorialIndex = 0;
+ 
         let currentTutorialTarget = [];
 
         function getTutorialElements() {
