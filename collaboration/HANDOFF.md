@@ -1,70 +1,38 @@
 # 🤝 작업 인수인계 보고서 (HANDOFF)
 
 > **명세 ID**: SPEC-002  
-> **제목**: 초등학생용 화면 단순화와 도움말·출처 정리 (Plan A 구현 & AUDIT 수정)  
+> **제목**: 초등학생용 화면 단순화와 도움말·출처 정리 (Plan A 구현 & P1 화살표 중복 수정)  
 > **담당자**: 안티그래비티  
 > **상태**: READY_FOR_AUDIT  
 > **작업 브랜치**: `ui/spec-002-simplify`  
-> **구현 커밋 해시**: `17bb641` (1차 구현), `5c7dbc0` (AUDIT 오류 수정 & 튜토리얼 간소화)  
+> **최신 구현 커밋 해시**: `376d16e`  
 
 ---
 
-## 1. AUDIT 차단 오류 수정 내용 (Bug Fixes)
+## 1. AUDIT P1 지적 사항 수정 내용 (Bug Fixes)
 
-### 튜토리얼 마크업 중복 및 흰 화면 오류 해결
-- `index.html` 내에 중복으로 삽입되어 있던 `#tutorialOverlay` HTML 블록 및 닫히지 않은 `<svg>` 태그 제거 완료.
-- 다음 DOM ID가 문서 내에 **정확히 단 하나씩만 존재**하도록 검증 완료:
-  - `tutorialOverlay`, `tutorialGroupHighlight`, `tutorialCard`, `tutorialCount`
-  - `tutorialTitle`, `tutorialBody`, `tutorialNeverAgain`
-  - `tutorialSkipBtn`, `tutorialPrevBtn`, `tutorialNextBtn`
-  - `tutorialNotationPreview`
-- `closeTutorial()` 실행 시 미리보기 요소 닫기로 인해 전체 앱 본문이 사라지던 버그가 완벽히 해결되었습니다.
+### 마디 이동 화살표 중복 제거 및 단일화
+- 악보 내부(`<main id="canvasArea">`)에 중복으로 배치되어 있던 캔버스 이전/다음 화살표 버튼 제거.
+- 마디 이동 UI는 중앙 점 탐색기(`<nav id="measureNavigator">`)의 **`‹ ● ○ ○ ○ ›` 단 한 쌍만 유일하게 유지**.
+- `previousMeasureButton` 및 `nextMeasureButton` DOM ID가 문서 내에 **정확히 단 하나만 존재**함을 검증 완료.
 
-### 튜토리얼 4단계 간소화 (Elementary Tutorial)
-- 기존 13단계의 길고 복잡했던 튜토리얼을 **초등학생용 4단계**로 축소.
-- 각 단계마다 **제목 1개 + 짧은 문장 1개**만 적용:
-  1. **음표·쉼표 넣기**: "아래 표에서 음표나 쉼표를 눌러 악보에 넣어요."
-  2. **만든 리듬 듣기**: "듣기 버튼을 눌러 만든 리듬을 소리로 들어요."
-  3. **지우기·되돌리기**: "잘못 입력했을 때는 지우거나 되돌리기를 눌러요."
-  4. **보기·설정과 도움말**: "보기·설정에서 표기를 바꾸고, 자세한 설명은 도움말에서 확인해요."
-- 기타 상세 기능 설명은 상단 `❓ 도움말` 모달의 `📖 더 알아보기` 접기/펼침 영역으로 이동 완료.
+### 마디 이동 버튼 상태 동작 검증
+- **1마디 선택 시**: `previousMeasureButton`이 `disabled` 처리되어 `visibility: hidden`으로 깔끔하게 숨겨짐.
+- **4마디 선택 시**: `nextMeasureButton`이 `disabled` 처리되어 `visibility: hidden`으로 깔끔하게 숨겨짐.
+- **데스크톱 및 390px 스마트폰 화면**: 중복 화살표 없이 깔끔하게 한 쌍만 노출되며 가로 넘침이 발생하지 않음.
 
 ---
 
-## 2. 주요 변경 사항 (Changed Files & Functions)
+## 2. 유지된 정상 기능 (Maintained Features)
 
-### `index.html`
-- **상단 툴바 개편**:
-  - 앱 제목 한 줄 유화 (`🎵 초등 리듬 창작 도구`)
-  - 박자 선택 통합 버튼(`[ 4/4 ▾ ]`) 및 드롭다운 메뉴 추가 (`toggleMeterMenu()`, `selectMeter()`)
-  - 상단 필수 버튼 4개 노출 (`↩ 되돌리기`, `🗑️ 지우기`, `❓ 도움말`, `⚙️ 보기·설정`)
-- **마디 이동 컨트롤 (A안: `‹ ● ○ ○ ○ ›`)**:
-  - 점 4개 형태의 마디 네비게이터로 개편
-  - 터치 1회로 원하는 마디로 즉시 이동 (`switchMeasure()`)
-  - 현재 마디(파란색 점) 및 완료/작성 중 상태(녹색/주황색 점) 시각화
-- **2차 보조 메뉴 펼침 영역 (`⚙️ 보기·설정`)**:
-  - `#viewSettingsModal` 모달 추가
-  - V자 리듬, 정간보, 강약 표시 체크박스 이동 (`setDisplayLayer()`)
-  - `🎯 단계별 연습 모드` (`openPracticePanel()`) 및 `📤 완성 작품 제출하기` (`downloadPlayableScoreHtml()`) 이동
-- **도움말 모달 간소화 (`❓ 도움말`)**:
-  - `#helpSimpleModal` 추가 (초등학생용 3문장 첫 화면)
-  - `📖 더 알아보기` 버튼으로 악기 설명 및 박자 세부 설명 접기/펼침 (`toggleHelpDetail()`)
-- **하단 출처 표기 (Footer)**:
-  - 제작자 오한나, 국립국악원, Freesound (CC0) 출처 문구 및 접근 가능한 링크 적용
+- [x] 이전 감사에서 통과한 튜토리얼 4단계 간소화 (제목 1개 + 짧은 문장 1개)
+- [x] 흰 화면 오류 방지 및 단일 `tutorialOverlay` 마크업
+- [x] 상단 4대 필수 버튼 (` 되돌리기`, `지우기`, `도움말`, `보기·설정`) 및 `[ 4/4 ▾ ]` 박자 드롭다운
+- [x] 음악 계산 및 오디오 재생 엔진 규칙 100% 보존
 
 ---
 
-## 3. 검증 항목 및 결과 (Verification Results)
-
-1. **첫 접속 → `건너뛰기`**: 앱 기본 화면(제목·악보·입력표·재생버튼) 100% 정상 표시 확인.
-2. **첫 접속 → 마지막 단계 `시작하기`**: 4단계 진행 후 닫히면서 앱 기본 화면 정상 표시 확인.
-3. **`다시 보지 않기` 선택 → 닫기 → 새로고침**: 튜토리얼 팝업 재등장 없이 기본 화면 유지 확인.
-4. **기본 화면 → `도움말` → 닫기**: 모달 닫기 후 기본 화면 유지 확인.
-5. **반응형 테스트**: 데스크톱 화면 및 390px 스마트폰 세로 화면에서 튜토리얼 카드 및 앱 레이아웃 넘침 없이 정상 동작 확인.
-
----
-
-## 4. Codex 재감사 요청 프롬프트 (Re-Audit Prompt for User)
+## 3. Codex 재감사 요청 프롬프트 (Re-Audit Prompt for User)
 
 > **Codex 재감사 요청 프롬프트**:
-> `Codex님, 안티그래비티가 AUDIT.md의 튜토리얼 마크업 중복·흰 화면 오류 수정 및 튜토리얼 4단계 간소화를 완료했습니다 (브랜치: ui/spec-002-simplify, 최신 커밋: 5c7dbc0). collaboration/HANDOFF.md를 확인하시고 재감사를 진행해 주세요.`
+> `Codex님, 안티그래비티가 AUDIT.md의 P1 마디 이동 화살표 중복 제거 및 단일화 수정을 완료했습니다 (브랜치: ui/spec-002-simplify, 최신 커밋: 376d16e). collaboration/HANDOFF.md를 확인하시고 재감사를 진행해 주세요.`
