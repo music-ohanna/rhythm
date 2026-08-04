@@ -681,11 +681,6 @@
     </div>
 
 
-    <!-- 📱 모바일 세로 모드 안내 배너 -->
-    <div id="portraitNotice" class="portrait-notice-banner hidden">
-        <span>📱 폰을 <strong>가로로 돌리면</strong> 악보와 정간보가 훨씬 크고 시원하게 보여요! 🔄</span>
-        <button type="button" onclick="closePortraitNotice()" class="portrait-notice-close" title="닫기">✕</button>
-    </div>
 
     <!-- 실시간 상태 경고 알림판 -->
     <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-6 py-3 rounded-full font-bold text-sm md:text-base flex items-center gap-2 pointer-events-none opacity-0 translate-y-[-20px] transition-all duration-300">
@@ -733,6 +728,12 @@
             </div>
         </div>
     </header>
+
+    <!-- 📱 모바일 세로 모드 가로 전환 안내 배너 -->
+    <div id="portraitNotice" class="portrait-notice-banner hidden" role="alert" aria-live="polite">
+        <span>📱 화면을 <strong>가로로 돌려주세요</strong> — 더 잘 보여요!</span>
+        <button class="portrait-notice-close" type="button" onclick="closePortraitNotice()" aria-label="배너 닫기">✕</button>
+    </div>
 
     <!-- 마디 이동 컨트롤 (A안: ‹ ● ○ ○ ○ › 점 표시 방식) -->
     <nav id="measureNavigator" class="measure-navigator" aria-label="최대 4마디 작품 탐색">
@@ -3471,6 +3472,28 @@
             applyExportedSubmissionMode();
         }, 150));
 
+        // 📱 모바일 세로 모드 감지 → 가로 전환 안내 배너 제어
+        function checkOrientationAndShowNotice() {
+            const notice = document.getElementById('portraitNotice');
+            if (!notice) return;
+            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+            const isPortrait = window.innerHeight > window.innerWidth;
+            if (isMobileDevice && isPortrait && !sessionStorage.getItem('portraitNoticeClosed')) {
+                notice.classList.remove('hidden');
+            } else {
+                notice.classList.add('hidden');
+            }
+        }
+        function closePortraitNotice() {
+            const notice = document.getElementById('portraitNotice');
+            if (notice) notice.classList.add('hidden');
+            sessionStorage.setItem('portraitNoticeClosed', 'true');
+        }
+        window.addEventListener('resize', checkOrientationAndShowNotice);
+        window.addEventListener('orientationchange', checkOrientationAndShowNotice);
+        window.addEventListener('load', checkOrientationAndShowNotice);
+
+
         function restPiecesForDuration(duration) {
             const pieces = [];
             let remaining = duration;
@@ -4428,26 +4451,6 @@
             rhythmCtx.restore();
         }
 
-        function checkOrientationAndShowNotice() {
-            const notice = document.getElementById('portraitNotice');
-            if (!notice) return;
-            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-            const isPortrait = window.innerHeight > window.innerWidth;
-            if (isMobileDevice && isPortrait && !sessionStorage.getItem('portraitNoticeClosed')) {
-                notice.classList.remove('hidden');
-            } else {
-                notice.classList.add('hidden');
-            }
-        }
-        function closePortraitNotice() {
-            const notice = document.getElementById('portraitNotice');
-            if (notice) notice.classList.add('hidden');
-            sessionStorage.setItem('portraitNoticeClosed', 'true');
-        }
-        window.addEventListener('resize', checkOrientationAndShowNotice);
-        window.addEventListener('orientationchange', checkOrientationAndShowNotice);
-        window.addEventListener('load', checkOrientationAndShowNotice);
-
         // playTone 함수 볼륨(volume) 매개변수를 기본화하여 제어력 증강
         function playTone(freq, duration, volume = 0.18, type = 'sine') {
             if(!audioCtx) return;
@@ -4808,51 +4811,6 @@
             oscillator.stop(tailEnd + 0.01);
         }
 
-        // 기본 리듬음은 낮고 둥근 유율음, 선택 악기는 녹음된 실제 타악기 단음을 사용합니다.
-        function playRhythmTone(duration, accent = 'weak', when = audioCtx?.currentTime) {
-            if (!audioCtx) return;
-            if (playLoadedRhythmSample(accent, when, duration)) return;
-            const now = Math.max(Number(when) || audioCtx.currentTime, audioCtx.currentTime);
-            const soundingDuration = Math.max(0.08, Number(duration) || 0.18);
-            const master = audioCtx.createGain();
-            const body = audioCtx.createOscillator();
-            const overtone = audioCtx.createOscillator();
-            trackScheduledAudioNode(body);
-            trackScheduledAudioNode(overtone);
-            const overtoneGain = audioCtx.createGain();
-
-            // 어택은 말렛처럼 선명하게, 본체음은 기보된 음가와 붙임줄 길이만큼 유지합니다.
-            body.type = 'triangle';
-            body.frequency.setValueAtTime(523.25, now);
-            overtone.type = 'sine';
-            overtone.frequency.setValueAtTime(1046.5, now);
-            overtoneGain.gain.setValueAtTime(0.085, now);
-
-            const accentGain = accent === 'strong' ? 1 : (accent === 'medium' ? 0.88 : 0.74);
-            const decayTime = now + Math.min(0.12, soundingDuration * 0.35);
-            const releaseStart = now + Math.max(decayTime - now, soundingDuration - Math.min(0.10, soundingDuration * 0.28));
-            master.gain.setValueAtTime(0.0001, now);
-            master.gain.exponentialRampToValueAtTime(0.32 * accentGain, now + 0.006);
-            master.gain.exponentialRampToValueAtTime(0.075 * accentGain, decayTime);
-            master.gain.setValueAtTime(0.075 * accentGain, releaseStart);
-            master.gain.exponentialRampToValueAtTime(0.001, now + soundingDuration);
-
-            body.connect(master);
-            overtone.connect(overtoneGain);
-            overtoneGain.connect(master);
-            if (audioCtx.createStereoPanner) {
-                const panner = audioCtx.createStereoPanner();
-                panner.pan.setValueAtTime(-0.28, now);
-                master.connect(panner);
-                panner.connect(audioCtx.destination);
-            } else {
-                master.connect(audioCtx.destination);
-            }
-            body.start(now);
-            overtone.start(now);
-            body.stop(now + soundingDuration + 0.015);
-            overtone.stop(now + soundingDuration + 0.015);
-        }
 
         // 메트로놈은 짧고 높은 틱, 리듬음은 낮고 긴 음으로 분리합니다.
         function playMetronomeClick(accent = 'weak', when = audioCtx?.currentTime) {
