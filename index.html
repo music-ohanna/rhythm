@@ -43,55 +43,162 @@
             background-color: #ffffff;
         }
 
-        .playback-controls {
-            min-height: 32px;
-            padding: 2px 8px;
-            border: 1px solid #cbd5e1;
+        .text-tool-btn {
+            min-height: 38px;
+            padding: 6px 10px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
             border-radius: 10px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            touch-action: manipulation;
+        }
+        .text-tool-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        /* 📥 상단 악보 저장 특화 버튼 */
+        .btn-save-score {
+            background: #4f46e5 !important;
+            color: #ffffff !important;
+            border-color: #4338ca !important;
+            font-weight: 800 !important;
+        }
+        .btn-save-score:hover {
+            background: #4338ca !important;
+        }
+
+        /* 📱 모바일 세로 가로모드 안내 배너 */
+        .portrait-notice-banner {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: calc(100% - 24px);
+            max-width: 480px;
+            background: #1e1b4b;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid #6366f1;
+            animation: fadeInDown 0.3s ease;
+        }
+        .portrait-notice-close {
+            background: transparent;
+            border: none;
+            color: #a5b4fc;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            padding: 2px 8px;
+            line-height: 1;
+        }
+        .portrait-notice-close:hover { color: #ffffff; }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translate(-50%, -10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .playback-controls {
+            min-height: 42px;
+            padding: 4px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
             background: #f8fafc;
             color: #334155;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             justify-content: center !important;
-            gap: 18px !important;
+            gap: 16px !important;
+            flex-wrap: wrap;
         }
-        .tempo-range { width: min(220px, 30vw); accent-color: #2563eb; }
-        .tempo-value { min-width: 54px; color: #0f172a; font-variant-numeric: tabular-nums; }
-        .metronome-toggle { accent-color: #2563eb; }
-        .instrument-label { display:flex; align-items:center; gap:5px; white-space:nowrap; }
-        .instrument-select { height:25px; min-width:104px; padding:0 24px 0 8px; border:1px solid #cbd5e1; border-radius:8px; background:#fff; color:#334155; font-size:12px; font-weight:800; cursor:pointer; }
+        .tempo-range { width: min(200px, 28vw); height: 24px; accent-color: #2563eb; cursor: pointer; }
+        .tempo-value { min-width: 58px; color: #0f172a; font-weight: 800; font-variant-numeric: tabular-nums; }
+        .metronome-toggle { width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer; }
+        .instrument-label { display:flex; align-items:center; gap:6px; white-space:nowrap; }
+        .instrument-select { height:34px; min-width:110px; padding:0 24px 0 10px; border:1px solid #cbd5e1; border-radius:10px; background:#fff; color:#0f172a; font-size:13px; font-weight:800; cursor:pointer; }
         .view-toggles { display:flex; align-items:center; gap:12px; padding-left:16px; border-left:1px solid #cbd5e1; }
         .view-option { display:flex; align-items:center; gap:5px; color:#334155; font-size:12px; font-weight:800; cursor:pointer; white-space:nowrap; }
-        .view-option input { width:14px; height:14px; accent-color:#2563eb; cursor:pointer; }
-        .submission-download-btn { padding:4px 10px; border:1px solid #94a3b8; border-radius:8px; background:#ffffff; color:#334155; font-size:12px; font-weight:900; white-space:nowrap; }
-        .submission-download-btn:hover { background:#eef2ff; border-color:#6366f1; color:#4338ca; }
+        .view-option input { width:16px; height:16px; accent-color:#2563eb; cursor:pointer; }
+        
+        .submission-download-btn {
+            padding: 10px 14px;
+            border: 2px solid #3730a3;
+            border-radius: 12px;
+            background: #4f46e5 !important;
+            color: #ffffff !important;
+            font-size: 13px;
+            font-weight: 900;
+            white-space: nowrap;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .submission-download-btn:hover { background:#4338ca !important; border-color:#312e81; }
+
         .measure-navigator {
-            display:flex; align-items:center; justify-content:center; gap:16px;
-            min-height:38px; margin-bottom:6px; padding:4px 12px;
+            display:flex; align-items:center; justify-content:center; gap:20px;
+            min-height:44px; margin-bottom:6px; padding:4px 16px;
             border:1px solid #cbd5e1; border-radius:14px; background:#ffffff;
             touch-action:manipulation; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .measure-project-label { display:none; }
-        .measure-tabs { display:flex; align-items:center; justify-content:center; gap:14px; }
+        .measure-tabs { display:flex; align-items:center; justify-content:center; gap:16px; }
         .measure-tab {
-            width:24px; height:24px; min-height:24px; padding:0; border:2px solid #94a3b8; border-radius:9999px;
+            width:32px; height:32px; min-height:32px; padding:0; border:2px solid #94a3b8; border-radius:9999px;
             background:#ffffff; cursor:pointer; display:flex; align-items:center; justify-content:center;
             touch-action:manipulation; transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .measure-tab:hover { border-color:#2563eb; transform:scale(1.15); }
-        .measure-tab.active { background:#2563eb; border-color:#1d4ed8; box-shadow:0 0 0 3px rgba(37,99,235,.25); transform:scale(1.22); }
+        .measure-tab.active { background:#2563eb; border-color:#1d4ed8; box-shadow:0 0 0 4px rgba(37,99,235,.25); transform:scale(1.25); }
         .measure-tab.complete:not(.active) { background:#22c55e; border-color:#16a34a; }
         .measure-tab.partial:not(.active) { background:#f59e0b; border-color:#d97706; }
-        .measure-status { width:6px; height:6px; flex:0 0 6px; border-radius:9999px; background:transparent; }
+        .measure-status { width:8px; height:8px; flex:0 0 8px; border-radius:9999px; background:transparent; }
         .measure-tab.active .measure-status { background:#ffffff; }
         .measure-arrow {
-            width:32px; height:32px; flex:0 0 32px; border:1px solid #cbd5e1; border-radius:9999px;
-            background:#f8fafc; color:#334155; font-size:20px; font-weight:900; line-height:1;
+            width:38px; height:38px; flex:0 0 38px; border:1.5px solid #cbd5e1; border-radius:9999px;
+            background:#f8fafc; color:#1e293b; font-size:22px; font-weight:900; line-height:1;
             display:flex; align-items:center; justify-content:center; cursor:pointer; touch-action:manipulation;
             transition: all 0.15s;
         }
         .measure-arrow:hover { background:#eff6ff; color:#2563eb; border-color:#93c5fd; }
         .measure-arrow:disabled { visibility:hidden; pointer-events:none; }
+
+        /* 터치 반응형 및 폰/태블릿 대응 스타일 */
+        .guide-cell {
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            cursor: pointer;
+        }
+        .guide-cell:active {
+            background-color: #e2e8f0;
+        }
+
+        @media (max-width: 640px) {
+            .text-tool-btn { min-height: 36px; padding: 4px 8px; font-size: 12px; }
+            .measure-navigator { gap: 12px; padding: 2px 10px; min-height: 40px; }
+            .measure-arrow { width: 34px; height: 34px; font-size: 18px; }
+            .playback-controls { padding: 4px 6px; gap: 10px !important; font-size: 11px; }
+            .instrument-select { min-width: 90px; height: 30px; font-size: 11px; }
+        }
         .measure-arrow-canvas {
             position:absolute; top:50%; z-index:42; transform:translateY(-50%);
             background:rgba(239,246,255,.94); backdrop-filter:blur(2px);
@@ -574,6 +681,12 @@
     </div>
 
 
+    <!-- 📱 모바일 세로 모드 안내 배너 -->
+    <div id="portraitNotice" class="portrait-notice-banner hidden">
+        <span>📱 폰을 <strong>가로로 돌리면</strong> 악보와 정간보가 훨씬 크고 시원하게 보여요! 🔄</span>
+        <button type="button" onclick="closePortraitNotice()" class="portrait-notice-close" title="닫기">✕</button>
+    </div>
+
     <!-- 실시간 상태 경고 알림판 -->
     <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-6 py-3 rounded-full font-bold text-sm md:text-base flex items-center gap-2 pointer-events-none opacity-0 translate-y-[-20px] transition-all duration-300">
         <span class="text-lg">⚠️</span>
@@ -600,13 +713,16 @@
                 </div>
             </div>
 
-            <!-- 주요 상단 기능 4개 노출 -->
+            <!-- 주요 상단 기능 5개 노출 (상단 저장 버튼 추가로 직관적 활용 지원) -->
             <div class="flex gap-1.5">
                 <button id="btn-undo" onclick="undoLastAction()" class="text-tool-btn text-xs md:text-sm" title="마지막 작업 되돌리기">
                     <span class="text-base">↩️</span> 되돌리기
                 </button>
                 <button id="btn-clear-all" onclick="confirmClear()" class="text-tool-btn text-xs md:text-sm" title="현재 마디의 모든 기호 삭제">
                     <span class="text-base">🗑️</span> 지우기
+                </button>
+                <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs md:text-sm" title="만든 악보 파일로 저장하기">
+                    <span class="text-base">📥</span> 악보 저장
                 </button>
                 <button id="btn-help-tutorial" onclick="openHelpModal()" class="text-tool-btn text-xs md:text-sm" title="도움말 보기">
                     <span class="text-base">❓</span> 도움말
@@ -796,7 +912,7 @@
                 <span class="current-play-icon">▶</span> 이 마디 듣기 (♩ = 60)
             </button>
             <button id="playAllBtn" onclick="toggleProjectPlay()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md flex items-center justify-center gap-2 text-sm md:text-base font-extrabold active:scale-95 transition">
-                <span class="project-play-icon">▶▶</span> 작품 듣기
+                <span class="project-play-icon">▶▶</span> 전체 듣기
             </button>
         </div>
 
@@ -842,9 +958,9 @@
                     <button id="btn-stage-practice" type="button" onclick="closeViewSettings(); openPracticePanel();" class="w-full py-2.5 px-3 bg-white border border-slate-300 rounded-xl font-bold text-xs md:text-sm text-slate-800 hover:bg-blue-50 hover:border-blue-400 flex items-center gap-2 shadow-sm transition">
                         <span class="text-base">🎯</span> 단계별 연습 모드
                     </button>
-                    <button id="btn-export-score" type="button" onclick="closeViewSettings(); downloadPlayableScoreHtml();" class="w-full py-2.5 px-3 bg-indigo-600 text-white rounded-xl font-bold text-xs md:text-sm hover:bg-indigo-700 flex items-center justify-between shadow-sm transition">
-                        <span class="flex items-center gap-2"><span class="text-base">📤</span> 완성 작품 제출하기 (파일 저장)</span>
-                        <span class="text-xs opacity-80">HTML</span>
+                    <button id="btn-export-score" type="button" onclick="closeViewSettings(); downloadPlayableScoreHtml();" class="submission-download-btn transition" style="background:#4f46e5 !important; color:#ffffff !important;">
+                        <span class="flex items-center gap-2 font-black text-sm text-white"><span class="text-base">📥</span> 완성 작품 제출하기 (파일 저장)</span>
+                        <span class="text-xs bg-indigo-900 text-white px-2 py-1 rounded-md font-bold">HTML 저장</span>
                     </button>
                 </div>
             </div>
@@ -1396,7 +1512,7 @@
                 : `<span class="current-play-icon">▶</span> 이 마디 듣기 (♩ = ${tempo})`;
             if (playAllBtn) playAllBtn.innerHTML = isProjectPlaying
                 ? '<span class="project-play-icon">■</span> 연주 중지'
-                : '<span class="project-play-icon">▶▶</span> 작품 듣기';
+                : '<span class="project-play-icon">▶▶</span> 전체 듣기';
         }
 
         function setTempo(value) {
@@ -4190,6 +4306,90 @@
                         }
                     }
                 }
+                        });
+                    }
+                }
+            }
+
+            if (group[0].type === 'triplet') {
+                const first = group[0];
+                const last = group[group.length - 1];
+                const centerX = (first.x + last.x) / 2 + 11;
+                const bracketY = staffY - 62;
+
+                rhythmCtx.strokeStyle = '#0f172a';
+                rhythmCtx.lineWidth = 2;
+                rhythmCtx.lineCap = 'round';
+                rhythmCtx.beginPath();
+                rhythmCtx.moveTo(first.x + 11, bracketY + 7);
+                rhythmCtx.lineTo(first.x + 11, bracketY);
+                rhythmCtx.lineTo(centerX - 13, bracketY);
+                rhythmCtx.moveTo(last.x + 11, bracketY + 7);
+                rhythmCtx.lineTo(last.x + 11, bracketY);
+                rhythmCtx.lineTo(centerX + 13, bracketY);
+                rhythmCtx.stroke();
+
+                rhythmCtx.fillStyle = '#0f172a';
+                rhythmCtx.font = 'bold 15px sans-serif';
+                rhythmCtx.textBaseline = 'middle';
+                rhythmCtx.textAlign = 'center';
+                rhythmCtx.fillText('3', centerX, bracketY);
+            }
+
+            rhythmCtx.restore();
+        }
+
+        function drawTimeBlocks(startX, measureWidth, totalBeats, blockY, blockHeight, events = notes) {
+            const subdivisionsPerBeat = 4;
+            const totalCells = totalBeats * subdivisionsPerBeat;
+            const cellWidth = measureWidth / totalCells;
+
+            rhythmCtx.save();
+            rhythmCtx.strokeStyle = '#0f172a';
+            rhythmCtx.lineWidth = 2.5;
+            rhythmCtx.strokeRect(startX, blockY - blockHeight/2, measureWidth, blockHeight);
+            rhythmCtx.restore();
+
+            events.forEach(n => {
+                const px = n.startX;
+                const pWidth = n.endX - n.startX;
+
+                rhythmCtx.save();
+                rhythmCtx.strokeStyle = n.autoRest ? 'rgba(100, 116, 139, 0.55)' : '#0f172a';
+                rhythmCtx.lineWidth = n.autoRest ? 1.6 : 2;
+                if (n.isRest) {
+                    rhythmCtx.setLineDash(n.autoRest ? [3, 5] : [4, 4]); 
+                } else {
+                    rhythmCtx.setLineDash([]);
+                }
+                drawRoundedRect(rhythmCtx, px + 2, blockY - blockHeight/2 + 2, pWidth - 4, blockHeight - 4, 4, false, true);
+                rhythmCtx.restore();
+
+                if (!n.isRest) {
+                    const rawVisibleCells = n.beatDuration * GRID_SUBDIVISIONS_PER_BEAT;
+                    const usesHalfCell = Math.abs(rawVisibleCells - Math.round(rawVisibleCells)) > 0.001;
+                    const numSubBlocks = (n.type === 'triplet') ? 1 : Math.max(1, usesHalfCell ? Math.round(n.beatDuration * GRID_SELECTION_UNITS_PER_BEAT) : Math.round(rawVisibleCells));
+                    const subW = (pWidth - 4) / numSubBlocks;
+
+                    for (let s = 0; s < numSubBlocks; s++) {
+                        const subX = px + 2 + s * subW;
+                        
+                        let fillPercent = 1.0;
+                        if (isPlaying) {
+                            fillPercent = Math.max(0, Math.min(1.0, (currentPlaybackX - subX) / (subW - 2)));
+                        }
+
+                        if (fillPercent > 0) {
+                            rhythmCtx.save();
+                            const grad = rhythmCtx.createLinearGradient(subX, blockY - blockHeight/2 + 4, subX, blockY + blockHeight/2 - 4);
+                            grad.addColorStop(0, '#818cf8');
+                            grad.addColorStop(1, '#4f46e5');
+                            rhythmCtx.fillStyle = grad;
+                            rhythmCtx.fillRect(subX + 1.5, blockY - blockHeight/2 + 4, Math.max(1, (subW - 3) * fillPercent), blockHeight - 8);
+                            rhythmCtx.restore();
+                        }
+                    }
+                }
             });
 
             // 마우스 드래그를 통한 실시간 정간보 색칠하기 하이라이트 가이드 레이어
@@ -4226,6 +4426,131 @@
                 rhythmCtx.stroke();
             }
             rhythmCtx.restore();
+        }
+
+        function checkOrientationAndShowNotice() {
+            const notice = document.getElementById('portraitNotice');
+            if (!notice) return;
+            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+            const isPortrait = window.innerHeight > window.innerWidth;
+            if (isMobileDevice && isPortrait && !sessionStorage.getItem('portraitNoticeClosed')) {
+                notice.classList.remove('hidden');
+            } else {
+                notice.classList.add('hidden');
+            }
+        }
+        function closePortraitNotice() {
+            const notice = document.getElementById('portraitNotice');
+            if (notice) notice.classList.add('hidden');
+            sessionStorage.setItem('portraitNoticeClosed', 'true');
+        }
+        window.addEventListener('resize', checkOrientationAndShowNotice);
+        window.addEventListener('orientationchange', checkOrientationAndShowNotice);
+        window.addEventListener('load', checkOrientationAndShowNotice);
+
+        // playTone 함수 볼륨(volume) 매개변수를 기본화하여 제어력 증강
+        function playTone(freq, duration, volume = 0.18, type = 'sine') {
+            if(!audioCtx) return;
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.type = type;
+            osc.frequency.value = freq;
+            gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function getRhythmAccentAtOffset(beatOffset) {
+            if (Math.abs(beatOffset) < 0.001) return 'strong';
+            if (isCompoundSixEight() && Math.abs(beatOffset - 1.5) < 0.001) return 'medium';
+            if (!isCompoundSixEight() && timeSignature.top === 4 && Math.abs(beatOffset - 2) < 0.001) return 'medium';
+            return 'weak';
+        }
+
+        function playLoadedRhythmSample(accent = 'weak', when = audioCtx?.currentTime, requestedDuration = 0.5) {
+            if (!audioCtx || rhythmInstrument === 'synth') return false;
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const hasAccentSamples = rhythmInstrument === 'janggu' || rhythmInstrument === 'kkwaenggwari';
+            const sampleKey = hasAccentSamples ? `${rhythmInstrument}-${accent}` : rhythmInstrument;
+            const buffer = rhythmSampleBuffers.get(sampleKey);
+            if (!buffer) {
+                loadRhythmSample(sampleKey);
+                return false;
+            }
+            const startTime = Math.max(Number(when) || audioCtx.currentTime, audioCtx.currentTime);
+            const source = audioCtx.createBufferSource();
+            trackScheduledAudioNode(source);
+            const gain = audioCtx.createGain();
+            const sampleOffset = rhythmSampleOffsets[sampleKey] || 0;
+            const availableDuration = Math.max(0.05, buffer.duration - sampleOffset);
+            // 짧은 음은 음가 끝에서 자르고, 긴 음은 녹음된 타악기의 자연스러운 울림을 가능한 만큼 유지합니다.
+            const clipDuration = Math.min(availableDuration, Math.max(0.08, Number(requestedDuration) || 0.5));
+            source.buffer = buffer;
+            const accentGain = accent === 'strong' ? 1 : (accent === 'medium' ? 0.88 : 0.76);
+            const baseGain = rhythmInstrument === 'kkwaenggwari' ? 0.54 : (rhythmInstrument === 'janggu' ? 0.78 : 0.82);
+            const fadeStart = startTime + Math.max(0.02, clipDuration - 0.06);
+            gain.gain.setValueAtTime(baseGain * accentGain, startTime);
+            gain.gain.setValueAtTime(baseGain * accentGain, fadeStart);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + clipDuration);
+            source.connect(gain);
+            gain.connect(audioCtx.destination);
+            source.start(startTime, sampleOffset, clipDuration);
+            source.stop(startTime + clipDuration + 0.01);
+            playPercussionSustainTail(requestedDuration, accent, startTime, rhythmInstrument);
+            return true;
+        }
+
+        // 기본 리듬음은 낮고 둥근 유율음 실음 멜로디, 선택 악기는 녹음된 실제 타악기 단음을 사용합니다.
+        function playRhythmTone(duration, accent = 'weak', when = audioCtx?.currentTime) {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            if (playLoadedRhythmSample(accent, when, duration)) return;
+            const now = Math.max(Number(when) || audioCtx.currentTime, audioCtx.currentTime);
+            const soundingDuration = Math.max(0.08, Number(duration) || 0.18);
+            const master = audioCtx.createGain();
+            const body = audioCtx.createOscillator();
+            const overtone = audioCtx.createOscillator();
+            trackScheduledAudioNode(body);
+            trackScheduledAudioNode(overtone);
+            const overtoneGain = audioCtx.createGain();
+
+            // 어택은 선명한 유율 멜로디 음(523.25Hz C5), 본체음은 기보된 음가와 붙임줄 길이만큼 맑게 유지합니다.
+            body.type = 'triangle';
+            body.frequency.setValueAtTime(523.25, now);
+            overtone.type = 'sine';
+            overtone.frequency.setValueAtTime(1046.5, now);
+            overtoneGain.gain.setValueAtTime(0.12, now);
+
+            const accentGain = accent === 'strong' ? 1 : (accent === 'medium' ? 0.88 : 0.74);
+            const decayTime = now + Math.min(0.12, soundingDuration * 0.35);
+            const releaseStart = now + Math.max(decayTime - now, soundingDuration - Math.min(0.10, soundingDuration * 0.28));
+            master.gain.setValueAtTime(0.0001, now);
+            master.gain.exponentialRampToValueAtTime(0.42 * accentGain, now + 0.006);
+            master.gain.exponentialRampToValueAtTime(0.12 * accentGain, decayTime);
+            master.gain.setValueAtTime(0.12 * accentGain, releaseStart);
+            master.gain.exponentialRampToValueAtTime(0.001, now + soundingDuration);
+
+            body.connect(master);
+            overtone.connect(overtoneGain);
+            overtoneGain.connect(master);
+            if (audioCtx.createStereoPanner) {
+                const panner = audioCtx.createStereoPanner();
+                panner.pan.setValueAtTime(-0.28, now);
+                master.connect(panner);
+                panner.connect(audioCtx.destination);
+            } else {
+                master.connect(audioCtx.destination);
+            }
+            body.start(now);
+            overtone.start(now);
+            body.stop(now + soundingDuration + 0.015);
+            overtone.stop(now + soundingDuration + 0.015);
         }
 
         function getSixEightVPointInPulse(pulse, localT, startX, measureWidth, visualizerY) {
@@ -4307,45 +4632,6 @@
             }
 
             const isBeatBoundary = (value) => Math.abs(value - Math.round(value)) < 0.002;
-
-            events.forEach(n => {
-                const startBeat = n.beatOffset;
-                const endBeat = n.beatOffset + n.beatDuration;
-                const splitIntoPieces = !n.isRest && (n.type === 'triplet' || n.type === 'eighth' || n.type === 'sixteenth' || n.type === 'thirtysecond');
-                const pieceGap = splitIntoPieces ? Math.min(n.beatDuration * 0.11, 0.022) : 0;
-
-                rhythmCtx.save();
-                if (n.isRest) {
-                    rhythmCtx.strokeStyle = '#0f172a';
-                    rhythmCtx.setLineDash([4, 4]);
-                    rhythmCtx.lineWidth = 3;
-                } else {
-                    rhythmCtx.strokeStyle = '#0f172a'; 
-                    rhythmCtx.setLineDash([]);
-                    rhythmCtx.lineWidth = 4;
-                }
-                rhythmCtx.lineCap = 'round';
-                rhythmCtx.lineJoin = 'round';
-
-                for (let b = 0; b < totalBeats; b++) {
-                    const bStartX = startX + b * beatWidth;
-                    const bEndX = startX + (b + 1) * beatWidth;
-                    const bMidX = (bStartX + bEndX) / 2;
-
-                    const t1 = Math.max(startBeat, b);
-                    const t2 = Math.min(endBeat, b + 1);
-
-                    if (t1 < t2 - 0.001) {
-                        let localT1 = t1 - b;
-                        let localT2 = t2 - b;
-
-                        if (splitIntoPieces) {
-                            if (!isBeatBoundary(t1)) localT1 += pieceGap;
-                            if (!isBeatBoundary(t2)) localT2 -= pieceGap;
-                        }
-
-                        if (localT1 >= localT2 - 0.001) continue;
-
                         rhythmCtx.beginPath();
                         const pStart = getVPoint(b, localT1, bStartX, bEndX, bMidX, visualizerY);
                         rhythmCtx.moveTo(pStart.x, pStart.y);
