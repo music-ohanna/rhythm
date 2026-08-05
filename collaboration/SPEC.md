@@ -3,7 +3,7 @@
 > **명세 ID**: SPEC-002  
 > **제목**: 초등학생용 화면 단순화와 도움말·출처 정리  
 > **소유자**: Codex  
-> **상태**: 사용자 승인 대기 (WAITING_FOR_USER_APPROVAL)  
+> **상태**: 재감사 후 수정 요청 (CHANGES_REQUESTED)
 > **기준 커밋**: `d0082e793537d7838ba92db365a0d37e42cd41ba`  
 > **권장 작업 브랜치**: `ui/spec-002-simplify`
 
