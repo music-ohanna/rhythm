@@ -10,7 +10,7 @@
 - **기준 커밋**: `d0082e793537d7838ba92db365a0d37e42cd41ba`
 - **구현 브랜치**: `ui/spec-002-simplify`
 - **이전 수정 커밋**: `562906c` (HANDOFF.md 기준)
-- **이번 수정 커밋**: `922ce25` (JS SyntaxError 제거)
+- **최신 작업 커밋**: `e6446e4` (V자 리듬 rendering, 음원 폴백, 마디 동기화 정밀화)
 - **인수인계**: `collaboration/HANDOFF.md`
 
 ---
