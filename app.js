@@ -2632,9 +2632,14 @@
                 .replace(/\u2028/g, '\\u2028')
                 .replace(/\u2029/g, '\\u2029');
 
+            let mainElement = document.querySelector('#canvasArea')?.cloneNode(true);
+            if (mainElement) {
+                const statusEl = mainElement.querySelector('#practiceStatus');
+                if (statusEl) statusEl.remove();
+            }
             const headerHtml = document.querySelector('header')?.outerHTML || '';
             const navHtml = document.querySelector('#measureNavigator')?.outerHTML || '';
-            const mainHtml = document.querySelector('#canvasArea')?.outerHTML || '';
+            const mainHtml = mainElement ? mainElement.outerHTML : (document.querySelector('#canvasArea')?.outerHTML || '');
             const footerHtml = document.querySelector('footer')?.outerHTML || '';
 
             let html = `<!DOCTYPE html>
@@ -2651,6 +2656,25 @@ ${cssText}
         window.PRELOADED_SCORE_STATE = "${encodedState}";
         window.EXPORTED_MEASURE_COUNT = ${completedCount};
         window.EXPORTED_SUBMISSION_LABEL = ${safeLabelLiteral};
+
+        function forceRenderExportedScore() {
+            if (typeof resize === 'function') resize();
+            if (window.PRELOADED_SCORE_STATE && typeof decodeScoreState === 'function') {
+                decodeScoreState(window.PRELOADED_SCORE_STATE);
+            }
+            if (typeof resize === 'function') resize();
+            if (typeof drawAll === 'function') drawAll();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(forceRenderExportedScore, 30);
+            setTimeout(forceRenderExportedScore, 150);
+            setTimeout(forceRenderExportedScore, 500);
+        });
+        window.addEventListener('load', () => {
+            setTimeout(forceRenderExportedScore, 30);
+            setTimeout(forceRenderExportedScore, 150);
+        });
     </script>
 </head>
 <body class="h-screen flex flex-col p-2 md:p-3 overflow-hidden">
