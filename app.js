@@ -2620,72 +2620,64 @@
             const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
             showToast('재생 가능한 작품 파일을 만드는 중입니다.', true);
 
-            // 저장용 DOM 클론 생성 및 불필요한 다이얼로그/모달/팝업/미리보기 요소 완벽 제거
-            const docClone = document.documentElement.cloneNode(true);
-            docClone.querySelectorAll('.choice-dialog, #alertOverlay, #toast, .tutorial-overlay, .tutorial-card, #practiceOverlay, #helpModal, #viewSettingsModal, #portraitNotice, #tutorialNotationPreview').forEach(el => {
-                el.remove();
-            });
-
-            // 캔버스 요소에 원본 픽셀 해상도 크기(width, height) 속성 명시 주입
-            const cloneRhythmCanvas = docClone.querySelector('#rhythmCanvas');
-            if (cloneRhythmCanvas && rhythmCanvas) {
-                cloneRhythmCanvas.setAttribute('width', rhythmCanvas.width || rhythmCanvas.clientWidth || 1200);
-                cloneRhythmCanvas.setAttribute('height', rhythmCanvas.height || rhythmCanvas.clientHeight || 400);
-            }
-            const cloneDrawingCanvas = docClone.querySelector('#drawingCanvas');
-            if (cloneDrawingCanvas && drawingCanvas) {
-                cloneDrawingCanvas.setAttribute('width', drawingCanvas.width || drawingCanvas.clientWidth || 1200);
-                cloneDrawingCanvas.setAttribute('height', drawingCanvas.height || drawingCanvas.clientHeight || 400);
-            }
-
-            let html = `<!DOCTYPE html>\n${docClone.outerHTML}`;
-
-            // Tailwind CDN 태그가 없으면 추가
-            if (!html.includes('cdn.tailwindcss.com')) {
-                html = html.replace('<head>', '<head>\n    <script src="https://cdn.tailwindcss.com"></script>');
-            }
+            const cssText = window._CACHED_STYLE_CSS || (await fetch('style.css').then(r => r.text()).catch(() => ''));
+            const jsText = window._CACHED_APP_JS || (await fetch('app.js').then(r => r.text()).catch(() => ''));
+            const audioDataJs = (typeof EMBEDDED_RHYTHM_AUDIO_DATA_URIS !== 'undefined')
+                ? `window.EMBEDDED_RHYTHM_AUDIO_DATA_URIS = ${JSON.stringify(EMBEDDED_RHYTHM_AUDIO_DATA_URIS)};`
+                : '';
 
             const encodedState = encodeScoreState();
             const safeLabelLiteral = JSON.stringify(submissionLabel)
                 .replace(/</g, '\\u003c')
                 .replace(/\u2028/g, '\\u2028')
                 .replace(/\u2029/g, '\\u2029');
-            const stateScript = `<script>\n        window.PRELOADED_SCORE_STATE = "${encodedState}";\n        window.EXPORTED_MEASURE_COUNT = ${completedCount};\n        window.EXPORTED_SUBMISSION_LABEL = ${safeLabelLiteral};\n    <\/script>`;
-            html = html.replace('<head>', `<head>\n    ${stateScript}`);
 
-            // sound_data.js 인라인 삽입
-            if (typeof EMBEDDED_RHYTHM_AUDIO_DATA_URIS !== 'undefined') {
-                const inlineAudioDataScript = `<script>window.EMBEDDED_RHYTHM_AUDIO_DATA_URIS = ${JSON.stringify(EMBEDDED_RHYTHM_AUDIO_DATA_URIS)};<\/script>`;
-                html = html.replace(/<script\s+[^>]*src=["']?sound_data\.js["']?[^>]*><\/script>/gi, inlineAudioDataScript);
-            }
+            const headerHtml = document.querySelector('header')?.outerHTML || '';
+            const navHtml = document.querySelector('#measureNavigator')?.outerHTML || '';
+            const mainHtml = document.querySelector('#canvasArea')?.outerHTML || '';
+            const footerHtml = document.querySelector('footer')?.outerHTML || '';
 
-            // style.css 인라인 삽입 (캐시 -> fetch -> document.styleSheets 다중 보장)
-            let cssText = window._CACHED_STYLE_CSS || '';
-            if (!cssText) {
-                try { cssText = await fetch('style.css').then(r => r.text()); } catch(e) {}
-            }
-            if (!cssText) {
-                try {
-                    cssText = Array.from(document.styleSheets)
-                        .map(sheet => {
-                            try { return Array.from(sheet.cssRules).map(r => r.cssText).join('\n'); } catch(e) { return ''; }
-                        })
-                        .filter(Boolean)
-                        .join('\n');
-                } catch(e) {}
-            }
-            if (cssText) {
-                html = html.replace(/<link\s+[^>]*href=["']?style\.css["']?[^>]*\/?>/gi, `<style>\n${cssText}\n</style>`);
-            }
+            let html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>${submissionLabel} · 제출 작품</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+${cssText}
+    </style>
+    <script>
+        window.PRELOADED_SCORE_STATE = "${encodedState}";
+        window.EXPORTED_MEASURE_COUNT = ${completedCount};
+        window.EXPORTED_SUBMISSION_LABEL = ${safeLabelLiteral};
+    </script>
+</head>
+<body class="h-screen flex flex-col p-2 md:p-3 overflow-hidden">
+    <div id="toast">메시지</div>
+    <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-5 py-3 rounded-2xl font-bold text-sm md:text-base flex items-start justify-between gap-3 opacity-0 pointer-events-none translate-y-[-20px] transition-all duration-300 shadow-2xl border-2 border-red-400 bg-red-700 text-white max-w-lg w-[92vw]">
+        <div class="flex items-start gap-2">
+            <span class="text-xl shrink-0">⚠️</span>
+            <div id="alertText" class="text-white leading-relaxed">박자 오류 감지됨</div>
+        </div>
+        <button type="button" onclick="event.stopPropagation(); hideValidationAlert();" class="shrink-0 text-white hover:text-red-200 bg-red-800/80 hover:bg-red-900 font-black text-lg px-2.5 py-0.5 rounded-xl transition cursor-pointer shadow border border-red-500" title="닫기">✕</button>
+    </div>
 
-            // app.js 인라인 삽입 (캐시 -> fetch -> document.scripts 다중 보장)
-            let jsText = window._CACHED_APP_JS || '';
-            if (!jsText) {
-                try { jsText = await fetch('app.js').then(r => r.text()); } catch(e) {}
-            }
-            if (jsText) {
-                html = html.replace(/<script\s+[^>]*src=["']?app\.js["']?[^>]*><\/script>/gi, `<script>\n${jsText}\n<\/script>`);
-            }
+    ${headerHtml}
+    ${navHtml}
+    ${mainHtml}
+    ${footerHtml}
+
+    <input type="file" id="scoreFileInput" accept=".html,.txt" style="display:none;" onchange="handleScoreFileUpload(event)">
+
+    <script>
+${audioDataJs}
+    </script>
+    <script>
+${jsText}
+    </script>
+</body>
+</html>`;
 
             try {
                 for (const sampleKey of getInstrumentSampleKeys(rhythmInstrument)) {
@@ -2699,7 +2691,7 @@
                     }
                 }
             } catch (error) {
-                console.warn('제출 파일 실음 포함 경고 (웹 오디오 실음 연주 엔진 기본 활성화됨):', error);
+                console.warn('제출 파일 실음 포함 경고:', error);
             }
 
             const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
