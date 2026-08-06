@@ -2620,9 +2620,9 @@
             const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
             showToast('재생 가능한 작품 파일을 만드는 중입니다.', true);
 
-            // 저장용 DOM 클론 생성 및 불필요한 다이얼로그/모달/팝업 요소 완벽 제거
+            // 저장용 DOM 클론 생성 및 불필요한 다이얼로그/모달/팝업/미리보기 요소 완벽 제거
             const docClone = document.documentElement.cloneNode(true);
-            docClone.querySelectorAll('.choice-dialog, #alertOverlay, #toast, .tutorial-overlay, .tutorial-card, #practiceOverlay, #helpModal, #viewSettingsModal, #portraitNotice').forEach(el => {
+            docClone.querySelectorAll('.choice-dialog, #alertOverlay, #toast, .tutorial-overlay, .tutorial-card, #practiceOverlay, #helpModal, #viewSettingsModal, #portraitNotice, #tutorialNotationPreview').forEach(el => {
                 el.remove();
             });
 
@@ -2713,6 +2713,42 @@
             link.remove();
             setTimeout(() => URL.revokeObjectURL(link.href), 1500);
             showToast(`${completedCount}마디 재생 작품을 저장했습니다. (실음 포함)`, true);
+        }
+
+        function openScoreFileSelector() {
+            const input = document.getElementById('scoreFileInput');
+            if (input) {
+                input.value = '';
+                input.click();
+            }
+        }
+
+        function handleScoreFileUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result || '';
+                // 1) PRELOADED_SCORE_STATE = "..." 매칭 (저장된 HTML 파일 소스에서 인코딩 데이터 추출)
+                let match = text.match(/PRELOADED_SCORE_STATE\s*=\s*["']([^"']+)["']/);
+                if (!match) {
+                    // 2) 해시태그 #score=... 매칭
+                    match = text.match(/#score=([^&"'\s]+)/);
+                }
+                
+                const scoreData = match ? match[1] : text.trim();
+                const success = decodeScoreState(scoreData);
+                if (success) {
+                    showToast('저장되었던 악보를 불러왔습니다. 이어서 편집할 수 있습니다!', true);
+                } else {
+                    showValidationAlert('<strong>불러오기 실패:</strong> 올바른 리듬 악보 저장 파일이 아닙니다.');
+                }
+            };
+            reader.onerror = function() {
+                showValidationAlert('<strong>파일 읽기 오류:</strong> 파일을 열 수 없습니다.');
+            };
+            reader.readAsText(file);
         }
 
         function loadScoreFromHash() {

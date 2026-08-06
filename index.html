@@ -95,7 +95,7 @@
         </div>
     </div>
 
-    <div id="tutorialNotationPreview" aria-hidden="true">
+    <div id="tutorialNotationPreview" aria-hidden="true" style="display:none;">
         <div class="tutorial-preview-title">악보에 이렇게 크게 표시됩니다</div>
         <div class="tutorial-preview-staff">
             <svg class="tutorial-preview-note" width="86" height="86" viewBox="0 0 100 100" aria-hidden="true">
@@ -110,7 +110,8 @@
         <div class="tutorial-preview-caption"><span>음표</span><span>쉼표</span></div>
     </div>
 
-
+    <!-- 악보 파일 불러오기 숨김 Input -->
+    <input type="file" id="scoreFileInput" accept=".html,.txt" style="display:none;" onchange="handleScoreFileUpload(event)">
 
     <!-- 실시간 상태 경고 알림판 -->
     <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-5 py-2.5 rounded-full font-bold text-sm md:text-base flex items-center gap-2 opacity-0 pointer-events-none translate-y-[-20px] transition-all duration-300 shadow-xl border border-red-300">
@@ -140,7 +141,7 @@
                 </div>
             </div>
 
-            <!-- 주요 상단 기능 5개 노출 (상단 저장 버튼 추가로 직관적 활용 지원) -->
+            <!-- 주요 상단 기능 노출 -->
             <div class="flex gap-1.5 items-center">
             <!-- 지우기/수정 도구 통합 그룹 -->
             <div class="flex gap-1 bg-slate-100/90 p-0.5 rounded-xl border border-slate-200 shadow-sm">
@@ -157,6 +158,9 @@
 
             <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs md:text-sm" title="만든 악보 파일로 저장하기">
                 <span class="text-base">📥</span> 악보 저장
+            </button>
+            <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs md:text-sm" title="저장했던 악보 HTML 파일을 불러와 이어서 편집하기">
+                <span class="text-base">📂</span> 불러오기
             </button>
             <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs md:text-sm" title="도움말 보기">
                 <span class="text-base">❓</span> 도움말
