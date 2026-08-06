@@ -1582,13 +1582,23 @@
             
             setTimeout(() => {
                 toast.style.opacity = "0";
-                setTimeout(() => { toast.style.visibility = "hidden"; }, 300);
-            }, 2500);
+                setTimeout(() => { toast.style.visibility = "hidden"; }, 200);
+            }, 1300);
         }
 
         let warningShowing = false;
         let lastWarningMessage = '';
         let warningTimer = null;
+
+        function hideValidationAlert() {
+            if (warningTimer) {
+                clearTimeout(warningTimer);
+                warningTimer = null;
+            }
+            alertOverlay.classList.remove('opacity-100', 'translate-y-0');
+            alertOverlay.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            warningShowing = false;
+        }
 
         function showValidationAlert(msg) {
             if (warningShowing && lastWarningMessage === msg) return;
@@ -1604,14 +1614,12 @@
             alertText.innerHTML = msg;
             alertOverlay.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
             alertOverlay.classList.add('opacity-100', 'translate-y-0');
+            alertOverlay.onclick = hideValidationAlert;
 
             if (warningTimer) clearTimeout(warningTimer);
             warningTimer = setTimeout(() => {
-                alertOverlay.classList.remove('opacity-100', 'translate-y-0');
-                alertOverlay.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
-                warningShowing = false;
-                warningTimer = null;
-            }, 5200);
+                hideValidationAlert();
+            }, 1800);
         }
 
         // 절대적 박자 타임라인 내부 빈 공간(Gap)을 먼저 찾아서 정밀 배치해 주는 알고리즘
@@ -2532,7 +2540,7 @@
                 const badge = document.createElement('span');
                 badge.id = 'submissionBadge';
                 badge.textContent = `제출 작품 · ${window.EXPORTED_SUBMISSION_LABEL}`;
-                badge.style.cssText = 'margin-left:10px;padding:4px 9px;border-radius:999px;background:#dcfce7;color:#166534;font-size:12px;font-weight:800;white-space:nowrap;';
+                badge.style.cssText = 'margin-left:10px;padding:4px 12px;border-radius:999px;background:#dcfce7;color:#166534;font-size:13px;font-weight:800;white-space:nowrap;display:inline-block;';
                 heading.appendChild(badge);
             }
             const exportButton = document.getElementById('btn-export-score');
@@ -2544,9 +2552,16 @@
             });
             const instrumentSelect = document.getElementById('rhythmInstrument');
             if (instrumentSelect) {
-                instrumentSelect.disabled = true;
-                instrumentSelect.title = '학생이 제출할 때 선택한 악기입니다.';
+                instrumentSelect.disabled = false; // 선생님이 제출작품 검인 시 다른 악기로도 들어볼 수 있도록 허용
             }
+            // 저장된 제출작품 오픈 시 캔버스 악보 100% 즉시 렌더링
+            setTimeout(() => {
+                if (window.PRELOADED_SCORE_STATE) {
+                    decodeScoreState(window.PRELOADED_SCORE_STATE);
+                }
+                resize();
+                drawAll();
+            }, 60);
         }
 
         function askSubmissionLabel() {
@@ -2600,15 +2615,23 @@
             const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
             showToast('재생 가능한 작품 파일을 만드는 중입니다.', true);
 
-            // 저장용 DOM 클론 생성 및 모달/오버레이 닫힘 상태로 정리
+            // 저장용 DOM 클론 생성 및 불필요한 다이얼로그/모달/팝업 요소 완벽 제거
             const docClone = document.documentElement.cloneNode(true);
-            docClone.querySelectorAll('.choice-dialog, #alertOverlay, #toast, .tutorial-overlay, .tutorial-card').forEach(el => {
-                el.classList.remove('active', 'show', 'visible');
+            docClone.querySelectorAll('.choice-dialog, #alertOverlay, #toast, .tutorial-overlay, .tutorial-card, #practiceOverlay, #helpModal, #viewSettingsModal, #portraitNotice').forEach(el => {
+                el.remove();
             });
-            const cloneToast = docClone.querySelector('#toast');
-            if (cloneToast) cloneToast.classList.remove('show');
-            const cloneSubmission = docClone.querySelector('#submissionDialog');
-            if (cloneSubmission) cloneSubmission.classList.remove('active');
+
+            // 캔버스 요소에 원본 픽셀 해상도 크기(width, height) 속성 명시 주입
+            const cloneRhythmCanvas = docClone.querySelector('#rhythmCanvas');
+            if (cloneRhythmCanvas && rhythmCanvas) {
+                cloneRhythmCanvas.setAttribute('width', rhythmCanvas.width || rhythmCanvas.clientWidth || 1200);
+                cloneRhythmCanvas.setAttribute('height', rhythmCanvas.height || rhythmCanvas.clientHeight || 400);
+            }
+            const cloneDrawingCanvas = docClone.querySelector('#drawingCanvas');
+            if (cloneDrawingCanvas && drawingCanvas) {
+                cloneDrawingCanvas.setAttribute('width', drawingCanvas.width || drawingCanvas.clientWidth || 1200);
+                cloneDrawingCanvas.setAttribute('height', drawingCanvas.height || drawingCanvas.clientHeight || 400);
+            }
 
             let html = `<!DOCTYPE html>\n${docClone.outerHTML}`;
 
