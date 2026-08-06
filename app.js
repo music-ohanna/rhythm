@@ -480,6 +480,33 @@
             drawAll();
         }
 
+        function syncVRhythmToggleUI() {
+            const is68 = isCompoundSixEight();
+            const vToggles = ['viewToggleV', 'bottomVStyleToggle'];
+            vToggles.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const parent = el.closest('label') || el.parentElement;
+                if (is68) {
+                    el.checked = false;
+                    el.disabled = true;
+                    if (parent) {
+                        parent.style.opacity = '0.4';
+                        parent.style.pointerEvents = 'none';
+                        parent.title = '6/8 박자는 겹박자 특성으로 V자 리듬 표기가 생략됩니다.';
+                    }
+                } else {
+                    el.disabled = false;
+                    el.checked = !!displayLayers.v;
+                    if (parent) {
+                        parent.style.opacity = '1';
+                        parent.style.pointerEvents = 'auto';
+                        parent.title = '';
+                    }
+                }
+            });
+        }
+
         function setDisplayLayer(layer, enabled) {
             if (!(layer in displayLayers)) return;
             const val = !!enabled;
@@ -498,6 +525,7 @@
                 });
             }
 
+            syncVRhythmToggleUI();
             drawAll();
         }
 
@@ -1270,6 +1298,7 @@
             initAudio();
             playTone(800, 0.05, 0.05);
             applyGuideLabelLanguage();
+            syncVRhythmToggleUI();
             drawAll();
             showToast(`${top}/${bottom} 박자로 변경하고 4마디를 새로 시작합니다.`, true);
         }
@@ -2879,26 +2908,7 @@ ${safeJsText}
             applyExportedSubmissionMode();
         }, 150));
 
-        // 📱 모바일 세로 모드 감지 → 가로 전환 안내 배너 제어
-        function checkOrientationAndShowNotice() {
-            const notice = document.getElementById('portraitNotice');
-            if (!notice) return;
-            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-            const isPortrait = window.innerHeight > window.innerWidth;
-            if (isMobileDevice && isPortrait && !sessionStorage.getItem('portraitNoticeClosed')) {
-                notice.classList.remove('hidden');
-            } else {
-                notice.classList.add('hidden');
-            }
-        }
-        function closePortraitNotice() {
-            const notice = document.getElementById('portraitNotice');
-            if (notice) notice.classList.add('hidden');
-            sessionStorage.setItem('portraitNoticeClosed', 'true');
-        }
-        window.addEventListener('resize', checkOrientationAndShowNotice);
-        window.addEventListener('orientationchange', checkOrientationAndShowNotice);
-        window.addEventListener('load', checkOrientationAndShowNotice);
+
 
 
         function restPiecesForDuration(duration) {
@@ -3042,6 +3052,7 @@ ${safeJsText}
 
         function drawAll() {
             syncActiveMeasureState();
+            syncVRhythmToggleUI();
             rhythmCtx.clearRect(0, 0, rhythmCanvas.width, rhythmCanvas.height);
             
             const {startX, endX, measureWidth} = getScoreLayout();
@@ -3109,9 +3120,9 @@ ${safeJsText}
                 rhythmCtx.setLineDash([4, 4]);
                 rhythmCtx.stroke();
 
-                // 가이드 숫자 (V자 리듬 가이드 바로 아래 정렬)
+                // 가이드 숫자 (V자 리듬 가이드 바로 아래 정렬 - 6/8 박자는 생략)
                 const isLabelPosition = isCompoundSixEight() ? c % 2 === 0 : c % subdivisionsPerBeat === 0;
-                if (displayLayers.v && isLabelPosition && c < totalCells) {
+                if (displayLayers.v && !isCompoundSixEight() && isLabelPosition && c < totalCells) {
                     rhythmCtx.fillStyle = '#ef4444';
                     rhythmCtx.font = 'bold 15px "Noto Sans KR"';
                     rhythmCtx.textAlign = 'center';
@@ -3172,8 +3183,8 @@ ${safeJsText}
                 drawTimeBlocks(startX, measureWidth, totalBeats, blockY, blockHeight, displayNotes);
             }
 
-            // 5. 연한 회색의 백그라운드 기본 V 격자 가이드선 우선 렌더링
-            if (displayLayers.v) {
+            // 5. 연한 회색의 백그라운드 기본 V 격자 가이드선 우선 렌더링 (6/8 박자는 겹박자 계산 이슈로 생략)
+            if (displayLayers.v && !isCompoundSixEight()) {
                 rhythmCtx.save();
                 rhythmCtx.strokeStyle = '#e2e8f0';
                 rhythmCtx.lineWidth = 2.5;
@@ -3205,8 +3216,8 @@ ${safeJsText}
                 rhythmCtx.restore();
             }
 
-            // 6. 활성화된 음표들에 기초한 선명하고 곧은 V자 리듬 분석 가이드선 렌더링
-            if (displayLayers.v) {
+            // 6. 활성화된 음표들에 기초한 선명하고 곧은 V자 리듬 분석 가이드선 렌더링 (6/8 박자는 겹박자 계산 이슈로 생략)
+            if (displayLayers.v && !isCompoundSixEight()) {
                 drawV자RhythmVisualizer(startX, measureWidth, totalBeats, visualizerY, cellWidth, beatWidth, displayNotes);
             }
 

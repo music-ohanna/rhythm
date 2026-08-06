@@ -1,18 +1,21 @@
 # 🔍 셀프 감사 보고서 (AUDIT)
 
 > **소유자**: 안티그래비티 (Solo 체제)  
-> **명세 ID**: SPEC-002 + UI-TWEAK-003  
-> **상태**: AUDIT_PASSED  
-> **감사 시각**: 2026-08-06T13:27:00+09:00  
+> **명세 ID**: RHYTHM-68V-FIX  
+> **상태**: AUDIT_PASSED / READY_FOR_USER_REVIEW  
+> **감사 시각**: 2026-08-06T23:56:00+09:00  
 
 ---
 
 ## 1. 감사 대상
 
-- **기준 커밋**: `d396e75`
 - **구현 브랜치**: `main`
-- **최신 커밋**: `88c8a70`
 - **인수인계**: `collaboration/HANDOFF.md`
+- **주요 수정 파일**:
+  - `collaboration/PROJECT_RULES.md`
+  - `index.html`
+  - `app.js`
+  - `style.css`
 
 ---
 
@@ -20,26 +23,16 @@
 
 ### 🔴 P1 — 즉시 수정 필수
 
-- [x] 브라우저 콘솔에 JS 오류가 없는가? ➔ **없음** (`bottomDisplayOnlyOptionsGroup` 앵커 연동 클린)
-- [x] 동일 ID가 HTML 내에서 중복되지 않는가? ➔ 중복 없음 확인
-- [x] 9단계 튜토리얼 하이라이트 박스 지정 위치 ➔ 붙임줄 제외, V자 리듬~기본음 영역 정확 매칭
-- [x] 재생 아이콘 및 버튼 배치 ➔ 정중앙 수평 정렬 통일
-- [x] 마디 선택 탭 ➔ 사각형 탭(`1마디`, `2마디`, `3마디`, `4마디`) 변환 및 화살표 제거 완료
+- [x] **8월 6일 버전 기준 복원 규칙 제정**: `PROJECT_RULES.md` 14번 규칙 수록 및 인수인계 문서 기록 완료.
+- [x] **6/8 박자 V자 리듬 전면 생략**: 6/8 박자 시 V자 리듬 궤적, 가이드 숫자, V자 visualizer 렌더링이 완전 제외됨. 정간보, 강약, 메트로놈 표시는 100% 정상 유지.
+- [x] **V자 체크박스 UI 비활성화 동기화**: `syncVRhythmToggleUI()`를 통해 6/8 박자일 때 V자 체크박스가 disabled/투명도 40%로 처리되고, 다른 박자로 변경 시 원래 상태 복원.
+- [x] **가로 권장 팝업 제거**: `index.html`, `app.js`, `style.css`에서 `portraitNotice` 관련 노드, 함수, CSS 애니메이션 완전 삭제.
+- [x] **스마트폰/태블릿 반응형 보정**: 모바일 세로 화면에서 `overflow-y: auto` 및 canvas scaling, 버튼 핏팅 최적화로 잘림 현상 방지.
+- [x] **JS 구문 및 괄호 스코프 무결성**: 구문 오류(Syntax Error) 및 괄호 불일치 없음 확인. 백지 현상 사전 방지 완료.
 
 ---
 
 ## 3. 최종 판정
 
-- [x] **승인** (`AUDIT_PASSED`)
+- [x] **승인** (`AUDIT_PASSED` / `READY_FOR_USER_REVIEW`)
 - [ ] 수정 요청 (`CHANGES_REQUESTED`)
-
----
-
-## SAVE-FIX-001 감사 (2026-08-06)
-
-- [x] `app.js` JavaScript 구문 검사 통과
-- [x] 저장용 인라인 JavaScript에서 `</script>` 종료 태그를 `<\/script>`로 이스케이프해 조기 스크립트 종료 방지
-- [x] 저장 상태에 4마디 작품(`m`), 빠르기(`p`), 악기(`i`), 메트로놈(`e`), 보기 설정(`d`)이 포함됨 확인
-- [x] 앱 소스를 받지 못할 때 빈 HTML 대신 사용자 오류 안내를 표시
-
-**판정: AUDIT_PASSED / READY_FOR_USER_REVIEW**
