@@ -2461,26 +2461,6 @@
                     const cancel = () => {
                         document.removeEventListener('pointermove', move);
                         document.removeEventListener('pointerup', finish);
-                        document.removeEventListener('pointercancel', cancel);
-                        if (ghost) ghost.remove();
-                    };
-
-                    document.addEventListener('pointermove', move, {passive:false});
-                    document.addEventListener('pointerup', finish, {once:true});
-                    document.addEventListener('pointercancel', cancel, {once:true});
-                });
-            });
-        }
-
-        function dropPaletteNotation(type, isRest, clientX, canvasRect) {
-            const duration = getBeat(type, false);
-            const {startX, measureWidth} = getScoreLayout();
-            const totalBeats = getMeasureDurationBeats();
-            const localX = clientX - canvasRect.left;
-            const rawOffset = ((localX - startX) / measureWidth) * totalBeats - 0.125;
-            const snappedOffset = Math.round(rawOffset / 0.25) * 0.25;
-            const beatOffset = Math.max(0, Math.min(totalBeats - duration, snappedOffset));
-            const changed = addDurationAtOffset(type, isRest, beatOffset, false);
             if (changed !== false) {
                 const unitLabel = isCompoundSixEight() ? `${Math.round(beatOffset / 0.5) + 1}번째 8분박` : `${Math.floor(beatOffset) + 1}박`;
                 showToast(`${unitLabel} 위치를 ${describePracticeEvent({type,isRest,dotted:false})}(으)로 바꿨습니다.`, true);
@@ -2604,9 +2584,26 @@
             const preloadValues = `window.PRELOADED_SCORE_STATE = "${encodedState}";\n        window.EXPORTED_MEASURE_COUNT = ${completedCount};\n        window.EXPORTED_SUBMISSION_LABEL = ${safeLabelLiteral};`;
             html = html.replace(preloadMarker, preloadValues);
 
+            // 1) sound_data.js → 인라인 삽입
             if (html.includes('<script src="sound_data.js"></script>') && typeof EMBEDDED_RHYTHM_AUDIO_DATA_URIS !== 'undefined') {
-                const inlineAudioDataScript = `<script>window.EMBEDDED_RHYTHM_AUDIO_DATA_URIS = ${JSON.stringify(EMBEDDED_RHYTHM_AUDIO_DATA_URIS)};</script>`;
+                const inlineAudioDataScript = `<script>window.EMBEDDED_RHYTHM_AUDIO_DATA_URIS = ${JSON.stringify(EMBEDDED_RHYTHM_AUDIO_DATA_URIS)};<\/script>`;
                 html = html.replace('<script src="sound_data.js"></script>', inlineAudioDataScript);
+            }
+
+            // 2) style.css → 인라인 <style> 삽입
+            if (html.includes('<link rel="stylesheet" href="style.css">')) {
+                try {
+                    const cssText = await fetch('style.css').then(r => r.text());
+                    html = html.replace('<link rel="stylesheet" href="style.css">', `<style>\n${cssText}\n</style>`);
+                } catch(e) { console.warn('style.css 인라인 삽입 실패:', e); }
+            }
+
+            // 3) app.js → 인라인 <script> 삽입
+            if (html.includes('<script src="app.js"></script>')) {
+                try {
+                    const jsText = await fetch('app.js').then(r => r.text());
+                    html = html.replace('<script src="app.js"></script>', `<script>\n${jsText}\n<\/script>`);
+                } catch(e) { console.warn('app.js 인라인 삽입 실패:', e); }
             }
 
             try {
