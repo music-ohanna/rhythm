@@ -4067,7 +4067,7 @@
             },
             {
                 title: '1단계: 음표나 쉼표 입력',
-                body: '저는 <strong>4분음표</strong>를 클릭해 보겠습니다. (입력표의 음표나 쉼표를 악보 위로 직접 드래그하여 올려놓을 수도 있습니다.)',
+                body: '저는 <strong>4분음표</strong>를 클릭했습니다. (입력표의 음표나 쉼표를 악보 위로 직접 드래그하여 올려놓을 수도 있습니다.)',
                 anchor: '#btn-note-quarter',
                 placement: 'top',
                 onEnter: () => {
@@ -4078,7 +4078,7 @@
             },
             {
                 title: '2단계: 점음표',
-                body: '음표나 쉼표를 선택한 뒤 <strong>점(.) 버튼</strong>을 누르면 원래 길이의 절반(0.5배)만큼 길어집니다. 8분음표에 점을 붙여보겠습니다.',
+                body: '음표나 쉼표를 선택한 뒤 <strong>점(.) 버튼</strong>을 누르면 원래 길이의 절반(0.5배)만큼 길어집니다. 8분음표에 점을 붙여 점8분음표로 만들었습니다.',
                 anchor: '#dotButton',
                 placement: 'top',
                 onEnter: () => {
@@ -4090,7 +4090,7 @@
             },
             {
                 title: '3단계: 16분음표 (1/4박) 입력',
-                body: '<strong>16분음표</strong>를 클릭하여 점8분음표와 합쳐 1박을 만들어 보겠습니다.',
+                body: '<strong>16분음표</strong>를 클릭하여 점8분음표와 합쳐 1박을 만들었습니다.',
                 anchor: '#btn-note-sixteenth',
                 placement: 'top',
                 onEnter: () => {
@@ -4104,7 +4104,7 @@
             },
             {
                 title: '4단계: 셋잇단음표 (1박 3분할)',
-                body: '1박을 3등분하는 <strong>셋잇단음표</strong>를 클릭해 보겠습니다.',
+                body: '1박을 3등분하는 <strong>셋잇단음표</strong>를 클릭했습니다.',
                 anchor: '#tripletNoteCell',
                 placement: 'top',
                 onEnter: () => {
@@ -4115,7 +4115,7 @@
             },
             {
                 title: '5단계: ⌒ 붙임줄 연결하기',
-                body: '<strong>붙임줄로 연결해 보겠습니다.</strong> 3박 셋잇단음표의 마지막 음표와 4박 첫 음표가 붙임줄로 연결되는 화면을 확인해 보세요.',
+                body: '<strong>붙임줄로 연결했습니다!</strong> 3박 셋잇단음표의 마지막 음표와 4박 첫 음표가 붙임줄로 연결된 화면을 확인해 보세요.',
                 anchor: '#btn-tie-note',
                 placement: 'top',
                 onEnter: () => {
