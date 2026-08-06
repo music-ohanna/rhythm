@@ -313,57 +313,55 @@
             <div class="guide-cell bg-slate-50" aria-hidden="true"></div>
         </div>
 
-        <div id="bottomDisplayAndInstrumentOptions" class="playback-controls flex justify-between items-center gap-2 shrink-0">
+        <div id="bottomDisplayAndInstrumentOptions" class="playback-controls flex justify-center items-center gap-3 shrink-0">
+
+            <!-- 왼쪽: 빠르기 + 악기 + 붙임줄 -->
+            <label class="flex items-center gap-2 text-xs md:text-sm">
+                <span>빠르기</span>
+                <input id="tempoSlider" class="tempo-range" type="range" min="40" max="160" step="1" value="60" oninput="setTempo(this.value)" aria-label="빠르기 조절">
+                <span id="tempoValue" class="tempo-value">♩ = 60</span>
+            </label>
+            <label class="instrument-label text-xs md:text-sm">
+                <span>악기</span>
+                <select id="rhythmInstrument" class="instrument-select" onchange="setRhythmInstrument(this.value)" aria-label="리듬 악기 선택">
+                    <option value="synth">기본음</option>
+                    <option value="janggu">장구</option>
+                    <option value="kkwaenggwari">꽹과리</option>
+                    <option value="woodblock">우드블록</option>
+                    <option value="drum">드럼</option>
+                </select>
+            </label>
             <button id="btn-tie-note" onclick="toggleTieMode()" class="text-tool-btn text-xs shrink-0" title="두 음표 연결 연주">
                 <span class="text-sm">⌒</span> 붙임줄
             </button>
 
-            <!-- V자 리듬부터 기본음(악기)까지의 전용 감싸기 그룹 (튜토리얼 9단계 하이라이트 대상) -->
-            <div id="bottomDisplayOnlyOptionsGroup" class="flex items-center justify-between gap-2 md:gap-3 shrink-0 flex-1 flex-wrap">
+            <span class="text-slate-200 text-sm select-none">|</span>
 
-                <!-- ✅ 보기 체크박스 4개: 왼쪽 파란 pill 박스로 묶음 -->
-                <div id="notationOptionsGroup" class="flex items-center gap-1 text-xs font-bold text-slate-700 bg-blue-50 border border-blue-100 rounded-xl px-2 py-0.5">
-                    <label class="inline-flex items-center gap-1 cursor-pointer px-1.5 py-0.5 rounded-lg hover:bg-white hover:shadow-sm transition text-slate-700">
+            <!-- 오른쪽: 보기 체크박스 4개 (테두리 없이) -->
+            <div id="bottomDisplayOnlyOptionsGroup" class="flex items-center gap-2 md:gap-3">
+                <div id="notationOptionsGroup" class="flex items-center gap-2 text-xs font-bold text-slate-700">
+                    <label class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 transition">
                         <input type="checkbox" id="bottomVStyleToggle" onchange="setDisplayLayer('v', this.checked)" checked class="w-3.5 h-3.5 accent-blue-600">
                         <span>V자 리듬</span>
                     </label>
-                    <span class="text-blue-200 text-[10px]">|</span>
-                    <label class="inline-flex items-center gap-1 cursor-pointer px-1.5 py-0.5 rounded-lg hover:bg-white hover:shadow-sm transition text-slate-700">
+                    <span class="text-slate-300 text-[10px]">|</span>
+                    <label class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 transition">
                         <input type="checkbox" id="bottomJeongganboToggle" onchange="setDisplayLayer('blocks', this.checked)" checked class="w-3.5 h-3.5 accent-blue-600">
                         <span>정간보</span>
                     </label>
-                    <span class="text-blue-200 text-[10px]">|</span>
-                    <label class="inline-flex items-center gap-1 cursor-pointer px-1.5 py-0.5 rounded-lg hover:bg-white hover:shadow-sm transition text-slate-700">
+                    <span class="text-slate-300 text-[10px]">|</span>
+                    <label class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 transition">
                         <input type="checkbox" id="bottomAccentToggle" onchange="setDisplayLayer('accents', this.checked)" checked class="w-3.5 h-3.5 accent-blue-600">
                         <span>강약</span>
                     </label>
-                    <span class="text-blue-200 text-[10px]">|</span>
-                    <label class="inline-flex items-center gap-1 cursor-pointer px-1.5 py-0.5 rounded-lg hover:bg-white hover:shadow-sm transition text-slate-700">
+                    <span class="text-slate-300 text-[10px]">|</span>
+                    <label class="inline-flex items-center gap-1 cursor-pointer hover:text-blue-600 transition">
                         <input id="metronomeToggle" class="metronome-toggle w-3.5 h-3.5 accent-blue-600" type="checkbox" checked onchange="setMetronomeEnabled(this.checked)" aria-label="짧은 틱 소리 메트로놈">
                         <span>메트로놈</span>
                     </label>
                 </div>
-
-                <!-- 🎛️ 빠르기 슬라이더 + 악기 드롭다운: 오른쪽 그룹 -->
-                <div class="flex items-center gap-2 md:gap-3">
-                    <label class="flex items-center gap-2 text-xs md:text-sm">
-                        <span>빠르기</span>
-                        <input id="tempoSlider" class="tempo-range" type="range" min="40" max="160" step="1" value="60" oninput="setTempo(this.value)" aria-label="빠르기 조절">
-                        <span id="tempoValue" class="tempo-value">♩ = 60</span>
-                    </label>
-                    <label class="instrument-label text-xs md:text-sm">
-                        <span>악기</span>
-                        <select id="rhythmInstrument" class="instrument-select" onchange="setRhythmInstrument(this.value)" aria-label="리듬 악기 선택">
-                            <option value="synth">기본음</option>
-                            <option value="janggu">장구</option>
-                            <option value="kkwaenggwari">꽹과리</option>
-                            <option value="woodblock">우드블록</option>
-                            <option value="drum">드럼</option>
-                        </select>
-                    </label>
-                </div>
-
             </div>
+
         </div>
 
         <div class="play-buttons h-9 md:h-10 shrink-0 flex justify-center items-center w-full my-1">
