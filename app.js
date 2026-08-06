@@ -1013,7 +1013,8 @@
         }
         window.addEventListener('resize', resize);
         window.addEventListener('load', resize);
-        setTimeout(resize, 100);
+        document.addEventListener('DOMContentLoaded', () => setTimeout(resize, 50));
+        setTimeout(resize, 200);
 
         function snapshotState() {
             return JSON.parse(JSON.stringify({
