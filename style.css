@@ -104,7 +104,7 @@ html {
         }
         .tempo-range { width: min(200px, 28vw); height: 24px; accent-color: #2563eb; cursor: pointer; }
         .tempo-value { min-width: 58px; color: #0f172a; font-weight: 800; font-variant-numeric: tabular-nums; }
-        .metronome-toggle { width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer; }
+        .metronome-toggle { width: 14px; height: 14px; accent-color: #2563eb; cursor: pointer; }
         .instrument-label { display:flex; align-items:center; gap:6px; white-space:nowrap; }
         .instrument-select { height:34px; min-width:110px; padding:0 24px 0 10px; border:1px solid #cbd5e1; border-radius:10px; background:#fff; color:#0f172a; font-size:13px; font-weight:800; cursor:pointer; }
         .view-toggles { display:flex; align-items:center; gap:12px; padding-left:16px; border-left:1px solid #cbd5e1; }

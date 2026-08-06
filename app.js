@@ -4166,7 +4166,7 @@
             },
             {
                 title: '9단계: 표기 및 옵션 설정',
-                body: '화면 아래의 <strong>V자 리듬, 정간보, 강약, 빠르기, 메트로놈, 악기</strong> 체크박스 및 컨트롤로 원하는 표시만 켜거나 끌 수 있습니다.',
+                body: '화면 아래의 <strong>V자 리듬, 정간보, 강약, 메트로놈</strong> 체크박스로 원하는 표시만 켜거나 끌 수 있습니다. 빠르기 슬라이더와 악기 선택도 여기에 있습니다.',
                 anchor: '#bottomDisplayOnlyOptionsGroup',
                 placement: 'top'
             }
