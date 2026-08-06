@@ -43,6 +43,12 @@
         })();
 
         window.PRELOADED_SCORE_STATE = window.PRELOADED_SCORE_STATE || "";
+        window._CACHED_STYLE_CSS = window._CACHED_STYLE_CSS || "";
+        window._CACHED_APP_JS = window._CACHED_APP_JS || "";
+        try {
+            fetch('style.css').then(r => r.text()).then(t => { if (t) window._CACHED_STYLE_CSS = t; }).catch(() => {});
+            fetch('app.js').then(r => r.text()).then(t => { if (t) window._CACHED_APP_JS = t; }).catch(() => {});
+        } catch(e) {}
         window.EXPORTED_MEASURE_COUNT = Number(window.EXPORTED_MEASURE_COUNT) || 0;
         window.EXPORTED_SUBMISSION_LABEL = window.EXPORTED_SUBMISSION_LABEL || "";
         const SVG = {
@@ -2620,25 +2626,38 @@
             const preloadValues = `window.PRELOADED_SCORE_STATE = "${encodedState}";\n        window.EXPORTED_MEASURE_COUNT = ${completedCount};\n        window.EXPORTED_SUBMISSION_LABEL = ${safeLabelLiteral};`;
             html = html.replace(preloadMarker, preloadValues);
 
-            if (html.includes('<script src="sound_data.js"></script>') && typeof EMBEDDED_RHYTHM_AUDIO_DATA_URIS !== 'undefined') {
+            // sound_data.js 인라인 삽입
+            if (typeof EMBEDDED_RHYTHM_AUDIO_DATA_URIS !== 'undefined') {
                 const inlineAudioDataScript = `<script>window.EMBEDDED_RHYTHM_AUDIO_DATA_URIS = ${JSON.stringify(EMBEDDED_RHYTHM_AUDIO_DATA_URIS)};<\/script>`;
-                html = html.replace('<script src="sound_data.js"></script>', inlineAudioDataScript);
+                html = html.replace(/<script\s+[^>]*src=["']?sound_data\.js["']?[^>]*><\/script>/gi, inlineAudioDataScript);
             }
 
-            // style.css 인라인 삽입
-            if (html.includes('<link rel="stylesheet" href="style.css">')) {
+            // style.css 인라인 삽입 (캐시 -> fetch -> document.styleSheets 다중 보장)
+            let cssText = window._CACHED_STYLE_CSS || '';
+            if (!cssText) {
+                try { cssText = await fetch('style.css').then(r => r.text()); } catch(e) {}
+            }
+            if (!cssText) {
                 try {
-                    const cssText = await fetch('style.css').then(r => r.text());
-                    html = html.replace('<link rel="stylesheet" href="style.css">', `<style>\n${cssText}\n</style>`);
-                } catch(e) { console.warn('style.css 인라인 삽입 실패:', e); }
+                    cssText = Array.from(document.styleSheets)
+                        .map(sheet => {
+                            try { return Array.from(sheet.cssRules).map(r => r.cssText).join('\n'); } catch(e) { return ''; }
+                        })
+                        .filter(Boolean)
+                        .join('\n');
+                } catch(e) {}
+            }
+            if (cssText) {
+                html = html.replace(/<link\s+[^>]*href=["']?style\.css["']?[^>]*\/?>/gi, `<style>\n${cssText}\n</style>`);
             }
 
-            // app.js 인라인 삽입
-            if (html.includes('<script src="app.js"></script>')) {
-                try {
-                    const jsText = await fetch('app.js').then(r => r.text());
-                    html = html.replace('<script src="app.js"></script>', `<script>\n${jsText}\n<\/script>`);
-                } catch(e) { console.warn('app.js 인라인 삽입 실패:', e); }
+            // app.js 인라인 삽입 (캐시 -> fetch -> document.scripts 다중 보장)
+            let jsText = window._CACHED_APP_JS || '';
+            if (!jsText) {
+                try { jsText = await fetch('app.js').then(r => r.text()); } catch(e) {}
+            }
+            if (jsText) {
+                html = html.replace(/<script\s+[^>]*src=["']?app\.js["']?[^>]*><\/script>/gi, `<script>\n${jsText}\n<\/script>`);
             }
 
             try {
