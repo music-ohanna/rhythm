@@ -10,10 +10,11 @@ html {
             min-height: 100dvh;
             margin: 0;
             padding: 0;
-            touch-action: none;
+            touch-action: manipulation;
             background-color: #f8fafc;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Segoe UI', sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             user-select: none;
         }
         .paper-bg {
@@ -379,16 +380,16 @@ html {
             .play-buttons button { font-size: 13.5px !important; }
         }
 
-        /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만 소형/일반 폰 줌인 방지) */
+        /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만: 초슬림 자동핏 & 핀치 축소/드래그 이동 해제) */
         @media screen and (orientation: landscape) and (max-height: 500px) {
-            body { height: 100dvh !important; min-height: 100dvh !important; padding: 2px 6px !important; overflow: hidden !important; display: flex; flex-direction: column; }
+            body { min-height: 100dvh !important; padding: 2px 6px !important; overflow-x: auto !important; overflow-y: auto !important; touch-action: manipulation !important; display: flex; flex-direction: column; }
             header { margin-bottom: 2px !important; padding-bottom: 1px !important; flex-shrink: 0; }
             header h1 { font-size: 13px !important; }
             .text-tool-btn { padding: 2px 5px !important; font-size: 10px !important; min-height: 24px !important; }
             .measure-navigator { min-height: 24px !important; margin-bottom: 2px !important; padding: 0 4px; flex-shrink: 0; }
             .measure-tab { flex: 1; width: auto !important; height: auto !important; min-height: 22px !important; padding: 1px 4px !important; font-size: 10px !important; }
             .measure-arrow { display: none !important; }
-            #canvasArea { flex: 1 1 0% !important; min-height: 120px !important; height: auto !important; margin-bottom: 2px !important; }
+            #canvasArea { flex: 1 1 0% !important; min-height: 140px !important; height: auto !important; margin-bottom: 2px !important; touch-action: manipulation !important; }
             footer { flex-shrink: 0; }
             .guide-cell { min-height: 20px !important; font-size: 9.5px !important; padding: 1px !important; }
             .playback-controls { padding: 2px 4px !important; gap: 3px !important; font-size: 10.5px !important; min-height: 26px !important; }
