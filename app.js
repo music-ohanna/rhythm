@@ -42,7 +42,9 @@
             }, true);
         })();
 
-        window.PRELOADED_SCORE_STATE = window.PRELOADED_SCORE_STATE || "";
+        if (typeof window.PRELOADED_SCORE_STATE === 'undefined') {
+            window.PRELOADED_SCORE_STATE = "";
+        }
         window._CACHED_STYLE_CSS = window._CACHED_STYLE_CSS || "";
         window._CACHED_APP_JS = window._CACHED_APP_JS || "";
         try {
@@ -1595,7 +1597,7 @@
                 clearTimeout(warningTimer);
                 warningTimer = null;
             }
-            alertOverlay.classList.remove('opacity-100', 'translate-y-0');
+            alertOverlay.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
             alertOverlay.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
             warningShowing = false;
         }
@@ -1613,13 +1615,12 @@
 
             alertText.innerHTML = msg;
             alertOverlay.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
-            alertOverlay.classList.add('opacity-100', 'translate-y-0');
-            alertOverlay.onclick = hideValidationAlert;
+            alertOverlay.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
 
             if (warningTimer) clearTimeout(warningTimer);
             warningTimer = setTimeout(() => {
                 hideValidationAlert();
-            }, 1800);
+            }, 8000);
         }
 
         // 절대적 박자 타임라인 내부 빈 공간(Gap)을 먼저 찾아서 정밀 배치해 주는 알고리즘
@@ -2400,7 +2401,11 @@
                 setRhythmInstrument(savedInstrument);
                 normalizeSequentialRests();
                 applyGuideLabelLanguage();
+                if (typeof updateMeterSelectButtonLabel === 'function') updateMeterSelectButtonLabel();
+                if (typeof updateMeasureNavigator === 'function') updateMeasureNavigator();
+                resize();
                 drawAll();
+                redrawAnalog();
                 return true;
             } catch (e) {
                 return false;
@@ -2645,9 +2650,8 @@
                 .replace(/</g, '\\u003c')
                 .replace(/\u2028/g, '\\u2028')
                 .replace(/\u2029/g, '\\u2029');
-            const preloadMarker = 'window.PRELOADED_SCORE_STATE = window.PRELOADED_SCORE_STATE || "";';
-            const preloadValues = `window.PRELOADED_SCORE_STATE = "${encodedState}";\n        window.EXPORTED_MEASURE_COUNT = ${completedCount};\n        window.EXPORTED_SUBMISSION_LABEL = ${safeLabelLiteral};`;
-            html = html.replace(preloadMarker, preloadValues);
+            const stateScript = `<script>\n        window.PRELOADED_SCORE_STATE = "${encodedState}";\n        window.EXPORTED_MEASURE_COUNT = ${completedCount};\n        window.EXPORTED_SUBMISSION_LABEL = ${safeLabelLiteral};\n    <\/script>`;
+            html = html.replace('<head>', `<head>\n    ${stateScript}`);
 
             // sound_data.js 인라인 삽입
             if (typeof EMBEDDED_RHYTHM_AUDIO_DATA_URIS !== 'undefined') {
