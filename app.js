@@ -2569,11 +2569,14 @@
             }, 60);
         }
 
-        function askSubmissionLabel() {
+        function askSubmissionLabel(btnText = '리듬 저장', titleText = '리듬 악보 파일 저장') {
             const dialog = document.getElementById('submissionDialog');
             const input = document.getElementById('submissionNameInput');
             const saveButton = document.getElementById('submissionSave');
             const cancelButton = document.getElementById('submissionCancel');
+            const titleEl = document.getElementById('submissionTitle');
+            if (saveButton) saveButton.textContent = btnText;
+            if (titleEl) titleEl.textContent = titleText;
             dialog.classList.add('show');
             input.focus();
             input.select();
@@ -2616,7 +2619,7 @@
                 return;
             }
 
-            const enteredLabel = await askSubmissionLabel();
+            const enteredLabel = await askSubmissionLabel('리듬 저장', '리듬 악보 파일 저장');
             if (enteredLabel === null) return;
             const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
 
@@ -2662,7 +2665,7 @@
                 return;
             }
 
-            const enteredLabel = await askSubmissionLabel();
+            const enteredLabel = await askSubmissionLabel('HTML 저장', '재생 가능 작품 HTML 만들기');
             if (enteredLabel === null) return;
             const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
             showToast('재생 가능한 작품 파일을 만드는 중입니다.', true);
