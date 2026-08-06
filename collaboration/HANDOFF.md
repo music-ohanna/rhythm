@@ -1,11 +1,34 @@
 # 🤝 작업 인수인계 보고서 (HANDOFF)
 
-> **명세 ID**: SPEC-002 + REFACTOR-001 + UI-TWEAK-003  
-> **제목**: 하이라이트 영역 정밀화, 재생 버튼 정중앙 배치, 마디 탭 사각형 디자인 전환  
+> **명세 ID**: RHYTHM-FILE-001  
+> **제목**: `.rhythm` 경량 데이터 파일 저장/불러오기 추가  
 > **담당자**: 안티그래비티 (Solo 체제)  
-> **상태**: AUDIT_PASSED / READY_FOR_USER_REVIEW  
+> **상태**: READY_FOR_USER_REVIEW  
 > **작업 브랜치**: `main`  
-> **최신 구현 커밋 해시**: `88c8a70`  
+
+---
+
+## 💡 RHYTHM-FILE-001 구현 내용 (.rhythm 경량 파일)
+
+### ① `.rhythm` 초경량 JSON 저장 (`downloadRhythmFile()`)
+- **개념**: 프로그램 실행 소스(HTML/CSS/JS/오디오) 전체를 다운로드하던 거대한 방식 대신, 학생이 창작한 악보 데이터만 수 KB의 `.rhythm` JSON 파일로 경량 내보냅니다.
+- **포맷**:
+  ```json
+  {
+    "format": "rhythm-score-v1",
+    "label": "학생 창작 리듬",
+    "savedAt": "2026-08-06T18:40:00.000Z",
+    "state": "Base64_Encoded_Score_State"
+  }
+  ```
+
+### ② `.rhythm` / `.json` 불러오기 수용 (`handleScoreFileUpload()`)
+- 기존 `.html` 단일 실행 파일 불러오기 외에도 새로 만든 `.rhythm` 및 `.json` 경량 데이터 파일을 선택하여 즉시 창작 상태를 복원할 수 있도록 호환 확장.
+
+### ③ 저장 버튼 분리 (UI)
+- **`📥 악보 저장`**: `.rhythm` 초경량 파일 저장 (주 버튼)
+- **`📄 HTML 저장`**: 단일 실행 가능한 `.html` 저장 (기존 방식 유지)
+- **`📂 불러오기`**: `.rhythm`, `.json`, `.html` 파일 모두 지원
 
 ---
 

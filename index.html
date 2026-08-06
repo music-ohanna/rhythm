@@ -111,7 +111,7 @@
     </div>
 
     <!-- 악보 파일 불러오기 숨김 Input -->
-    <input type="file" id="scoreFileInput" accept=".html,.txt" style="display:none;" onchange="handleScoreFileUpload(event)">
+    <input type="file" id="scoreFileInput" accept=".rhythm,.json,.html,.txt" style="display:none;" onchange="handleScoreFileUpload(event)">
 
     <!-- 실시간 상태 경고 알림판 -->
     <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-5 py-3 rounded-2xl font-bold text-sm md:text-base flex items-start justify-between gap-3 opacity-0 pointer-events-none translate-y-[-20px] transition-all duration-300 shadow-2xl border-2 border-red-400 bg-red-700 text-white max-w-lg w-[92vw]">
@@ -158,10 +158,13 @@
                 </button>
             </div>
 
-            <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs md:text-sm" title="만든 악보 파일로 저장하기">
+            <button id="btn-header-save" onclick="downloadRhythmFile()" class="text-tool-btn btn-save-score text-xs md:text-sm" title="만든 악보 데이터를 .rhythm 파일로 경량 저장하기">
                 <span class="text-base">📥</span> 악보 저장
             </button>
-            <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs md:text-sm" title="저장했던 악보 HTML 파일을 불러와 이어서 편집하기">
+            <button id="btn-header-save-html" onclick="downloadPlayableScoreHtml()" class="text-tool-btn text-xs md:text-sm" title="단일 실행 가능한 .html 파일로 저장하기">
+                <span class="text-base">📄</span> HTML 저장
+            </button>
+            <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs md:text-sm" title="저장했던 .rhythm 또는 .html 악보 파일을 불러와 이어서 편집하기">
                 <span class="text-base">📂</span> 불러오기
             </button>
             <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs md:text-sm" title="도움말 보기">

@@ -2592,6 +2592,51 @@
                     if (event.key === 'Escape') finish(null);
                 };
             });
+        // ─────────────────────────────────────────────
+        // 📁 .rhythm 경량 파일 저장
+        // ─────────────────────────────────────────────
+        async function downloadRhythmFile() {
+            if (isPresetScore) {
+                showValidationAlert('예시 악보는 저장할 수 없습니다. 새 악보를 만들어 보세요.');
+                return;
+            }
+            const completedCount = getCompletedSubmissionMeasureCount();
+            if (completedCount < 1) {
+                const warning = validateMeasureForPlayback(scoreMeasures[0], 0) || '1마디를 먼저 완성하세요.';
+                switchMeasure(0);
+                showValidationAlert(warning);
+                return;
+            }
+            const unfinishedLaterIndex = scoreMeasures.findIndex((measureNotes, index) => index >= completedCount && measureNotes.length > 0);
+            if (unfinishedLaterIndex >= 0) {
+                switchMeasure(unfinishedLaterIndex);
+                showValidationAlert(validateMeasureForPlayback(scoreMeasures[unfinishedLaterIndex], unfinishedLaterIndex) || `${unfinishedLaterIndex + 1}마디를 완성하세요.`);
+                return;
+            }
+
+            const enteredLabel = await askSubmissionLabel();
+            if (enteredLabel === null) return;
+            const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
+
+            const encodedState = encodeScoreState();
+            const payload = {
+                format: 'rhythm-score-v1',
+                label: submissionLabel,
+                savedAt: new Date().toISOString(),
+                state: encodedState
+            };
+
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+            const link = document.createElement('a');
+            const safeFileName = submissionLabel.replace(/[\\/:*?"<>|]+/g, '_').replace(/\s+/g, ' ').trim() || '리듬 작품';
+            link.href = URL.createObjectURL(blob);
+            link.download = `${safeFileName}.rhythm`;
+            link.dataset.allowAppSave = 'true';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(link.href), 1500);
+            showToast(`"${submissionLabel}" 리듬 악보를 저장했습니다. (.rhythm)`, true);
         }
 
         async function downloadPlayableScoreHtml() {
@@ -2756,6 +2801,30 @@ ${safeJsText}
             const reader = new FileReader();
             reader.onload = function(e) {
                 const text = e.target.result || '';
+
+                // ── .rhythm / .json 경량 파일 처리 ──
+                const isRhythmFile = file.name.endsWith('.rhythm') || (file.name.endsWith('.json') && text.trim().startsWith('{'));
+                if (isRhythmFile) {
+                    try {
+                        const payload = JSON.parse(text);
+                        if (!payload || payload.format !== 'rhythm-score-v1' || !payload.state) {
+                            showValidationAlert('<strong>불러오기 실패:</strong> 올바른 리듬 악보 저장 파일(.rhythm)이 아닙니다.');
+                            return;
+                        }
+                        const success = decodeScoreState(payload.state);
+                        if (success) {
+                            const label = payload.label ? `"${payload.label}"` : '악보';
+                            showToast(`${label}을(를) 불러왔습니다. 이어서 편집할 수 있습니다!`, true);
+                        } else {
+                            showValidationAlert('<strong>불러오기 실패:</strong> 파일 내 악보 데이터가 손상되었습니다.');
+                        }
+                    } catch (_) {
+                        showValidationAlert('<strong>불러오기 실패:</strong> 파일을 읽을 수 없습니다.');
+                    }
+                    return;
+                }
+
+                // ── .html / .txt 단일 실행 파일 처리 ──
                 // 1) PRELOADED_SCORE_STATE = "..." 매칭 (저장된 HTML 파일 소스에서 인코딩 데이터 추출)
                 let match = text.match(/PRELOADED_SCORE_STATE\s*=\s*["']([^"']+)["']/);
                 if (!match) {
