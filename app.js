@@ -705,14 +705,14 @@
             initAudio();
             const sig = `${timeSignature.top}/${timeSignature.bottom}`;
             const msg = `
-                <div style="font-size: 15px; font-weight: 800; margin-bottom: 8px; color: #fef08a;">
+                <div style="font-size: 15px; font-weight: 800; margin-bottom: 8px; color: #b91c1c;">
                     ⚠️ ${sig} 마디의 길이를 넘었습니다
                 </div>
-                <div style="font-size: 14px; line-height: 1.65; font-weight: 600;">
+                <div style="font-size: 14px; line-height: 1.65; font-weight: 600; color: #7f1d1d;">
                     <strong>원인:</strong> 넣으려는 음표(쉼표) 길이가 마디에 남은 박보다 길어요.<br><br>
                     <strong>수정 방법:</strong><br>
                     • 더 짧은 음표나 쉼표를 골라 넣어보세요.<br>
-                    • 이미 마디가 다 찼다면 <strong>악보 오른쪽(또는 상단)의 [다음 마디 ➔]</strong> 화살표를 눌러 다음 마디로 이동하세요.<br>
+                    • 이미 마디가 다 찼다면 <strong>악보 오른쪽의 + 아이콘</strong> 클릭해서 다음 마디로 이동하세요. 또는 <strong>화면 위의 마디 숫자</strong>를 클릭해서 다음 마디로 이동하세요.<br>
                     • 중간의 특정 음표를 지우고 싶다면 <strong>악보 위 음표를 더블클릭</strong>하거나 <strong>[🏷️ 선택 삭제]</strong>를 사용하세요.
                 </div>
             `;
@@ -2782,12 +2782,12 @@ ${safeCssText}
 </head>
 <body class="h-screen flex flex-col p-2 md:p-3 overflow-hidden">
     <div id="toast">메시지</div>
-    <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-5 py-3 rounded-2xl font-bold text-sm md:text-base flex items-start justify-between gap-3 opacity-0 pointer-events-none translate-y-[-20px] transition-all duration-300 shadow-2xl border-2 border-red-400 bg-red-700 text-white max-w-lg w-[92vw]">
+    <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-5 py-3 rounded-2xl font-bold text-sm md:text-base flex items-start justify-between gap-3 opacity-0 pointer-events-none translate-y-[-20px] transition-all duration-300 shadow-2xl border-2 border-red-500 bg-white text-red-700 max-w-lg w-[92vw]">
         <div class="flex items-start gap-2">
             <span class="text-xl shrink-0">⚠️</span>
-            <div id="alertText" class="text-white leading-relaxed">박자 오류 감지됨</div>
+            <div id="alertText" class="text-red-700 leading-relaxed">박자 오류 감지됨</div>
         </div>
-        <button type="button" onclick="event.stopPropagation(); hideValidationAlert();" class="shrink-0 text-white hover:text-red-200 bg-red-800/80 hover:bg-red-900 font-black text-lg px-2.5 py-0.5 rounded-xl transition cursor-pointer shadow border border-red-500" title="닫기">✕</button>
+        <button type="button" onclick="event.stopPropagation(); hideValidationAlert();" class="shrink-0 text-red-600 hover:text-red-800 bg-red-100 hover:bg-red-200 font-black text-lg px-2.5 py-0.5 rounded-xl transition cursor-pointer shadow border border-red-300" title="닫기">✕</button>
     </div>
 
     ${headerHtml}
