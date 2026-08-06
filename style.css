@@ -317,96 +317,84 @@ html {
         .-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x,0),var(--tw-translate-y))}.translate-y-\[-20px\]{transform:translateY(-20px)}.translate-y-0{transform:translateY(0)}
         .opacity-0{opacity:0}.opacity-100{opacity:1}.transition{transition:all .15s ease}.transition-all{transition:all .15s ease}.duration-300{transition-duration:.3s}.active\:scale-95:active{transform:scale(.95)}
         @media (min-width:768px){.md\:p-3{padding:.75rem}.md\:text-sm{font-size:.875rem}.md\:text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}.md\:text-2xl{font-size:1.5rem}.md\:h-9{height:2.25rem}.md\:h-10{height:2.5rem}.md\:w-9{width:2.25rem}}
-        /* 스마트폰 세로 화면: 한 마디 악보를 유지하면서 도구와 재생부를 세로로 재배치합니다. */
+        /* 스마트폰 세로 화면: 한 화면(dvh)에 핏 되도록 뷰포트 스케일링 보정 */
         @media (max-width: 768px) and (orientation: portrait) {
-            body { height:auto !important; min-height:100dvh; padding:6px !important; overflow-x:hidden; overflow-y:auto; touch-action:pan-y; }
-            header { flex-wrap:wrap; gap:5px; align-items:center; }
-            header h1 { width:auto; font-size:16px !important; line-height:1.15; }
+            body { height:100dvh !important; min-height:100dvh; padding:4px !important; overflow:hidden; touch-action:manipulation; display:flex; flex-direction:column; }
+            header { flex-wrap:nowrap; gap:4px; align-items:center; flex-shrink:0; margin-bottom:4px; }
+            header h1 { font-size:15px !important; line-height:1.15; white-space:nowrap; }
             header h1 > span { display:none; }
-            header > div { width:100%; justify-content:space-between; gap:4px; }
-            header > div > div:first-child { min-width:0; overflow-x:auto; padding-bottom:2px; touch-action:pan-x; }
-            .text-tool-btn { flex:0 0 auto; padding:5px 8px !important; border-width:1px; font-size:11px !important; white-space:nowrap; }
-            .measure-navigator { gap:12px; min-height:36px; padding:2px 8px; margin-bottom:4px; }
+            header > div { width:auto; justify-content:flex-end; gap:3px; }
+            header > div > div:first-child { min-width:0; overflow-x:auto; padding-bottom:1px; touch-action:pan-x; scrollbar-width:none; }
+            .text-tool-btn { flex:0 0 auto; padding:4px 6px !important; border-width:1px; font-size:10.5px !important; white-space:nowrap; min-height:30px !important; }
+            .portrait-notice-banner { top:2px; padding:4px 10px; font-size:11px; z-index:90; opacity:0.95; }
+            .measure-navigator { gap:6px; min-height:32px; padding:2px 4px; margin-bottom:4px; flex-shrink:0; }
             .measure-project-label, .next-measure-preview { display:none; }
-            .measure-tabs { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; }
-            .measure-tab { flex:1; width:auto; min-height:28px; padding:3px 8px; font-size:12px; }
+            .measure-tabs { display:flex; align-items:center; justify-content:center; gap:4px; width:100%; }
+            .measure-tab { flex:1; width:auto; min-height:26px; padding:2px 4px; font-size:11.5px; }
             .measure-arrow { display:none !important; }
-            #canvasArea { flex:none !important; width:100%; height:340px; min-height:340px; border-radius:12px; }
-            #timeSigArea { width:64px; height:90px; left:0; }
-            footer { width:100%; overflow:visible; }
-            footer > .grid-cols-8 { grid-template-columns:repeat(8,minmax(66px,1fr)); overflow-x:auto; overflow-y:hidden; touch-action:pan-x; }
-            .guide-cell { min-height:28px; }
-            .playback-controls { flex-wrap:wrap; gap:6px !important; padding:5px 6px; }
-            .tempo-range { width:100px; }
-            .play-buttons { grid-template-columns:1fr 1fr; gap:5px; height:42px !important; }
-            .play-buttons button { font-size:12px !important; line-height:1.15; padding:3px 5px; }
-            #toast { max-width:calc(100vw - 28px); top:10%; padding:9px 14px; font-size:14px; }
+            #canvasArea { flex:1 1 0% !important; width:100%; height:auto !important; min-height:200px !important; border-radius:12px; }
+            #timeSigArea { width:54px; height:80px; left:0; }
+            footer { width:100%; flex-shrink:0; }
+            footer > .grid-cols-8 { grid-template-columns:repeat(8,minmax(0,1fr)) !important; overflow:hidden; width:100%; }
+            .guide-cell { min-height:24px; padding:1px 2px; font-size:10.5px; }
+            .playback-controls { flex-wrap:wrap; gap:4px !important; padding:3px 4px; font-size:11px; }
+            .tempo-range { width:80px; }
+            .play-buttons { grid-template-columns:1fr 1fr; gap:4px; height:36px !important; }
+            .play-buttons button { font-size:11.5px !important; line-height:1.15; padding:2px 4px; }
+            #toast { max-width:calc(100vw - 28px); top:10%; padding:7px 12px; font-size:13px; }
         }
 
-        /* 폰 가로 모드 (landscape, 최대 900px 높이) */
+        /* 폰 가로 모드 (landscape, 최대 900px 너비) */
         @media screen and (max-width: 900px) and (orientation: landscape) {
-            body {
-                padding: 4px;
-            }
-            header h1 {
-                font-size: 15px !important;
-            }
-            header h1 span {
-                font-size: 9px !important;
-            }
-            .text-tool-btn {
-                padding: 5px 8px !important;
-                font-size: 11px !important;
-            }
-            .guide-cell {
-                min-height: 28px;
-            }
-            .measure-navigator { min-height:34px; margin-bottom:3px; padding:2px 4px; }
-            .measure-project-label { font-size:10px; }
-            .measure-tabs { grid-template-columns:repeat(4,minmax(58px,76px)); gap:4px; }
-            .measure-tab { min-height:28px; padding:2px 6px; font-size:11px; }
+            body { padding: 3px 6px !important; }
+            header h1 { font-size: 14px !important; }
+            .text-tool-btn { padding: 3px 6px !important; font-size: 10.5px !important; }
+            .measure-navigator { min-height:30px; margin-bottom:2px; padding:1px 4px; }
+            .measure-tabs { gap:4px; }
+            .measure-tab { min-height:24px; padding:1px 5px; font-size:10.5px; }
             .next-measure-preview { display:none; }
         }
 
         /* 갤럭시 탭 / 아이패드 세로 모드 (768px ~ 1024px, portrait) */
         @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-            body { padding: 10px !important; }
-            header h1 { font-size: 20px !important; }
-            .text-tool-btn { padding: 7px 12px !important; font-size: 12px !important; }
-            #canvasArea { min-height: 320px; }
-            .guide-cell { min-height: 36px; }
-            .play-buttons { height: 48px !important; }
-            .play-buttons button { font-size: 14px !important; }
-            .measure-navigator { min-height: 44px; }
-            .measure-tab { flex: 1; width: auto; min-height: 32px; font-size: 13px; }
+            body { padding: 8px !important; }
+            header h1 { font-size: 19px !important; }
+            .text-tool-btn { padding: 6px 10px !important; font-size: 12px !important; }
+            #canvasArea { min-height: 280px; }
+            .guide-cell { min-height: 32px; }
+            .play-buttons { height: 44px !important; }
+            .play-buttons button { font-size: 13.5px !important; }
+            .measure-navigator { min-height: 40px; }
+            .measure-tab { flex: 1; width: auto; min-height: 30px; font-size: 12.5px; }
         }
 
         /* 갤럭시 탭 / 아이패드 가로 모드 (1024px ~ 1366px, landscape) */
         @media screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
-            body { padding: 10px !important; }
-            header h1 { font-size: 22px !important; }
-            .text-tool-btn { padding: 8px 14px !important; font-size: 13px !important; }
-            #canvasArea { min-height: 280px; }
-            .guide-cell { min-height: 34px; }
-            .play-buttons { height: 46px !important; }
-            .play-buttons button { font-size: 14px !important; }
+            body { padding: 8px !important; }
+            header h1 { font-size: 20px !important; }
+            .text-tool-btn { padding: 7px 12px !important; font-size: 12.5px !important; }
+            #canvasArea { min-height: 260px; }
+            .guide-cell { min-height: 32px; }
+            .play-buttons { height: 44px !important; }
+            .play-buttons button { font-size: 13.5px !important; }
         }
 
-        /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만 소형 폰) */
+        /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만 소형/일반 폰 줌인 방지) */
         @media screen and (orientation: landscape) and (max-height: 500px) {
-            body { padding: 3px 6px !important; overflow-y: auto; }
-            header { margin-bottom: 3px; padding-bottom: 3px; }
-            header h1 { font-size: 14px !important; }
-            .text-tool-btn { padding: 4px 7px !important; font-size: 10px !important; min-height: 28px !important; }
-            .measure-navigator { min-height: 28px !important; margin-bottom: 2px; padding: 1px 4px; }
-            .measure-tab { flex: 1; width: auto !important; height: auto !important; min-height: 24px !important; padding: 2px 4px !important; font-size: 10px !important; }
+            body { height: 100dvh !important; min-height: 100dvh !important; padding: 2px 6px !important; overflow: hidden !important; display: flex; flex-direction: column; }
+            header { margin-bottom: 2px !important; padding-bottom: 1px !important; flex-shrink: 0; }
+            header h1 { font-size: 13px !important; }
+            .text-tool-btn { padding: 2px 5px !important; font-size: 10px !important; min-height: 24px !important; }
+            .measure-navigator { min-height: 24px !important; margin-bottom: 2px !important; padding: 0 4px; flex-shrink: 0; }
+            .measure-tab { flex: 1; width: auto !important; height: auto !important; min-height: 22px !important; padding: 1px 4px !important; font-size: 10px !important; }
             .measure-arrow { display: none !important; }
-            #canvasArea { min-height: 160px !important; }
-            .guide-cell { min-height: 24px !important; }
-            .playback-controls { padding: 3px 4px !important; gap: 4px !important; }
-            .tempo-range { width: 80px !important; }
-            .play-buttons { height: 36px !important; gap: 4px !important; }
-            .play-buttons button { font-size: 11px !important; }
+            #canvasArea { flex: 1 1 0% !important; min-height: 120px !important; height: auto !important; margin-bottom: 2px !important; }
+            footer { flex-shrink: 0; }
+            .guide-cell { min-height: 20px !important; font-size: 9.5px !important; padding: 1px !important; }
+            .playback-controls { padding: 2px 4px !important; gap: 3px !important; font-size: 10.5px !important; min-height: 26px !important; }
+            .tempo-range { width: 70px !important; }
+            .play-buttons { height: 30px !important; gap: 3px !important; }
+            .play-buttons button { font-size: 10.5px !important; padding: 2px 4px !important; }
         }
 
 

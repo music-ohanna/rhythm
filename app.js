@@ -996,25 +996,39 @@
         }
 
         function getScoreLayout() {
-            const width = rhythmCanvas.width || rhythmCanvas.parentElement.clientWidth || window.innerWidth;
-            const compact = width < 700;
-            const startX = compact ? Math.max(78, width * 0.20) : 200;
-            const endX = width - (compact ? Math.max(18, width * 0.045) : 100);
+            const width = rhythmCanvas.width || (rhythmCanvas.parentElement ? rhythmCanvas.parentElement.clientWidth : window.innerWidth);
+            const height = rhythmCanvas.height || (rhythmCanvas.parentElement ? rhythmCanvas.parentElement.clientHeight : window.innerHeight);
+            const isLandscapeSmall = height < 480;
+            const compact = width < 768 || isLandscapeSmall;
+            const startX = compact ? Math.max(62, Math.min(100, width * 0.16)) : 200;
+            const endX = width - (compact ? Math.max(16, width * 0.04) : 100);
             return {startX, endX, measureWidth: Math.max(120, endX - startX)};
         }
 
         function resize() {
             const parent = rhythmCanvas.parentElement;
+            if (!parent) return;
             rhythmCanvas.width = parent.clientWidth;
             rhythmCanvas.height = parent.clientHeight;
             drawingCanvas.width = parent.clientWidth;
             drawingCanvas.height = parent.clientHeight;
             
-            // 전역 뷰포트 상대높이 스케일링 설정
-            staffY = rhythmCanvas.height * 0.23;      
-            // 음표와 V자 리듬을 한눈에 연결해 볼 수 있도록 V자 영역을 악보 쪽으로 당깁니다.
-            visualizerY = rhythmCanvas.height * 0.47;
-            blockY = rhythmCanvas.height * 0.74;      
+            const h = rhythmCanvas.height;
+            if (h < 260) {
+                // 모바일 가로 모드 등 세로 공간이 협소할 때 줌인 및 잘림 방지
+                staffY = Math.max(30, h * 0.20);
+                visualizerY = Math.max(75, h * 0.46);
+                blockY = Math.max(130, h * 0.76);
+            } else if (h > 600) {
+                // 데스크톱 모드 세로 등 세로 길이가 길 때 간격 과다 벌어짐 방지
+                staffY = Math.min(130, h * 0.22);
+                visualizerY = staffY + Math.min(180, h * 0.25);
+                blockY = visualizerY + Math.min(160, h * 0.25);
+            } else {
+                staffY = h * 0.23;
+                visualizerY = h * 0.47;
+                blockY = h * 0.74;
+            }
             
             drawAll();
             redrawAnalog();
