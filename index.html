@@ -1,4 +1,4 @@
-﻿
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -170,15 +170,14 @@
     </div>
 
     <!-- 마디 이동 컨트롤 (A안: ‹ ● ○ ○ ○ › 점 표시 방식) -->
-    <nav id="measureNavigator" class="measure-navigator" aria-label="최대 4마디 작품 탐색">
-        <button id="previousMeasureButton" class="measure-arrow" type="button" onclick="switchMeasure(activeMeasureIndex - 1)" aria-label="이전 마디로 이동" title="이전 마디">‹</button>
+    <!-- 마디 이동 컨트롤 -->
+    <nav id="measureNavigator" class="measure-navigator justify-center" aria-label="최대 4마디 작품 탐색">
         <div class="measure-tabs" role="tablist" aria-label="편집할 마디 선택">
-            <button class="measure-tab active" type="button" role="tab" aria-selected="true" data-measure-index="0" onclick="switchMeasure(0)" title="1마디"><span>마디 1</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="1" onclick="switchMeasure(1)" title="2마디"><span>마디 2</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="2" onclick="switchMeasure(2)" title="3마디"><span>마디 3</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="3" onclick="switchMeasure(3)" title="4마디"><span>마디 4</span></button>
+            <button class="measure-tab active" type="button" role="tab" aria-selected="true" data-measure-index="0" onclick="switchMeasure(0)" title="1마디"><span>1마디</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="1" onclick="switchMeasure(1)" title="2마디"><span>2마디</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="2" onclick="switchMeasure(2)" title="3마디"><span>3마디</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="3" onclick="switchMeasure(3)" title="4마디"><span>4마디</span></button>
         </div>
-        <button id="nextMeasureButton" class="measure-arrow" type="button" onclick="switchMeasure(activeMeasureIndex + 1)" aria-label="다음 마디로 이동" title="다음 마디">›</button>
     </nav>
 
     <!-- 세로 해상도 다이어트형 드로잉 영역 -->
@@ -314,14 +313,14 @@
         </div>
 
         <div id="bottomDisplayAndInstrumentOptions" class="playback-controls flex justify-between items-center gap-2 shrink-0">
-            <div class="flex items-center gap-2">
-                <button id="btn-tie-note" onclick="toggleTieMode()" class="text-tool-btn text-xs" title="두 음표 연결 연주">
-                    <span class="text-sm">⌒</span> 붙임줄
-                </button>
+            <button id="btn-tie-note" onclick="toggleTieMode()" class="text-tool-btn text-xs shrink-0" title="두 음표 연결 연주">
+                <span class="text-sm">⌒</span> 붙임줄
+            </button>
 
+            <!-- V자 리듬부터 기본음(악기)까지의 전용 감싸기 그룹 (튜토리얼 9단계 하이라이트 대상) -->
+            <div id="bottomDisplayOnlyOptionsGroup" class="flex items-center justify-end gap-2 md:gap-3 shrink-0 flex-wrap">
                 <!-- 하단에 드러난 보기 옵션 체크리스트 -->
                 <div id="notationOptionsGroup" class="flex items-center gap-2 text-xs font-bold text-slate-700">
-                    
                     <label class="inline-flex items-center gap-1 cursor-pointer px-2 py-0.5 rounded-full hover:bg-white hover:shadow-sm transition text-slate-700">
                         <input type="checkbox" id="bottomVStyleToggle" onchange="setDisplayLayer('v', this.checked)" checked class="w-3.5 h-3.5 accent-blue-600 rounded">
                         <span>V자 리듬</span>
@@ -337,36 +336,37 @@
                         <span>강약</span>
                     </label>
                 </div>
+                <label class="flex items-center gap-2 text-xs md:text-sm">
+                    <span>빠르기</span>
+                    <input id="tempoSlider" class="tempo-range" type="range" min="40" max="160" step="1" value="60" oninput="setTempo(this.value)" aria-label="빠르기 조절">
+                    <span id="tempoValue" class="tempo-value">♩ = 60</span>
+                </label>
+                <label class="flex items-center gap-1 cursor-pointer text-xs md:text-sm">
+                    <input id="metronomeToggle" class="metronome-toggle" type="checkbox" checked onchange="setMetronomeEnabled(this.checked)" aria-label="짧은 틱 소리 메트로놈">
+                    <span>메트로놈</span>
+                </label>
+                <label class="instrument-label text-xs md:text-sm">
+                    <span>악기</span>
+                    <select id="rhythmInstrument" class="instrument-select" onchange="setRhythmInstrument(this.value)" aria-label="리듬 악기 선택">
+                        <option value="synth">기본음</option>
+                        <option value="janggu">장구</option>
+                        <option value="kkwaenggwari">꽹과리</option>
+                        <option value="woodblock">우드블록</option>
+                        <option value="drum">드럼</option>
+                    </select>
+                </label>
             </div>
-            <label class="flex items-center gap-2 text-xs md:text-sm">
-                <span>빠르기</span>
-                <input id="tempoSlider" class="tempo-range" type="range" min="40" max="160" step="1" value="60" oninput="setTempo(this.value)" aria-label="빠르기 조절">
-                <span id="tempoValue" class="tempo-value">♩ = 60</span>
-            </label>
-            <label class="flex items-center gap-1 cursor-pointer text-xs md:text-sm">
-                <input id="metronomeToggle" class="metronome-toggle" type="checkbox" checked onchange="setMetronomeEnabled(this.checked)" aria-label="짧은 틱 소리 메트로놈">
-                <span>메트로놈</span>
-            </label>
-            <label class="instrument-label text-xs md:text-sm">
-                <span>악기</span>
-                <select id="rhythmInstrument" class="instrument-select" onchange="setRhythmInstrument(this.value)" aria-label="리듬 악기 선택">
-                    <option value="synth">기본음</option>
-                    <option value="janggu">장구</option>
-                    <option value="kkwaenggwari">꽹과리</option>
-                    <option value="woodblock">우드블록</option>
-                    <option value="drum">드럼</option>
-                </select>
-            </label>
         </div>
 
-        <div class="play-buttons h-9 md:h-10 shrink-0">
-            <div id="playbackControlsBtnsContainer" class="flex items-center gap-2 flex-1">
-            <button id="playBtn" onclick="togglePlay()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white rounded-xl shadow-md flex items-center justify-center gap-2 text-sm md:text-base font-extrabold active:scale-95 transition">
-                <span class="current-play-icon">▶</span> 이 마디 듣기 (♩ = 60)
-            </button>
-            <button id="playAllBtn" onclick="toggleProjectPlay()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md flex items-center justify-center gap-2 text-sm md:text-base font-extrabold active:scale-95 transition">
-                <span class="project-play-icon">▶▶</span> 전체 듣기
-            </button>
+        <div class="play-buttons h-9 md:h-10 shrink-0 flex justify-center items-center w-full my-1">
+            <div id="playbackControlsBtnsContainer" class="flex items-center justify-center gap-3 w-full max-w-xl mx-auto">
+                <button id="playBtn" onclick="togglePlay()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white rounded-xl shadow-md flex items-center justify-center gap-2 text-sm md:text-base font-extrabold active:scale-95 transition py-1.5">
+                    <span class="current-play-icon">▶</span> 이 마디 듣기 (♩ = 60)
+                </button>
+                <button id="playAllBtn" onclick="toggleProjectPlay()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md flex items-center justify-center gap-2 text-sm md:text-base font-extrabold active:scale-95 transition py-1.5">
+                    <span class="project-play-icon">▶▶</span> 전체 듣기
+                </button>
+            </div>
         </div>
 
         <div class="mt-1 pt-1 border-t border-slate-200 text-center shrink-0">
