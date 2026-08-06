@@ -313,7 +313,7 @@
         let dragStartCell = -1;
         let dragEndCell = -1;
 
-        const PROJECT_MEASURE_COUNT = 4;
+        const PROJECT_MEASURE_COUNT = 8;
         let scoreMeasures = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
         let measureUndoStacks = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
         let activeMeasureIndex = 0;
@@ -1300,7 +1300,7 @@
             applyGuideLabelLanguage();
             syncVRhythmToggleUI();
             drawAll();
-            showToast(`${top}/${bottom} 박자로 변경하고 4마디를 새로 시작합니다.`, true);
+            showToast(`${top}/${bottom} 박자로 변경하고 ${PROJECT_MEASURE_COUNT}마디를 새로 시작합니다.`, true);
         }
 
         function toggleMeterMenu() {

@@ -176,14 +176,18 @@
     </header>
 
 
-    <!-- 마디 이동 컨트롤 (A안: ‹ ● ○ ○ ○ › 점 표시 방식) -->
     <!-- 마디 이동 컨트롤 -->
-    <nav id="measureNavigator" class="measure-navigator justify-center" aria-label="최대 4마디 작품 탐색">
+    <nav id="measureNavigator" class="measure-navigator justify-center" aria-label="최대 8마디 작품 탐색">
         <div class="measure-tabs" role="tablist" aria-label="편집할 마디 선택">
-            <button class="measure-tab active" type="button" role="tab" aria-selected="true" data-measure-index="0" onclick="switchMeasure(0)" title="1마디"><span>1마디</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="1" onclick="switchMeasure(1)" title="2마디"><span>2마디</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="2" onclick="switchMeasure(2)" title="3마디"><span>3마디</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="3" onclick="switchMeasure(3)" title="4마디"><span>4마디</span></button>
+            <span class="measure-label-prefix">마디:</span>
+            <button class="measure-tab active" type="button" role="tab" aria-selected="true" data-measure-index="0" onclick="switchMeasure(0)" title="1마디"><span>1</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="1" onclick="switchMeasure(1)" title="2마디"><span>2</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="2" onclick="switchMeasure(2)" title="3마디"><span>3</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="3" onclick="switchMeasure(3)" title="4마디"><span>4</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="4" onclick="switchMeasure(4)" title="5마디"><span>5</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="5" onclick="switchMeasure(5)" title="6마디"><span>6</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="6" onclick="switchMeasure(6)" title="7마디"><span>7</span></button>
+            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="7" onclick="switchMeasure(7)" title="8마디"><span>8</span></button>
         </div>
     </nav>
 
