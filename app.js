@@ -2594,7 +2594,23 @@
             const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
             showToast('재생 가능한 작품 파일을 만드는 중입니다.', true);
 
-            let html = `<!DOCTYPE html>\n${document.documentElement.outerHTML}`;
+            // 저장용 DOM 클론 생성 및 모달/오버레이 닫힘 상태로 정리
+            const docClone = document.documentElement.cloneNode(true);
+            docClone.querySelectorAll('.choice-dialog, #alertOverlay, #toast, .tutorial-overlay, .tutorial-card').forEach(el => {
+                el.classList.remove('active', 'show', 'visible');
+            });
+            const cloneToast = docClone.querySelector('#toast');
+            if (cloneToast) cloneToast.classList.remove('show');
+            const cloneSubmission = docClone.querySelector('#submissionDialog');
+            if (cloneSubmission) cloneSubmission.classList.remove('active');
+
+            let html = `<!DOCTYPE html>\n${docClone.outerHTML}`;
+
+            // Tailwind CDN 태그가 없으면 추가
+            if (!html.includes('cdn.tailwindcss.com')) {
+                html = html.replace('<head>', '<head>\n    <script src="https://cdn.tailwindcss.com"></script>');
+            }
+
             const encodedState = encodeScoreState();
             const safeLabelLiteral = JSON.stringify(submissionLabel)
                 .replace(/</g, '\\u003c')
