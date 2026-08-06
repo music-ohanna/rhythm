@@ -32,3 +32,14 @@
 
 - [x] **승인** (`AUDIT_PASSED`)
 - [ ] 수정 요청 (`CHANGES_REQUESTED`)
+
+---
+
+## SAVE-FIX-001 감사 (2026-08-06)
+
+- [x] `app.js` JavaScript 구문 검사 통과
+- [x] 저장용 인라인 JavaScript에서 `</script>` 종료 태그를 `<\/script>`로 이스케이프해 조기 스크립트 종료 방지
+- [x] 저장 상태에 4마디 작품(`m`), 빠르기(`p`), 악기(`i`), 메트로놈(`e`), 보기 설정(`d`)이 포함됨 확인
+- [x] 앱 소스를 받지 못할 때 빈 HTML 대신 사용자 오류 안내를 표시
+
+**판정: AUDIT_PASSED / READY_FOR_USER_REVIEW**

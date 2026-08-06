@@ -2622,6 +2622,16 @@
 
             const cssText = window._CACHED_STYLE_CSS || (await fetch('style.css').then(r => r.text()).catch(() => ''));
             const jsText = window._CACHED_APP_JS || (await fetch('app.js').then(r => r.text()).catch(() => ''));
+            // 앱 소스를 다시 <script> 안에 넣을 때, 소스에 포함된 "</script>"가
+            // 바깥 스크립트를 먼저 닫지 않도록 이스케이프한다. 이 처리가 없으면
+            // 저장한 작품 HTML은 중간에서 JavaScript 구문 오류가 나 빈 화면이 된다.
+            const safeCssText = cssText.replace(/<\/style/gi, '<\\/style');
+            const safeJsText = jsText.replace(/<\/script/gi, '<\\/script');
+
+            if (!safeJsText.trim()) {
+                showValidationAlert('저장에 필요한 앱 파일을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 다시 저장해 주세요.');
+                return;
+            }
             const audioDataJs = (typeof EMBEDDED_RHYTHM_AUDIO_DATA_URIS !== 'undefined')
                 ? `window.EMBEDDED_RHYTHM_AUDIO_DATA_URIS = ${JSON.stringify(EMBEDDED_RHYTHM_AUDIO_DATA_URIS)};`
                 : '';
@@ -2650,7 +2660,7 @@
     <title>${submissionLabel} · 제출 작품</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-${cssText}
+${safeCssText}
     </style>
     <script>
         window.PRELOADED_SCORE_STATE = "${encodedState}";
@@ -2698,7 +2708,7 @@ ${cssText}
 ${audioDataJs}
     </script>
     <script>
-${jsText}
+${safeJsText}
     </script>
 </body>
 </html>`;
