@@ -3243,10 +3243,11 @@ ${audioDataJs}
                         const bMidX = (bStartX + bEndX) / 2;
                         const vMargin = Math.min(34, beatWidth * 0.18);
 
+                        const vHalf = getVHalfHeight();
                         rhythmCtx.beginPath();
-                        rhythmCtx.moveTo(bStartX + vMargin, visualizerY - 30);
-                        rhythmCtx.lineTo(bMidX, visualizerY + 30);
-                        rhythmCtx.lineTo(bEndX - vMargin, visualizerY - 30);
+                        rhythmCtx.moveTo(bStartX + vMargin, visualizerY - vHalf);
+                        rhythmCtx.lineTo(bMidX, visualizerY + vHalf);
+                        rhythmCtx.lineTo(bEndX - vMargin, visualizerY - vHalf);
                         rhythmCtx.stroke();
                     }
                 }
@@ -3467,28 +3468,35 @@ ${audioDataJs}
             });
         }
 
+        function getCanvasNoteScale() {
+            if (typeof rhythmCanvas === 'undefined' || !rhythmCanvas?.width) return 1.0;
+            return Math.min(1.0, Math.max(0.78, rhythmCanvas.width / 460));
+        }
+
         // 하단 입력표에서 사용한 음표 비례를 실제 악보에도 동일하게 적용합니다.
         function drawLearnedNoteHead(ctx, filled = true) {
+            const scale = getCanvasNoteScale();
             ctx.save();
             ctx.rotate(-0.31);
             ctx.beginPath();
-            ctx.ellipse(0, 0, 13, 8.5, 0, 0, Math.PI * 2);
+            ctx.ellipse(0, 0, 13 * scale, 8.5 * scale, 0, 0, Math.PI * 2);
             if (filled) {
                 ctx.fill();
             } else {
-                ctx.lineWidth = 2.1;
+                ctx.lineWidth = 2.1 * scale;
                 ctx.stroke();
             }
             ctx.restore();
         }
 
         function drawLearnedStem(ctx) {
+            const scale = getCanvasNoteScale();
             ctx.save();
-            ctx.lineWidth = 4.0;
+            ctx.lineWidth = 3.6 * scale;
             ctx.lineCap = 'round';
             ctx.beginPath();
-            ctx.moveTo(11.2, 1.5);
-            ctx.lineTo(11.2, -48);
+            ctx.moveTo(11.2 * scale, 1.5);
+            ctx.lineTo(11.2 * scale, -46);
             ctx.stroke();
             ctx.restore();
         }
@@ -3708,23 +3716,27 @@ ${audioDataJs}
             if (group[0].type === 'triplet') {
                 const first = group[0];
                 const last = group[group.length - 1];
-                const centerX = (first.x + last.x) / 2 + 11;
-                const bracketY = staffY - 62;
+                const scale = getCanvasNoteScale();
+                const stemOffset = 11.2 * scale;
+                const centerX = (first.x + last.x) / 2 + stemOffset;
+                // 모바일 캔버스 상단 잘림 방지: bracketY가 캔버스 탑 선(0px) 위로 나가지 않도록 최소 14px 여백 보장
+                const rawBracketY = staffY - Math.round(56 * scale);
+                const bracketY = Math.max(14, rawBracketY);
 
                 rhythmCtx.strokeStyle = '#0f172a';
-                rhythmCtx.lineWidth = 2;
+                rhythmCtx.lineWidth = 1.8;
                 rhythmCtx.lineCap = 'round';
                 rhythmCtx.beginPath();
-                rhythmCtx.moveTo(first.x + 11, bracketY + 7);
-                rhythmCtx.lineTo(first.x + 11, bracketY);
-                rhythmCtx.lineTo(centerX - 13, bracketY);
-                rhythmCtx.moveTo(last.x + 11, bracketY + 7);
-                rhythmCtx.lineTo(last.x + 11, bracketY);
-                rhythmCtx.lineTo(centerX + 13, bracketY);
+                rhythmCtx.moveTo(first.x + stemOffset, bracketY + 6);
+                rhythmCtx.lineTo(first.x + stemOffset, bracketY);
+                rhythmCtx.lineTo(centerX - 11, bracketY);
+                rhythmCtx.moveTo(last.x + stemOffset, bracketY + 6);
+                rhythmCtx.lineTo(last.x + stemOffset, bracketY);
+                rhythmCtx.lineTo(centerX + 11, bracketY);
                 rhythmCtx.stroke();
 
                 rhythmCtx.fillStyle = '#0f172a';
-                rhythmCtx.font = 'bold 15px sans-serif';
+                rhythmCtx.font = `bold ${Math.max(12, Math.round(14 * scale))}px sans-serif`;
                 rhythmCtx.textBaseline = 'middle';
                 rhythmCtx.textAlign = 'center';
                 rhythmCtx.fillText('3', centerX, bracketY);
@@ -3928,14 +3940,21 @@ ${audioDataJs}
             overtone.stop(now + soundingDuration + 0.015);
         }
 
+        function getVHalfHeight() {
+            if (typeof rhythmCanvas === 'undefined' || !rhythmCanvas?.height) return 20;
+            const h = rhythmCanvas.height;
+            return Math.min(22, Math.max(15, Math.round(h * 0.07)));
+        }
+
         function getSixEightVPointInPulse(pulse, localT, startX, measureWidth, visualizerY) {
             const pulseWidth = measureWidth / 6;
             const margin = Math.min(8, pulseWidth * 0.08);
             const x1 = startX + pulse * pulseWidth + margin;
             const x2 = startX + (pulse + 1) * pulseWidth - margin;
             const descends = pulse % 2 === 0;
-            const y1 = descends ? visualizerY - 30 : visualizerY + 30;
-            const y2 = descends ? visualizerY + 30 : visualizerY - 30;
+            const vHalf = getVHalfHeight();
+            const y1 = descends ? visualizerY - vHalf : visualizerY + vHalf;
+            const y2 = descends ? visualizerY + vHalf : visualizerY - vHalf;
             const t = Math.max(0, Math.min(1, localT));
             return {x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t};
         }
@@ -3944,18 +3963,19 @@ ${audioDataJs}
             const margin = Math.min(34, (bEndX - bStartX) * 0.18);
             const effectiveStartX = bStartX + margin;
             const effectiveEndX = bEndX - margin;
+            const vHalf = getVHalfHeight();
 
             if (t <= 0.5) {
                 const factor = t / 0.5;
                 return {
                     x: effectiveStartX + factor * (bMidX - effectiveStartX),
-                    y: (visualizerY - 30) + factor * 60
+                    y: (visualizerY - vHalf) + factor * (vHalf * 2)
                 };
             } else {
                 const factor = (t - 0.5) / 0.5;
                 return {
                     x: bMidX + factor * (effectiveEndX - bMidX),
-                    y: (visualizerY + 30) - factor * 60
+                    y: (visualizerY + vHalf) - factor * (vHalf * 2)
                 };
             }
         }
