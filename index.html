@@ -122,13 +122,13 @@
         <button type="button" onclick="event.stopPropagation(); hideValidationAlert();" class="shrink-0 text-red-600 hover:text-red-800 bg-red-100 hover:bg-red-200 font-black text-lg px-2.5 py-0.5 rounded-xl transition cursor-pointer shadow border border-red-300" title="닫기">✕</button>
     </div>
 
-    <!-- 크롬북 맞춤형 초슬림 헤더 디자인 (SPEC-002 단순화) -->
-    <header class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5 px-1 border-b border-slate-100 pb-1 shrink-0">
-        <div class="flex items-center gap-2 shrink-0">
+    <!-- 크롬북 및 모바일 최적화 헤더 디자인 -->
+    <header class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1 mb-1 px-1 border-b border-slate-100 pb-1 shrink-0">
+        <!-- Row 1: 앱 제목 및 박자 선택 -->
+        <div class="flex items-center justify-between sm:justify-start gap-2 shrink-0">
             <h1 onclick="resetScoreWithConfirmation()" class="text-base sm:text-xl md:text-2xl font-black text-slate-900 tracking-tight flex items-center cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap" title="새 악보 만들기">
                 🎵 리듬 창작 앱
             </h1>
-            <!-- 박자 선택 (모바일/스마트폰 터치 최적화 네이티브 드롭다운) -->
             <select id="meterSelect" onchange="handleMeterSelectChange(this)" class="px-2 py-1 rounded-xl bg-white text-slate-900 font-extrabold border-2 border-slate-300 text-xs sm:text-sm shadow-sm cursor-pointer outline-none">
                 <option value="4/4" selected>4/4 박자</option>
                 <option value="3/4">3/4 박자</option>
@@ -137,10 +137,9 @@
             </select>
         </div>
 
-        <!-- 주요 상단 기능 노출 -->
-        <div class="flex flex-wrap items-center gap-1 sm:gap-1.5">
-            <!-- 지우기/수정 도구 통합 그룹 -->
-            <div class="flex gap-1 bg-slate-100/90 p-0.5 rounded-xl border border-slate-200 shadow-sm">
+        <!-- Row 2 (모바일) / Right (데스크톱): 기능 도구 버튼 균형 배치 -->
+        <div class="flex flex-wrap items-center justify-between sm:justify-end gap-1 sm:gap-1.5 w-full sm:w-auto">
+            <div class="flex gap-1 bg-slate-100/90 p-0.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
                 <button id="btn-undo" onclick="undoLastAction()" class="text-tool-btn text-xs sm:text-sm" title="방금 입력한 마지막 기호 취소">
                     <span class="text-sm sm:text-base">↩️</span> 되돌리기
                 </button>
@@ -152,15 +151,17 @@
                 </button>
             </div>
 
-            <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs sm:text-sm" title="만든 악보 데이터를 저장하기">
-                <span class="text-sm sm:text-base">📥</span> 악보 저장
-            </button>
-            <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs sm:text-sm" title="저장했던 악보 파일을 불러와 이어서 편집하기">
-                <span class="text-sm sm:text-base">📂</span> 불러오기
-            </button>
-            <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs sm:text-sm" title="도움말 보기">
-                <span class="text-sm sm:text-base">❓</span> 도움말
-            </button>
+            <div class="flex gap-1 items-center shrink-0">
+                <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs sm:text-sm" title="만든 악보 데이터를 저장하기">
+                    <span class="text-sm sm:text-base">📥</span> 악보 저장
+                </button>
+                <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs sm:text-sm" title="저장했던 악보 파일을 불러와 이어서 편집하기">
+                    <span class="text-sm sm:text-base">📂</span> 불러오기
+                </button>
+                <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs sm:text-sm" title="도움말 보기">
+                    <span class="text-sm sm:text-base">❓</span> 도움말
+                </button>
+            </div>
         </div>
     </header>
 

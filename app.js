@@ -556,6 +556,7 @@
                 : '<span class="project-play-icon">▶▶</span> 전체 듣기';
         }
 
+        let tempoDebounceTimer = null;
         function setTempo(value) {
             tempo = Math.max(40, Math.min(160, Number(value) || 60));
             const tempoValue = document.getElementById('tempoValue');
@@ -563,20 +564,24 @@
             updatePlayButtonLabel();
 
             if (isPlaying && !isCountingIn) {
-                // 실시간 빠르기 조절: 연주 중 슬라이더 변경 시 즉시 연주 속도 갱신
-                playTimeouts.forEach(t => clearTimeout(t));
-                playTimeouts = [];
-                scheduledAudioNodes.forEach(node => { try { node.stop(); } catch(e){} });
-                scheduledAudioNodes.clear();
-                cancelAnimationFrame(playbackAnimFrame);
+                // 실시간 빠르기 조절: PC 마우스 드래그 시 라벨은 즉시 갱신하고 연주 재설정은 디바운싱으로 부드럽게 반영
+                if (tempoDebounceTimer) clearTimeout(tempoDebounceTimer);
+                tempoDebounceTimer = setTimeout(() => {
+                    if (!isPlaying || isCountingIn) return;
+                    playTimeouts.forEach(t => clearTimeout(t));
+                    playTimeouts = [];
+                    scheduledAudioNodes.forEach(node => { try { node.stop(); } catch(e){} });
+                    scheduledAudioNodes.clear();
+                    cancelAnimationFrame(playbackAnimFrame);
 
-                const beatDuration = 60 / tempo;
-                if (isProjectPlaying) {
-                    executeProjectPlayback(beatDuration, audioCtx.currentTime + 0.03);
-                } else {
-                    const totalBeats = getVisibleTimelineBeats();
-                    executeCorePlayback(notes, beatDuration, totalBeats, audioCtx.currentTime + 0.03);
-                }
+                    const beatDuration = 60 / tempo;
+                    if (isProjectPlaying) {
+                        executeProjectPlayback(beatDuration, audioCtx.currentTime + 0.03);
+                    } else {
+                        const totalBeats = getVisibleTimelineBeats();
+                        executeCorePlayback(notes, beatDuration, totalBeats, audioCtx.currentTime + 0.03);
+                    }
+                }, 75);
             }
         }
 
@@ -1042,20 +1047,20 @@
             drawingCanvas.height = parent.clientHeight;
             
             const h = rhythmCanvas.height;
-            if (h < 260) {
-                // 모바일 가로 모드 등 세로 공간이 협소할 때 줌인 및 잘림 방지
-                staffY = Math.max(30, h * 0.20);
-                visualizerY = Math.max(75, h * 0.46);
-                blockY = Math.max(130, h * 0.76);
+            if (h < 350) {
+                // 모바일 세로/가로 모드: 음표 기둥(stem: -48px)과 박자표가 상단 경계선에 잘리지 않도록 staffY 안전여백 확보 (최소 62px)
+                staffY = Math.max(62, Math.round(h * 0.25));
+                visualizerY = staffY + Math.max(48, Math.round(h * 0.23));
+                blockY = visualizerY + Math.max(48, Math.round(h * 0.24));
             } else if (h > 600) {
                 // 데스크톱 모드 세로 등 세로 길이가 길 때 간격 과다 벌어짐 방지
-                staffY = Math.min(130, h * 0.22);
-                visualizerY = staffY + Math.min(180, h * 0.25);
-                blockY = visualizerY + Math.min(160, h * 0.25);
+                staffY = Math.min(130, Math.round(h * 0.22));
+                visualizerY = staffY + Math.min(180, Math.round(h * 0.25));
+                blockY = visualizerY + Math.min(160, Math.round(h * 0.25));
             } else {
-                staffY = h * 0.23;
-                visualizerY = h * 0.47;
-                blockY = h * 0.74;
+                staffY = Math.max(64, Math.round(h * 0.24));
+                visualizerY = staffY + Math.round(h * 0.25);
+                blockY = visualizerY + Math.round(h * 0.26);
             }
             
             drawAll();
@@ -3126,13 +3131,17 @@ ${audioDataJs}
                 rhythmCtx.fillRect(barX - 1.5, staffY - 40, m === visibleMeasures ? 5 : 3, 80);
             }
             
-            // 박자표 기보
-            rhythmCtx.font = 'bold 54px "Noto Sans KR"'; 
+            // 박자표 기보 (모바일 해상도에 맞춰 가변 스케일링)
+            const hCanvas = rhythmCanvas.height || 350;
+            const tsFontSize = Math.min(54, Math.max(32, Math.round(hCanvas * 0.14)));
+            const tsTopY = staffY - Math.min(34, Math.round(tsFontSize * 0.62));
+            const tsBottomY = staffY + Math.min(42, Math.round(tsFontSize * 0.76));
+            rhythmCtx.font = `bold ${tsFontSize}px "Noto Sans KR"`; 
             rhythmCtx.fillStyle = '#0f172a';
             rhythmCtx.textBaseline = 'middle'; 
             rhythmCtx.textAlign = 'center'; 
-            rhythmCtx.fillText(timeSignature.top, startX - 35, staffY - 34);
-            rhythmCtx.fillText(timeSignature.bottom, startX - 35, staffY + 42);
+            rhythmCtx.fillText(timeSignature.top, startX - 35, tsTopY);
+            rhythmCtx.fillText(timeSignature.bottom, startX - 35, tsBottomY);
 
             // 2. 통합 시간 수직 격자선
             rhythmCtx.save();

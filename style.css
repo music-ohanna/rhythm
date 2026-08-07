@@ -586,8 +586,8 @@ html {
         /* 📱 모바일/스마트폰(max-width: 639px) 최적화 스타일 */
         @media screen and (max-width: 639px) {
             .text-tool-btn {
-                min-height: 32px;
-                padding: 3px 6px;
+                min-height: 30px;
+                padding: 3px 5px;
                 font-size: 11px;
                 gap: 2px;
                 border-radius: 8px;
