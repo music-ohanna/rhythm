@@ -1289,6 +1289,8 @@
             timeSignature.top = top; timeSignature.bottom = bottom;
             const meterLabel = document.getElementById('currentMeterLabel');
             if (meterLabel) meterLabel.textContent = `${top}/${bottom}`;
+            const meterSelect = document.getElementById('meterSelect');
+            if (meterSelect) meterSelect.value = `${top}/${bottom}`;
             scoreMeasures = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
             measureUndoStacks = Array.from({length: PROJECT_MEASURE_COUNT}, () => []);
             activeMeasureIndex = 0;
@@ -1301,6 +1303,15 @@
             syncVRhythmToggleUI();
             drawAll();
             showToast(`${top}/${bottom} 박자로 변경하고 ${PROJECT_MEASURE_COUNT}마디를 새로 시작합니다.`, true);
+        }
+
+        function handleMeterSelectChange(selectEl) {
+            if (!selectEl) return;
+            const val = selectEl.value;
+            const parts = val.split('/').map(Number);
+            if (parts.length === 2) {
+                setTimeSig(parts[0], parts[1]);
+            }
         }
 
         function toggleMeterMenu() {
@@ -1332,6 +1343,7 @@
         function closeHelpModal() {
             const modal = document.getElementById('helpSimpleModal');
             if (modal) modal.classList.remove('show');
+            closeTutorial();
         }
 
         function loadPresetRhythm(type) {
@@ -1366,10 +1378,6 @@
             updateMeasureNavigator();
             drawAll();
             showToast('예시 리듬 악보를 불러왔습니다.', true);
-        }
-
-        function closeHelpModal() {
-            closeTutorial();
         }
 
         function openNewScreenModal() {
@@ -2708,23 +2716,47 @@
                 return;
             }
 
-            const enteredLabel = await askSubmissionLabel('HTML 저장', '재생 가능 작품 HTML 만들기');
+            const enteredLabel = await askSubmissionLabel('악보 저장', '리듬 악보 저장');
             if (enteredLabel === null) return;
             const submissionLabel = (enteredLabel || '리듬 작품').slice(0, 60);
-            showToast('재생 가능한 작품 파일을 만드는 중입니다.', true);
+            showToast('악보 파일을 만드는 중입니다.', true);
 
-            const cssText = window._CACHED_STYLE_CSS || (await fetch('style.css').then(r => r.text()).catch(() => ''));
-            const jsText = window._CACHED_APP_JS || (await fetch('app.js').then(r => r.text()).catch(() => ''));
-            // 앱 소스를 다시 <script> 안에 넣을 때, 소스에 포함된 "</script>"가
-            // 바깥 스크립트를 먼저 닫지 않도록 이스케이프한다. 이 처리가 없으면
-            // 저장한 작품 HTML은 중간에서 JavaScript 구문 오류가 나 빈 화면이 된다.
-            const safeCssText = cssText.replace(/<\/style/gi, '<\\/style');
-            const safeJsText = jsText.replace(/<\/script/gi, '<\\/script');
-
-            if (!safeJsText.trim()) {
-                showValidationAlert('저장에 필요한 앱 파일을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 다시 저장해 주세요.');
-                return;
+            let cssText = window._CACHED_STYLE_CSS;
+            if (!cssText || !cssText.trim()) {
+                try {
+                    cssText = await fetch('style.css').then(r => r.text()).catch(() => '');
+                } catch(e) {}
             }
+            if (!cssText || !cssText.trim()) {
+                try {
+                    for (const sheet of document.styleSheets) {
+                        try {
+                            const rules = sheet.cssRules || sheet.rules;
+                            if (rules) {
+                                for (const rule of rules) {
+                                    cssText += rule.cssText + '\n';
+                                }
+                            }
+                        } catch (e) {}
+                    }
+                } catch (e) {}
+            }
+
+            let jsText = window._CACHED_APP_JS;
+            if (!jsText || !jsText.trim()) {
+                try {
+                    jsText = await fetch('app.js').then(r => r.text()).catch(() => '');
+                } catch(e) {}
+            }
+
+            const safeCssText = (cssText || '').replace(/<\/style/gi, '<\\/style');
+            const safeJsText = (jsText || '').replace(/<\/script/gi, '<\\/script');
+
+            const cssTagOrBlock = safeCssText.trim() ? `<style>\n${safeCssText}\n</style>` : `<link rel="stylesheet" href="style.css">`;
+            const jsTagOrBlock = safeJsText.trim()
+                ? `<script>\n${safeJsText}\n</script>`
+                : `<script src="sound_data.js"></script>\n<script src="app.js"></script>`;
+
             const audioDataJs = (typeof EMBEDDED_RHYTHM_AUDIO_DATA_URIS !== 'undefined')
                 ? `window.EMBEDDED_RHYTHM_AUDIO_DATA_URIS = ${JSON.stringify(EMBEDDED_RHYTHM_AUDIO_DATA_URIS)};`
                 : '';
@@ -2752,9 +2784,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>${submissionLabel} · 제출 작품</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-${safeCssText}
-    </style>
+    ${cssTagOrBlock}
     <script>
         window.PRELOADED_SCORE_STATE = "${encodedState}";
         window.EXPORTED_MEASURE_COUNT = ${completedCount};
@@ -2800,9 +2830,7 @@ ${safeCssText}
     <script>
 ${audioDataJs}
     </script>
-    <script>
-${safeJsText}
-    </script>
+    ${jsTagOrBlock}
 </body>
 </html>`;
 

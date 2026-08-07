@@ -1,0 +1,266 @@
+===NEW_HEADER===
+        <h1 onclick="resetToHome()" class="text-xl md:text-2xl font-black text-slate-900 tracking-tight flex items-center cursor-pointer hover:opacity-80 transition select-none" title="처음 메인 화면으로 돌아가기">
+            🎵 리듬 창작 앱
+        </h1>
+        <div class="flex gap-2 items-center">
+            <!-- 박자 선택 (현재 박자 표시 및 클릭 시 선택 메뉴 열림) -->
+            <div class="relative inline-block text-left">
+                <button id="meterSelectBtn" onclick="toggleMeterMenu()" type="button" class="px-3 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold border-2 border-slate-300 hover:bg-slate-50 text-xs md:text-sm flex items-center gap-1 shadow-sm">
+                    <span id="currentMeterLabel">4/4</span>
+                    <span class="text-xs text-slate-500">▾</span>
+                </button>
+                <div id="meterDropdown" class="hidden absolute right-0 mt-1 w-24 rounded-xl bg-white border-2 border-slate-300 shadow-xl z-50 overflow-hidden py-1">
+                    <button onclick="selectMeter(4,4)" class="w-full px-3 py-1.5 text-left text-xs md:text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600">4/4</button>
+                    <button onclick="selectMeter(3,4)" class="w-full px-3 py-1.5 text-left text-xs md:text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600">3/4</button>
+                    <button onclick="selectMeter(2,4)" class="w-full px-3 py-1.5 text-left text-xs md:text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600">2/4</button>
+                    <button onclick="selectMeter(6,8)" class="w-full px-3 py-1.5 text-left text-xs md:text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600">6/8</button>
+                </div>
+            </div>
+
+            <!-- 주요 상단 기능 직관적 배치 -->
+            <div class="flex gap-1.5 items-center">
+                <button id="btn-undo" onclick="undoLastAction()" class="text-tool-btn text-xs md:text-sm" title="마지막 작업 되돌리기">
+                    <span class="text-base">↩️</span> 되돌리기
+                </button>
+                <button id="btn-clear-all" onclick="confirmClear()" class="text-tool-btn text-xs md:text-sm" title="현재 마디의 모든 기호 삭제">
+                    <span class="text-base">🗑️</span> 지우기
+                </button>
+                <button id="btn-delete-note" onclick="toggleDeleteMode()" class="text-tool-btn text-xs md:text-sm" title="선택한 기호 하나씩 삭제 모드">
+                    <span class="text-base">🧽</span> 선택 삭제
+                </button>
+                <button id="btn-stage-practice" onclick="showPracticeExample()" class="text-tool-btn text-xs md:text-sm bg-amber-500 hover:bg-amber-600 text-white font-extrabold border-amber-600 shadow" title="4/4박자 예시 리듬 따라 만들기">
+                    <span class="text-base">🎯</span> 예시 따라하기
+                </button>
+                <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs md:text-sm" title="만든 악보 파일로 저장하기">
+                    <span class="text-base">📥</span> 악보 저장
+                </button>
+                <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs md:text-sm" title="투어 가이드 다시 보기">
+                    <span class="text-base">📖</span> 가이드
+                </button>
+            </div>
+        </div>
+===NEW_CONTROLS===
+        <div class="playback-controls flex justify-between items-center gap-2 shrink-0">
+            <div class="flex items-center gap-1.5">
+                <button id="btn-tie-note" onclick="toggleTieMode()" class="text-tool-btn text-xs" title="붙임줄 만들기">
+                    <span class="text-sm">⌒</span> 붙임줄
+                </button>
+            </div>
+            <label class="flex items-center gap-2 text-xs md:text-sm">
+                <span>빠르기</span>
+                <input id="tempoSlider" class="tempo-range" type="range" min="40" max="160" step="1" value="60" oninput="setTempo(this.value)" aria-label="빠르기 조절">
+                <span id="tempoValue" class="tempo-value">♩ = 60</span>
+            </label>
+            <!-- 밖으로 노출된 직관적인 메트로놈 / V자 리듬 / 정간보 토글 -->
+            <div class="flex items-center gap-3 text-xs md:text-sm font-bold text-slate-800">
+                <label class="flex items-center gap-1 cursor-pointer" title="메트로놈 소리 켜기/끄기">
+                    <input id="metronomeToggle" class="metronome-toggle" type="checkbox" checked onchange="setMetronomeEnabled(this.checked)" aria-label="짧은 틱 소리 메트로놈">
+                    <span>메트로놈</span>
+                </label>
+                <label class="flex items-center gap-1 cursor-pointer" title="악보 아래 V자 리듬 표기 보이기">
+                    <input id="vRhythmToggle" type="checkbox" checked onchange="toggleVRhythmDisplay(this.checked)" aria-label="V자 리듬 표기">
+                    <span>V자 리듬</span>
+                </label>
+                <label class="flex items-center gap-1 cursor-pointer" title="악보 아래 정간보 표기 보이기">
+                    <input id="jeongganboToggle" type="checkbox" checked onchange="toggleJeongganboDisplay(this.checked)" aria-label="정간보 표기">
+                    <span>정간보</span>
+                </label>
+            </div>
+            <label class="instrument-label text-xs md:text-sm">
+                <span>악기</span>
+                <select id="rhythmInstrument" class="instrument-select" onchange="setRhythmInstrument(this.value)" aria-label="리듬 악기 선택">
+                    <option value="synth">기본음</option>
+                    <option value="janggu">장구</option>
+                    <option value="kkwaenggwari">꽹과리</option>
+                    <option value="woodblock">우드블록</option>
+                    <option value="drum">드럼</option>
+                </select>
+            </label>
+        </div>
+===NEW_TIE_CURVE===
+        function drawTieCurve(fromNote, toNote, staffY, color = '#0f172a', alpha = 1) {
+            if (!fromNote || !toNote) return;
+            const fromX = fromNote.x + 10.5;
+            const toX = toNote.x - 10.5;
+            if (toX <= fromX + 4) return;
+
+            const y = staffY + 12;
+            const width = toX - fromX;
+            // 더 볼록하고 깊게 (최소 22px, 너비 비례 0.30, 최대 48px)
+            const depth = Math.max(22, Math.min(48, width * 0.30));
+
+            rhythmCtx.save();
+            rhythmCtx.strokeStyle = color;
+            rhythmCtx.globalAlpha = alpha;
+            rhythmCtx.lineWidth = 3.5;
+            rhythmCtx.lineCap = 'round';
+            rhythmCtx.lineJoin = 'round';
+
+            // 깔끔한 단일 베지어 곡선 (잔향 이중선 제거)
+            rhythmCtx.beginPath();
+            rhythmCtx.moveTo(fromX, y);
+            rhythmCtx.bezierCurveTo(
+                fromX + width * 0.22, y + depth,
+                toX - width * 0.22, y + depth,
+                toX, y
+            );
+            rhythmCtx.stroke();
+            rhythmCtx.restore();
+        }
+===NEW_PRACTICE_TARGET===
+        // 사진 속 4/4박자 예시 리듬 (4분음표 · 점8분음표+16분음표 · 셋잇단 3개 · 8분음표+8분쉼표)
+        function getFourFourPracticeExample() {
+            return [
+                { type: 'quarter',   isRest: false, beatOffset: 0,           dotted: false },
+                { type: 'eighth',    isRest: false, beatOffset: 1,           dotted: true  },
+                { type: 'sixteenth', isRest: false, beatOffset: 1.75,        dotted: false },
+                { type: 'triplet',   isRest: false, beatOffset: 2,           dotted: false },
+                { type: 'triplet',   isRest: false, beatOffset: 2 + 1/3,     dotted: false },
+                { type: 'triplet',   isRest: false, beatOffset: 2 + 2/3,     dotted: false },
+                { type: 'eighth',    isRest: false, beatOffset: 3,           dotted: false },
+                { type: 'eighth',    isRest: true,  beatOffset: 3.5,         dotted: false }
+            ];
+        }
+
+        // 박자 선택과 무관하게 항상 사용자 4/4박자 예시 리듬 하나로 고정
+        function getPracticeTarget() {
+            return getFourFourPracticeExample();
+        }
+
+        function resetToHome() {
+            stopPerformance();
+            guidedPracticeTarget = null;
+            hidePracticeStatus();
+            closePracticePanel();
+            if (timeSignature.top !== 4 || timeSignature.bottom !== 4) {
+                setTimeSig(4, 4);
+            }
+            switchMeasure(0);
+            showToast('🎵 처음 메인 화면으로 돌아왔습니다.', true);
+        }
+
+        function toggleVRhythmDisplay(enabled) {
+            showVRhythm = !!enabled;
+            const cb = document.getElementById('vRhythmToggle');
+            if (cb) cb.checked = showVRhythm;
+            drawAll();
+        }
+
+        function toggleJeongganboDisplay(enabled) {
+            showJeongganbo = !!enabled;
+            const cb = document.getElementById('jeongganboToggle');
+            if (cb) cb.checked = showJeongganbo;
+            drawAll();
+        }
+
+        async function showPracticeExample() {
+            stopPerformance();
+            if (timeSignature.top !== 4 || timeSignature.bottom !== 4) {
+                showToast('⚠️ 예시 창작은 4/4박자를 기준으로 합니다. 4/4박자로 전환합니다!', true);
+                await new Promise(r => setTimeout(r, 600));
+                setTimeSig(4, 4);
+                await new Promise(r => setTimeout(r, 100));
+            }
+            pushUndoState();
+            const example = getFourFourPracticeExample();
+            notes.splice(0, notes.length, ...example.map(note => ({...note})));
+            guidedPracticeTarget = example.map(note => ({...note}));
+            dotCandidateNote = null;
+            syncActiveMeasureState();
+            closePracticePanel();
+            showPracticeStatus('example');
+            drawAll();
+            showToast('🎯 예시 악보를 1회 연주합니다. 잘 들어보세요!', true);
+            await startPerformance();
+        }
+
+        function startGuidedPractice() {
+            stopPerformance();
+            if (timeSignature.top !== 4 || timeSignature.bottom !== 4) {
+                setTimeSig(4, 4);
+            }
+            pushUndoState();
+            guidedPracticeTarget = getFourFourPracticeExample().map(note => ({...note}));
+            notes.splice(0, notes.length);
+            dotCandidateNote = null;
+            syncActiveMeasureState();
+            closePracticePanel();
+            showPracticeStatus('guided');
+            drawAll();
+            showToast('연한 회색 악보 기호를 따라 입력하세요.', true);
+        }
+===NEW_TUTORIAL_STEPS===
+        const tutorialSteps = [
+            {
+                title: '1단계: 음표 넣기',
+                body: '아래 표에서 <strong>4분음표</strong>, <strong>8분음표</strong> 등 음표를 눌러 악보에 넣어요.',
+                anchor: 'noteRestButtons',
+                placement: 'top'
+            },
+            {
+                title: '2단계: 쉼표 넣기',
+                body: '쉼표 줄의 <strong>4분쉼표</strong>, <strong>8분쉼표</strong>를 눌러 악보에 쉼표를 넣어요.',
+                anchor: 'noteRestButtons',
+                placement: 'top'
+            },
+            {
+                title: '3단계: 점( . ) 붙이기',
+                body: '음표나 쉼표를 넣은 다음 <strong>[ . ] (점)</strong> 버튼을 눌러 점음표나 점쉼표로 만드세요.',
+                anchor: 'dotButton',
+                placement: 'top'
+            },
+            {
+                title: '4단계: 붙임줄 연결하기',
+                body: '음표를 이어 연결하고 싶다면 <strong>[⌒ 붙임줄]</strong> 버튼을 활성화한 뒤 <strong>앞 음표 → 뒤 음표 순서</strong>로 클릭하세요.',
+                anchor: 'tie',
+                placement: 'top'
+            },
+            {
+                title: '5단계: 내 리듬 들어보기',
+                body: '악보를 완성한 후 <strong>[▶ 이 마디 듣기]</strong> 버튼을 눌러 내가 만든 리듬을 들어보세요!',
+                anchor: 'play',
+                placement: 'top'
+            },
+            {
+                title: '6단계: 지우기·되돌리기·선택 삭제',
+                body: '잘못 입력했을 때는 <strong>↩️ 되돌리기</strong>, <strong>🗑️ 전체 지우기</strong> 또는 <strong>🧽 선택 삭제</strong>를 누르세요.<br><small>선택 삭제를 누른 후 지우고 싶은 음표를 클릭하면 하나씩 삭제됩니다.</small>',
+                anchor: 'undoClear',
+                placement: 'bottom'
+            },
+            {
+                title: '7단계: 가이드 완료!',
+                body: '기본 사용법 안내가 끝났습니다! 자유롭게 나만의 리듬을 창작해 보세요 🎉',
+                anchor: 'canvas',
+                placement: 'center'
+            },
+            {
+                title: '8단계: 예시 따라 만들기 도전!',
+                body: '선생님이 준비한 예시 리듬을 따라서 만들고 싶다면 상단의 <strong>[🎯 예시 따라하기]</strong> 버튼을 클릭하세요!',
+                anchor: 'practice',
+                placement: 'bottom'
+            }
+        ];
+===NEW_TUTORIAL_ANCHOR===
+        function getTutorialAnchor(anchor) {
+            if (!anchor) return null;
+            if (anchor === 'canvas') return document.getElementById('canvasArea');
+            if (anchor === 'measureNavigator') return document.getElementById('measureNavigator');
+            if (anchor === 'play') return document.getElementById('playBtn');
+            if (anchor === 'playbackControls') return document.querySelector('.playback-controls');
+            if (anchor === 'delete') return document.getElementById('btn-delete-note');
+            if (anchor === 'undo') return document.getElementById('btn-undo');
+            if (anchor === 'tie') return document.getElementById('btn-tie-note');
+            if (anchor === 'help') return document.getElementById('btn-help-tutorial');
+            if (anchor === 'practice') return document.getElementById('btn-stage-practice');
+            if (anchor === 'clear') return document.getElementById('btn-clear-all');
+            if (anchor === 'undoClear') {
+                return [document.getElementById('btn-undo'), document.getElementById('btn-clear-all'), document.getElementById('btn-delete-note')].filter(Boolean);
+            }
+            if (anchor === 'noteRestButtons') {
+                return Array.from(document.querySelectorAll('.guide-cell[onclick]')).filter(el => (el.getAttribute('onclick') || '').includes('addNoteSmart'));
+            }
+            if (anchor === 'dotButton') {
+                return Array.from(document.querySelectorAll('.guide-cell[onclick]')).find(el => (el.getAttribute('onclick') || '').includes('toggleLastDot'));
+            }
+            return document.querySelector(anchor);
+        }

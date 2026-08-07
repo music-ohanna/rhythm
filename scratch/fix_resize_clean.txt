@@ -1,0 +1,14 @@
+function resize() {
+            const parent = rhythmCanvas.parentElement;
+            rhythmCanvas.width = (parent && parent.clientWidth) ? parent.clientWidth : Math.max(600, window.innerWidth - 32);
+            rhythmCanvas.height = (parent && parent.clientHeight) ? parent.clientHeight : Math.max(260, Math.floor(window.innerHeight * 0.45));
+            drawingCanvas.width = rhythmCanvas.width;
+            drawingCanvas.height = rhythmCanvas.height;
+            
+            staffY = rhythmCanvas.height * 0.23;      
+            visualizerY = rhythmCanvas.height * 0.47;
+            blockY = rhythmCanvas.height * 0.74;      
+            
+            drawAll();
+            redrawAnalog();
+        }

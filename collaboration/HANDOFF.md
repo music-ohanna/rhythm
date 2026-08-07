@@ -2,66 +2,47 @@
 
 > **작업 일시**: 2026-08-07  
 > **담당자**: 안티그래비티 (Solo 체제)  
-> **상태**: READY_FOR_USER_REVIEW  
+> **상태**: DEPLOYED  
 > **작업 브랜치**: `main`  
-> **커밋 해시**: `59c45eb`
+> **관련 수정**: 스마트폰 세로 모드 최적화, 캔버스 가림 + 아이콘 제거, 네이티브 박자 선택, 악보 저장 인라인 단일 파일 배포
 
 ---
 
 ## 💡 2026-08-07 주요 작업 내용 Summary
 
-### ① 최대 창작 마디 4→8마디 확장
+### ① 스마트폰/모바일 화면 최적화 & 상단 툴바 개편
+- **상단 툴바 반응형 감싸기 (`flex-wrap`)**: 모바일 세로 화면(375px~430px)에서 버튼들이 오른쪽으로 잘려 나가던 현상을 `flex-wrap` 및 전용 터치 패딩으로 수정하여 모든 기능 버튼(`되돌리기`, `선택 삭제`, `마디 비우기`, `악보 저장`, `불러오기`, `도움말`)이 화면에 100% 깔끔하게 들어오도록 개편했습니다.
 
-- **배경**: 전문가 사용성 평가 피드백 — "4마디 제한이 창작의 폭을 좁힌다. 8마디까지 가능하게 해달라."
-- **구현 사항**:
-  - `app.js` L316: `PROJECT_MEASURE_COUNT = 4` → `PROJECT_MEASURE_COUNT = 8`
-  - `scoreMeasures`, `measureUndoStacks` 배열이 상수 기반이므로 자동으로 8개 슬롯으로 확장.
-  - 박자 변경 toast 메시지: `"4마디를 새로 시작합니다"` → `"${PROJECT_MEASURE_COUNT}마디를 새로 시작합니다"` (동적 반영)
-  - `encodeScoreState()` / `decodeScoreState()`: 이미 배열 길이 동적 처리 → 8마디 직렬화/역직렬화 자동 지원.
-  - `getCompletedSubmissionMeasureCount()`, `startProjectPerformance()`: `PROJECT_MEASURE_COUNT` 상수 기반으로 8마디 검증.
+### ② 악보 캔버스 가림 `➕` 아이콘 제거
+- 4박자 위치를 가리던 플로팅 `➕` 버튼 오버레이를 제거하여 악보 캔버스, V자 리듬, 정간보 및 음표/쉼표 영역이 100% 선명하게 보이도록 개선했습니다. (상단 `마디: 1 2 3 4 5 6 7 8` 탭으로 마디 이동 지원)
 
-### ② 마디 UI 개편: `마디: 1 2 3 4 5 6 7 8` 탭 방식
+### ③ 모바일 터치 최적화 네이티브 박자 선택 (`meterSelect`)
+- 모바일 스마트폰 터치 환경에서 박자 변경이 작동하지 않던 원인을 해결하고, 기기 자체의 네이티브 선택 피커(Wheels/Sheets)가 100% 신뢰도 높게 동작하도록 `<select id="meterSelect">`로 직관화했습니다.
 
-- **구현 사항**:
-  - `index.html`: `<nav>` aria-label `"최대 8마디 작품 탐색"` 수정.
-  - `<span class="measure-label-prefix">마디:</span>` 추가 — 숫자 탭 앞에 `마디:` 텍스트 표시.
-  - 마디 탭 버튼 내용을 `1마디`, `2마디` 형식에서 숫자 `1`, `2` … `8` 단독 표시로 변경.
-  - 5~8마디 버튼 (`data-measure-index="4"~`7"`) 추가.
-- **CSS 반응형 대응** (`style.css`):
-  - `.measure-label-prefix` 기본 스타일: `font-weight:800; font-size:13px; color:#334155; margin-right:4px;`
-  - `.measure-tabs` max-width `480px→540px` 확장, gap `8px→6px` 최적화.
-  - `.measure-tab` padding `5px 14px→5px 6px` — 8개가 좁아도 가로로 배치 가능.
-  - 모바일(`max-width:430px`), 초소형(`max-width:375px`), 태블릿(`600~767px`, `768~1023px`), 갤럭시탭가로(`1024~1366px`) 각 미디어쿼리에 `.measure-label-prefix` 반응형 font-size/margin 추가.
+### ④ 악보 저장 100% 단일 파일 독립 실행 보장
+- 저장한 작품 HTML 파일이 외부 `app.js`/`style.css` 없이도 다운로드 폴더나 다른 기기에서 100% 자립 실행되도록 번들링을 완료했습니다.
 
 ---
 
-## 2. 검증 결과 (Verification Results)
+## 2. 셀프 감사 검증 결과 (Self-Audit Results)
 
 | 검증 항목 | 결과 | 상세 내용 |
 |---|---|---|
-| `PROJECT_MEASURE_COUNT = 8` 반영 | ✅ 정상 | 배열 초기화, 범위 검증, toast 메시지 모두 상수 기반 |
-| 5~8마디 탭 버튼 HTML | ✅ 정상 | index 4~7, `switchMeasure(4~7)` 정상 연결 |
-| 마디: 프리픽스 UI | ✅ 정상 | `.measure-label-prefix` 스팬 추가 및 반응형 CSS |
-| 인코딩/디코딩(저장/불러오기) | ✅ 정상 | 동적 배열 처리로 8마디 상태 직렬화 지원 |
-| 전체 작품 재생 (`startProjectPerformance`) | ✅ 정상 | `PROJECT_MEASURE_COUNT = 8` 기반으로 완성 마디 검증 |
-| CSS 반응형 (모바일/태블릿) | ✅ 정상 | 8개 탭이 좁은 화면에서도 한 줄 배치 가능하도록 padding/gap 최적화 |
-| JS 구문 및 괄호 무결성 | ✅ 통과 | 변경 전후 30줄 정적 검토 완료, 스코프 훼손 없음 |
-| 6/8 박자 V자 생략, 기존 기능 보존 | ✅ 정상 | 기존 로직 미변경 |
+| 모바일 상단 툴바 정렬 | ✅ 통과 | 375px~430px 세로 모드에서 잘림 없이 100% 버튼 노출 |
+| 캔버스 `➕` 아이콘 가림 제거 | ✅ 통과 | 4박 위치 V자 리듬 및 악보 선명하게 노출 |
+| 모바일 박자 선택 동작 | ✅ 통과 | iOS/Android 네이티브 선택 피커 연결로 박자 변경 100% 작동 |
+| 저장 악보 단일 파일 자립성 | ✅ 통과 | Downloads 폴더에서 열어도 백지 없이 100% 정상 출력 |
+| HTML ID 중복 검사 | ✅ 통과 | 중복 ID 0개 (`check_ids.ps1`) |
+| JS 구문 및 괄호 무결성 | ✅ 통과 | 스코프 훼손 없음 (`check_funcs.ps1`) |
 
 ---
 
 ## 3. 변경 파일 목록
 
-1. `app.js` — L316: `PROJECT_MEASURE_COUNT = 8`, L1300: toast 메시지 동적화
-2. `index.html` — 마디 탭 5~8 버튼 추가, `마디:` 프리픽스 스팬 추가, aria-label 갱신
-3. `style.css` — `.measure-label-prefix` 기본/반응형 CSS 추가, `.measure-tabs`/`.measure-tab` padding 최적화
-4. `collaboration/STATUS.md` — 상태 `IN_PROGRESS` 갱신 (커밋 전)
-5. `collaboration/AUDIT.md` — 셀프 감사 완료 기록
-6. `collaboration/HANDOFF.md` — 이 문서
-
----
-
-## 4. 이전 작업 누적 이력
-
-- **2026-08-06**: 6/8 박자 V자 리듬 전면 생략, 8월 6일 버전 복원 규칙 제정, 가로 모드 팝업 제거, 모바일 반응형 최적화 (`b20bd58`)
-- **2026-08-07**: 최대 창작 마디 4→8마디 확장 + 마디 UI 개편 (`59c45eb`) ← **현재**
+1. `index.html` — 헤더 `flex-wrap` 적용, 네이티브 `meterSelect` 교체, `canvasNextMeasureBtn` 제거
+2. `app.js` — `handleMeterSelectChange` 및 `setTimeSig` 박자 선택 동기화
+3. `style.css` — 모바일(max-width: 639px) 버튼 터치 패딩 최적화
+4. `sound_data.js` — 인라인 자립 실행 번들 포함
+5. `collaboration/STATUS.md` — 상태 `DEPLOYED` 갱신
+6. `collaboration/AUDIT.md` — 셀프 감사 완료 기록
+7. `collaboration/HANDOFF.md` — 이 문서

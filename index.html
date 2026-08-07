@@ -123,55 +123,44 @@
     </div>
 
     <!-- 크롬북 맞춤형 초슬림 헤더 디자인 (SPEC-002 단순화) -->
-    <header class="flex justify-between items-center mb-1.5 px-1 border-b border-slate-100 pb-1 shrink-0">
-        <h1 onclick="resetScoreWithConfirmation()" class="text-xl md:text-2xl font-black text-slate-900 tracking-tight flex items-center cursor-pointer hover:opacity-80 transition-opacity" title="새 악보 만들기">
-            🎵 리듬 창작 앱
-        </h1>
-        <div class="flex gap-2 items-center">
-            <!-- 박자 선택 (현재 박자 표시 및 클릭 시 선택 메뉴 열림) -->
-            <div class="relative inline-block text-left">
-                <button id="meterSelectBtn" onclick="toggleMeterMenu()" type="button" class="px-3 py-1.5 rounded-xl bg-white text-slate-900 font-extrabold border-2 border-slate-300 hover:bg-slate-50 text-xs md:text-sm flex items-center gap-1 shadow-sm">
-                    <span id="currentMeterLabel">4/4</span>
-                    <span class="text-xs font-semibold text-slate-600">박자</span>
-                    <span class="text-xs text-slate-500">▾</span>
-                </button>
-                <div id="meterDropdown" class="hidden absolute right-0 mt-1 w-28 rounded-xl bg-white border-2 border-slate-300 shadow-xl z-50 overflow-hidden py-1">
-                    <button onclick="selectMeter(4,4)" class="w-full px-3 py-1.5 text-left text-xs md:text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600">4/4 박자</button>
-                    <button onclick="selectMeter(3,4)" class="w-full px-3 py-1.5 text-left text-xs md:text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600">3/4 박자</button>
-                    <button onclick="selectMeter(2,4)" class="w-full px-3 py-1.5 text-left text-xs md:text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600">2/4 박자</button>
-                    <button onclick="selectMeter(6,8)" class="w-full px-3 py-1.5 text-left text-xs md:text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600">6/8 박자</button>
-                </div>
-            </div>
+    <header class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5 px-1 border-b border-slate-100 pb-1 shrink-0">
+        <div class="flex items-center gap-2 shrink-0">
+            <h1 onclick="resetScoreWithConfirmation()" class="text-base sm:text-xl md:text-2xl font-black text-slate-900 tracking-tight flex items-center cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap" title="새 악보 만들기">
+                🎵 리듬 창작 앱
+            </h1>
+            <!-- 박자 선택 (모바일/스마트폰 터치 최적화 네이티브 드롭다운) -->
+            <select id="meterSelect" onchange="handleMeterSelectChange(this)" class="px-2 py-1 rounded-xl bg-white text-slate-900 font-extrabold border-2 border-slate-300 text-xs sm:text-sm shadow-sm cursor-pointer outline-none">
+                <option value="4/4" selected>4/4 박자</option>
+                <option value="3/4">3/4 박자</option>
+                <option value="2/4">2/4 박자</option>
+                <option value="6/8">6/8 박자</option>
+            </select>
+        </div>
 
-            <!-- 주요 상단 기능 노출 -->
-            <div class="flex gap-1.5 items-center">
+        <!-- 주요 상단 기능 노출 -->
+        <div class="flex flex-wrap items-center gap-1 sm:gap-1.5">
             <!-- 지우기/수정 도구 통합 그룹 -->
             <div class="flex gap-1 bg-slate-100/90 p-0.5 rounded-xl border border-slate-200 shadow-sm">
-                <button id="btn-undo" onclick="undoLastAction()" class="text-tool-btn text-xs md:text-sm" title="방금 입력한 마지막 기호 취소">
-                    <span class="text-base">↩️</span> 되돌리기
+                <button id="btn-undo" onclick="undoLastAction()" class="text-tool-btn text-xs sm:text-sm" title="방금 입력한 마지막 기호 취소">
+                    <span class="text-sm sm:text-base">↩️</span> 되돌리기
                 </button>
-                <button id="btn-delete-note" onclick="toggleDeleteMode()" class="text-tool-btn text-xs md:text-sm" title="특정 음표만 선택하여 지우기 (더블클릭 가능)">
-                    <span class="text-base">🏷️</span> <span id="delete-label">선택 삭제</span>
+                <button id="btn-delete-note" onclick="toggleDeleteMode()" class="text-tool-btn text-xs sm:text-sm" title="특정 음표만 선택하여 지우기 (더블클릭 가능)">
+                    <span class="text-sm sm:text-base">🏷️</span> <span id="delete-label">선택 삭제</span>
                 </button>
-                <button id="btn-clear-all" onclick="confirmClear()" class="text-tool-btn text-xs md:text-sm" title="현재 마디의 모든 기호 지우기">
-                    <span class="text-base">🗑️</span> 마디 비우기
+                <button id="btn-clear-all" onclick="confirmClear()" class="text-tool-btn text-xs sm:text-sm" title="현재 마디의 모든 기호 지우기">
+                    <span class="text-sm sm:text-base">🗑️</span> 마디 비우기
                 </button>
             </div>
 
-            <button id="btn-header-save" onclick="downloadRhythmFile()" class="text-tool-btn btn-save-score text-xs md:text-sm" title="만든 악보 데이터를 .rhythm 파일로 경량 저장하기">
-                <span class="text-base">📥</span> 악보 저장
+            <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs sm:text-sm" title="만든 악보 데이터를 저장하기">
+                <span class="text-sm sm:text-base">📥</span> 악보 저장
             </button>
-            <button id="btn-header-save-html" onclick="downloadPlayableScoreHtml()" class="text-tool-btn text-xs md:text-sm" title="단일 실행 가능한 .html 파일로 저장하기">
-                <span class="text-base">📄</span> HTML 저장
+            <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs sm:text-sm" title="저장했던 악보 파일을 불러와 이어서 편집하기">
+                <span class="text-sm sm:text-base">📂</span> 불러오기
             </button>
-            <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs md:text-sm" title="저장했던 .rhythm 또는 .html 악보 파일을 불러와 이어서 편집하기">
-                <span class="text-base">📂</span> 불러오기
+            <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs sm:text-sm" title="도움말 보기">
+                <span class="text-sm sm:text-base">❓</span> 도움말
             </button>
-            <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs md:text-sm" title="도움말 보기">
-                <span class="text-base">❓</span> 도움말
-            </button>
-            
-        </div>
         </div>
     </header>
 
@@ -193,7 +182,6 @@
 
     <!-- 세로 해상도 다이어트형 드로잉 영역 -->
     <main id="canvasArea" class="relative flex-1 paper-bg rounded-2xl border-2 border-slate-400 shadow-md overflow-hidden cursor-default">
-        <button id="canvasNextMeasureBtn" type="button" onclick="switchMeasure(activeMeasureIndex + 1)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);z-index:40;" class="text-blue-600 hover:text-blue-800 font-black text-4xl md:text-5xl cursor-pointer p-1 bg-transparent border-0 outline-none hover:scale-110 active:scale-95 transition-transform" title="마디 추가">➕</button>
         <!-- 손글씨 그리기 레이어 -->
         <canvas id="drawingCanvas" class="absolute top-0 left-0 w-full h-full block z-20 touch-none"></canvas>
         <!-- 오선 악보 및 그리드 레이어 -->

@@ -582,3 +582,14 @@ html {
         #playAllBtn.playing { background:#dc2626 !important; border-color:#b91c1c !important; }
         .current-play-icon { color:#ffffff; }
         .project-play-icon { color:#fde047; }
+
+        /* 📱 모바일/스마트폰(max-width: 639px) 최적화 스타일 */
+        @media screen and (max-width: 639px) {
+            .text-tool-btn {
+                min-height: 32px;
+                padding: 3px 6px;
+                font-size: 11px;
+                gap: 2px;
+                border-radius: 8px;
+            }
+        }
