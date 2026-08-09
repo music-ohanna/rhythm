@@ -4492,9 +4492,10 @@ ${audioDataJs}
             },
             {
                 title: '7단계: ➕ 마디 추가',
-                body: '마디를 추가할 수 있습니다.',
+                body: '악보 오른쪽의 <strong>➕ 버튼</strong>을 클릭하면 마디를 추가할 수 있습니다.',
                 anchor: '#canvasNextMeasureBtn',
                 placement: 'left',
+                skipOnMobile: true,
                 onEnter: () => {
                     if (isPlaying) stopPerformance();
                     switchMeasure(1);
@@ -4533,6 +4534,8 @@ ${audioDataJs}
         ];
 
         let tutorialIndex = 0;
+        // 현재 기기에서 사용할 실제 튜토리얼 스텝 배열 (모바일에서는 skipOnMobile 스텝 제외)
+        let activeTutorialSteps = tutorialSteps;
 
         async function togglePlay() {
             if (isPlaying || isCountingIn) {
@@ -4968,15 +4971,15 @@ ${audioDataJs}
         function renderTutorialStep() {
             const el = getTutorialElements();
             if (!el.overlay) return;
-            const step = tutorialSteps[tutorialIndex];
+            const step = activeTutorialSteps[tutorialIndex];
             if (step && typeof step.onEnter === 'function') {
                 try { step.onEnter(); } catch(e) { console.warn('Tutorial step action error:', e); }
             }
-            el.count.textContent = `${tutorialIndex + 1} / ${tutorialSteps.length}`;
+            el.count.textContent = `${tutorialIndex + 1} / ${activeTutorialSteps.length}`;
             el.title.textContent = step.title;
             el.body.innerHTML = step.body;
             el.prev.disabled = tutorialIndex === 0;
-            el.next.textContent = tutorialIndex === tutorialSteps.length - 1 ? '창작 시작하기 🎉' : '다음';
+            el.next.textContent = tutorialIndex === activeTutorialSteps.length - 1 ? '창작 시작하기 🎉' : '다음';
 
             hideTutorialNotationPreview();
             requestAnimationFrame(positionTutorialCard);
@@ -5007,6 +5010,12 @@ ${audioDataJs}
             if (!force && localStorage.getItem(TUTORIAL_STORAGE_KEY) === 'true') return;
             const el = getTutorialElements();
             if (!el.overlay) return;
+            // 모바일(세로 폰) 화면에서는 + 버튼이 없으므로 skipOnMobile 스텝 제외
+            const isMobile = window.matchMedia('(max-width: 768px) and (orientation: portrait)').matches
+                || (window.innerWidth <= 768 && window.innerHeight > window.innerWidth);
+            activeTutorialSteps = isMobile
+                ? tutorialSteps.filter(s => !s.skipOnMobile)
+                : tutorialSteps;
             tutorialIndex = 0;
             if (el.never) el.never.checked = false;
             el.overlay.classList.add('show');
@@ -5032,7 +5041,7 @@ ${audioDataJs}
                 renderTutorialStep();
             });
             el.next.addEventListener('click', () => {
-                if (tutorialIndex >= tutorialSteps.length - 1) {
+                if (tutorialIndex >= activeTutorialSteps.length - 1) {
                     closeTutorial();
                     return;
                 }
