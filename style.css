@@ -624,47 +624,56 @@ html {
             text-indent: -1.2rem;
         }
 
-        /* 🎛️ 세로 마디 이동 리모컨 바 (.side-tab) */
-        .side-measure-remote {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        /* 🎵 음악교육적 가로 2줄(4마디+4마디) 네비게이터 커스텀 스타일 */
+        .measure-navigator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 8px;
+            margin-bottom: 4px;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
-        .measure-tab.side-tab {
+        .measure-tab {
             width: 100%;
-            height: 38px;
-            min-height: 32px;
+            height: 32px;
+            min-height: 28px;
             padding: 0;
-            margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #ffffff;
             color: #1e293b;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
             font-weight: 900;
-            font-size: 15px;
+            font-size: 13.5px;
             cursor: pointer;
             transition: all 0.15s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
-        .measure-tab.side-tab:hover {
-            background: #f1f5f9;
-            border-color: #64748b;
-            color: #0f172a;
+        .measure-tab:hover {
+            border-color: #2563eb;
+            color: #1d4ed8;
+            background: #eff6ff;
         }
-        .measure-tab.side-tab.active {
+        .measure-tab.active {
             background: #2563eb !important;
             color: #ffffff !important;
             border-color: #1d4ed8 !important;
-            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.4) !important;
+            font-weight: 900;
+            box-shadow: 0 2px 6px rgba(37,99,235,0.3) !important;
         }
 
         @media screen and (max-width: 639px) {
-            .measure-tab.side-tab {
-                height: 32px;
-                min-height: 30px;
-                font-size: 13px;
-                border-radius: 10px;
+            .measure-tab {
+                height: 28px;
+                min-height: 26px;
+                font-size: 12px;
+                border-radius: 8px;
             }
         }
+
 

@@ -127,7 +127,7 @@
         </div>
     </div>
 
-    <!-- 크롬북 및 모바일 최적화 헤더 디자인 (왼쪽: 파일 저장/불러오기, 오른쪽: 편집/도움말) -->
+    <!-- 크롬북 및 모바일 최적화 헤더 디자인 (왼쪽: 파일 저장/불러오기, 오른쪽: 박자 선택 및 편집/도움말) -->
     <header class="flex flex-wrap items-center justify-between gap-1.5 mb-1 px-1.5 border-b border-slate-200 pb-1.5 shrink-0 bg-white">
         <!-- Left: 앱 제목 및 파일 관리 (불러오기, 악보 저장) -->
         <div class="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -144,8 +144,16 @@
             </div>
         </div>
 
-        <!-- Right: 기능 도구 버튼 (되돌리기, 선택 삭제, 마디 비우기, 도움말) -->
-        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+        <!-- Right: 박자 선택 드롭다운 + 기능 도구 버튼 (되돌리기, 선택 삭제, 마디 비우기, 도움말) -->
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
+            <!-- 박자 선택 드롭다운 (되돌리기 옆에 선명하게 노출) -->
+            <select id="meterSelect" onchange="handleMeterSelectChange(this)" class="px-2.5 py-1 rounded-xl bg-white text-slate-900 font-black border-2 border-slate-300 text-xs sm:text-sm shadow-sm cursor-pointer outline-none hover:border-slate-400 transition" title="박자 선택">
+                <option value="4/4" selected>4/4 박자</option>
+                <option value="3/4">3/4 박자</option>
+                <option value="2/4">2/4 박자</option>
+                <option value="6/8">6/8 박자</option>
+            </select>
+
             <div class="flex gap-1 bg-slate-100 p-0.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
                 <button id="btn-undo" onclick="undoLastAction()" class="text-tool-btn text-xs sm:text-sm" title="방금 입력한 마지막 기호 취소">
                     <span class="text-sm sm:text-base">↩️</span> 되돌리기
@@ -164,50 +172,51 @@
         </div>
     </header>
 
-    <!-- 구 버전 호환 보이지 않는 네비게이터 -->
-    <nav id="measureNavigator" class="hidden" aria-hidden="true"></nav>
-
-    <!-- 세로 해상도 다이어트형 드로잉 영역 + 우측 세로 마디 리모컨 -->
-    <div class="flex flex-1 gap-1.5 sm:gap-2 overflow-hidden items-stretch relative min-h-0">
-        <!-- 중앙: 악보 Canvas 드로잉 영역 -->
-        <main id="canvasArea" class="relative flex-1 paper-bg rounded-2xl border-2 border-slate-400 shadow-md overflow-hidden cursor-default">
-            <!-- 손글씨 그리기 레이어 -->
-            <canvas id="drawingCanvas" class="absolute top-0 left-0 w-full h-full block z-20 touch-none"></canvas>
-            <!-- 오선 악보 및 그리드 레이어 -->
-            <canvas id="rhythmCanvas" class="absolute top-0 left-0 w-full h-full block z-10 pointer-events-none"></canvas>
-            
-            <div id="timeSigArea" class="absolute top-[23%] left-4 transform -translate-y-1/2 w-24 h-28 cursor-pointer z-30" onclick="inputTimeSig()"></div>
-            <div id="cursorIndicator"></div>
-            <div id="popupContainer" class="z-50 text-slate-900"></div>
-            <div id="practiceStatus" role="status" style="display:none;"><span id="practiceStatusText"></span><button id="practiceStatusAction" type="button" onclick="handlePracticeStatusAction()">정답 확인</button></div>
-        </main>
-
-        <!-- 우측: 마디 전환 세로 리모컨 (전문가 2차 검사 반영 UI) -->
-        <aside id="sideMeasureRemote" class="side-measure-remote flex flex-col items-center bg-slate-100/95 border-2 border-slate-300 rounded-2xl p-1 sm:p-1.5 shadow-md w-16 sm:w-20 md:w-24 shrink-0 select-none overflow-y-auto z-20 gap-1">
-            <!-- 박자 선택 드롭다운 (크고 또렷한 3/4 박자 표시) -->
-            <div class="w-full text-center pb-1 border-b border-slate-300 mb-0.5">
-                <select id="meterSelect" onchange="handleMeterSelectChange(this)" class="w-full px-1 py-1.5 rounded-xl bg-blue-600 text-white font-black border-2 border-blue-700 text-xs sm:text-sm md:text-base shadow-md cursor-pointer outline-none text-center hover:bg-blue-700 transition">
-                    <option value="4/4" selected>4/4 박자</option>
-                    <option value="3/4">3/4 박자</option>
-                    <option value="2/4">2/4 박자</option>
-                    <option value="6/8">6/8 박자</option>
-                </select>
+    <!-- 마디 이동 컨트롤 (음악교육적 한도막 형식: 4마디+4마디 균형 핏팅) -->
+    <nav id="measureNavigator" class="measure-navigator justify-center my-0.5 shrink-0" aria-label="최대 8마디 작품 탐색">
+        <div class="flex items-center gap-1.5 w-full max-w-4xl mx-auto px-1">
+            <span class="text-xs sm:text-sm font-black text-slate-700 shrink-0">마디:</span>
+            <div class="grid grid-cols-4 gap-1 sm:gap-1.5 flex-1">
+                <button class="measure-tab active" type="button" role="tab" aria-selected="true" data-measure-index="0" onclick="switchMeasure(0)" title="1마디"><span>1</span></button>
+                <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="1" onclick="switchMeasure(1)" title="2마디"><span>2</span></button>
+                <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="2" onclick="switchMeasure(2)" title="3마디"><span>3</span></button>
+                <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="3" onclick="switchMeasure(3)" title="4마디"><span>4</span></button>
             </div>
-            
-            <span class="text-[11px] sm:text-xs font-black text-slate-700 mb-0.5">마디:</span>
-            
-            <div id="sideMeasureButtons" class="flex flex-col gap-1 w-full flex-1 justify-start">
-                <button class="measure-tab side-tab active" type="button" data-measure-index="0" onclick="switchMeasure(0)" title="1마디"><span>1</span></button>
-                <button class="measure-tab side-tab" type="button" data-measure-index="1" onclick="switchMeasure(1)" title="2마디"><span>2</span></button>
-                <button class="measure-tab side-tab" type="button" data-measure-index="2" onclick="switchMeasure(2)" title="3마디"><span>3</span></button>
-                <button class="measure-tab side-tab" type="button" data-measure-index="3" onclick="switchMeasure(3)" title="4마디"><span>4</span></button>
-                <button class="measure-tab side-tab" type="button" data-measure-index="4" onclick="switchMeasure(4)" title="5마디"><span>5</span></button>
-                <button class="measure-tab side-tab" type="button" data-measure-index="5" onclick="switchMeasure(5)" title="6마디"><span>6</span></button>
-                <button class="measure-tab side-tab" type="button" data-measure-index="6" onclick="switchMeasure(6)" title="7마디"><span>7</span></button>
-                <button class="measure-tab side-tab" type="button" data-measure-index="7" onclick="switchMeasure(7)" title="8마디"><span>8</span></button>
+            <div class="grid grid-cols-4 gap-1 sm:gap-1.5 flex-1">
+                <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="4" onclick="switchMeasure(4)" title="5마디"><span>5</span></button>
+                <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="5" onclick="switchMeasure(5)" title="6마디"><span>6</span></button>
+                <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="6" onclick="switchMeasure(6)" title="7마디"><span>7</span></button>
+                <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="7" onclick="switchMeasure(7)" title="8마디"><span>8</span></button>
             </div>
-        </aside>
-    </div>
+        </div>
+    </nav>
+
+    <!-- 세로 해상도 다이어트형 드로잉 영역 (가로 100% 원복으로 찌그러짐 해소) -->
+    <main id="canvasArea" class="relative flex-1 paper-bg rounded-2xl border-2 border-slate-400 shadow-md overflow-hidden cursor-default w-full">
+        <!-- 손글씨 그리기 레이어 -->
+        <canvas id="drawingCanvas" class="absolute top-0 left-0 w-full h-full block z-20 touch-none"></canvas>
+        <!-- 오선 악보 및 그리드 레이어 -->
+        <canvas id="rhythmCanvas" class="absolute top-0 left-0 w-full h-full block z-10 pointer-events-none"></canvas>
+        
+        <!-- 악보 이동 및 마디 추가 플로팅 원형 버튼 (+ 보라색 입체 아이콘 버튼) -->
+        <button id="canvasPrevMeasureBtn" type="button" onclick="switchMeasure(activeMeasureIndex - 1)" class="absolute left-2.5 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 hover:from-slate-600 hover:to-slate-800 text-white font-black text-xl sm:text-2xl shadow-lg border-2 border-white/80 flex items-center justify-center transition-all active:scale-95 cursor-pointer" title="이전 마디로 이동" style="display:none;">
+            ‹
+        </button>
+
+        <button id="canvasNextMeasureBtn" type="button" onclick="switchMeasure(activeMeasureIndex + 1)" class="absolute right-2.5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-indigo-500 via-purple-600 to-indigo-700 hover:from-indigo-400 hover:to-purple-500 text-white shadow-xl border-2 border-white/90 flex items-center justify-center transition-all hover:scale-110 active:scale-95 cursor-pointer" title="다음 마디로 이동 (마디 추가)">
+            <svg class="w-6 h-6 sm:w-7 sm:h-7 stroke-[3.5] stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+        </button>
+
+
+        <div id="timeSigArea" class="absolute top-[23%] left-4 transform -translate-y-1/2 w-24 h-28 cursor-pointer z-30" onclick="inputTimeSig()"></div>
+        <div id="cursorIndicator"></div>
+        <div id="popupContainer" class="z-50 text-slate-900"></div>
+        <div id="practiceStatus" role="status" style="display:none;"><span id="practiceStatusText"></span><button id="practiceStatusAction" type="button" onclick="handlePracticeStatusAction()">정답 확인</button></div>
+    </main>
+
+
 
     <div id="practiceOverlay" class="choice-dialog" role="dialog" aria-modal="true" aria-labelledby="practiceTitle">
         <div class="choice-card practice-card">
