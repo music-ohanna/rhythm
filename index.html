@@ -113,33 +113,40 @@
     <!-- 악보 파일 불러오기 숨김 Input -->
     <input type="file" id="scoreFileInput" accept=".rhythm,.json,.html,.txt" style="display:none;" onchange="handleScoreFileUpload(event)">
 
-    <!-- 실시간 상태 경고 알림판 -->
-    <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-5 py-3 rounded-2xl font-bold text-sm md:text-base flex items-start justify-between gap-3 opacity-0 pointer-events-none translate-y-[-20px] transition-all duration-300 shadow-2xl border-2 border-red-500 bg-white text-red-700 max-w-lg w-[92vw]">
-        <div class="flex items-start gap-2">
-            <span class="text-xl shrink-0">⚠️</span>
-            <div id="alertText" class="text-red-700 leading-relaxed">박자 오류 감지됨</div>
+    <!-- 실시간 상태 경고 알림판 (전문가 2차 검사 반영 카드 레이아웃) -->
+    <div id="alertOverlay" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 alert-banner px-5 py-4 rounded-3xl opacity-0 pointer-events-none translate-y-[-20px] transition-all duration-300 shadow-2xl border-2 border-red-400 bg-white text-slate-800 max-w-lg w-[92vw]">
+        <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl shrink-0 leading-none">⚠️</span>
+                <div id="alertTitle" class="text-base sm:text-lg font-black text-red-700 leading-snug">박자 오류 감지됨</div>
+            </div>
+            <button type="button" onclick="event.stopPropagation(); hideValidationAlert();" class="shrink-0 text-red-500 hover:text-red-700 bg-red-100 hover:bg-red-200 font-extrabold text-base w-8 h-8 rounded-full flex items-center justify-center transition cursor-pointer shadow-sm" title="닫기">✕</button>
         </div>
-        <button type="button" onclick="event.stopPropagation(); hideValidationAlert();" class="shrink-0 text-red-600 hover:text-red-800 bg-red-100 hover:bg-red-200 font-black text-lg px-2.5 py-0.5 rounded-xl transition cursor-pointer shadow border border-red-300" title="닫기">✕</button>
+        <div id="alertBody" class="mt-3 text-xs sm:text-sm text-slate-700 space-y-2">
+            <div id="alertText"></div>
+        </div>
     </div>
 
-    <!-- 크롬북 및 모바일 최적화 헤더 디자인 -->
-    <header class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1 mb-1 px-1 border-b border-slate-100 pb-1 shrink-0">
-        <!-- Row 1: 앱 제목 및 박자 선택 -->
-        <div class="flex items-center justify-between sm:justify-start gap-2 shrink-0">
-            <h1 onclick="resetScoreWithConfirmation()" class="text-base sm:text-xl md:text-2xl font-black text-slate-900 tracking-tight flex items-center cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap" title="새 악보 만들기">
+    <!-- 크롬북 및 모바일 최적화 헤더 디자인 (왼쪽: 파일 저장/불러오기, 오른쪽: 편집/도움말) -->
+    <header class="flex flex-wrap items-center justify-between gap-1.5 mb-1 px-1.5 border-b border-slate-200 pb-1.5 shrink-0 bg-white">
+        <!-- Left: 앱 제목 및 파일 관리 (불러오기, 악보 저장) -->
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <h1 onclick="resetScoreWithConfirmation()" class="text-base sm:text-xl font-black text-slate-900 tracking-tight flex items-center cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap" title="새 악보 만들기">
                 🎵 리듬 창작 앱
             </h1>
-            <select id="meterSelect" onchange="handleMeterSelectChange(this)" class="px-2 py-1 rounded-xl bg-white text-slate-900 font-extrabold border-2 border-slate-300 text-xs sm:text-sm shadow-sm cursor-pointer outline-none">
-                <option value="4/4" selected>4/4 박자</option>
-                <option value="3/4">3/4 박자</option>
-                <option value="2/4">2/4 박자</option>
-                <option value="6/8">6/8 박자</option>
-            </select>
+            <div class="flex items-center gap-1.5 pl-2 border-l border-slate-200">
+                <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-2.5 py-1 rounded-xl border border-slate-300 shadow-sm transition" title="저장했던 악보 파일 불러오기">
+                    <span class="text-sm sm:text-base">📂</span> 불러오기
+                </button>
+                <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold px-2.5 py-1 rounded-xl shadow-sm transition" title="만든 악보 데이터를 저장하기">
+                    <span class="text-sm sm:text-base">📥</span> 악보 저장
+                </button>
+            </div>
         </div>
 
-        <!-- Row 2 (모바일) / Right (데스크톱): 기능 도구 버튼 균형 배치 -->
-        <div class="flex flex-wrap items-center justify-between sm:justify-end gap-1 sm:gap-1.5 w-full sm:w-auto">
-            <div class="flex gap-1 bg-slate-100/90 p-0.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
+        <!-- Right: 기능 도구 버튼 (되돌리기, 선택 삭제, 마디 비우기, 도움말) -->
+        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+            <div class="flex gap-1 bg-slate-100 p-0.5 rounded-xl border border-slate-200 shadow-sm shrink-0">
                 <button id="btn-undo" onclick="undoLastAction()" class="text-tool-btn text-xs sm:text-sm" title="방금 입력한 마지막 기호 취소">
                     <span class="text-sm sm:text-base">↩️</span> 되돌리기
                 </button>
@@ -151,48 +158,56 @@
                 </button>
             </div>
 
-            <div class="flex gap-1 items-center shrink-0">
-                <button id="btn-header-save" onclick="downloadPlayableScoreHtml()" class="text-tool-btn btn-save-score text-xs sm:text-sm" title="만든 악보 데이터를 저장하기">
-                    <span class="text-sm sm:text-base">📥</span> 악보 저장
-                </button>
-                <button id="btn-header-open" onclick="openScoreFileSelector()" class="text-tool-btn text-xs sm:text-sm" title="저장했던 악보 파일을 불러와 이어서 편집하기">
-                    <span class="text-sm sm:text-base">📂</span> 불러오기
-                </button>
-                <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs sm:text-sm" title="도움말 보기">
-                    <span class="text-sm sm:text-base">❓</span> 도움말
-                </button>
-            </div>
+            <button id="btn-help-tutorial" onclick="showTutorial(true)" class="text-tool-btn text-xs sm:text-sm bg-amber-500 hover:bg-amber-600 text-white font-extrabold px-2.5 py-1 rounded-xl shadow-sm transition" title="도움말 보기">
+                <span class="text-sm sm:text-base">❓</span> 도움말
+            </button>
         </div>
     </header>
 
+    <!-- 구 버전 호환 보이지 않는 네비게이터 -->
+    <nav id="measureNavigator" class="hidden" aria-hidden="true"></nav>
 
-    <!-- 마디 이동 컨트롤 -->
-    <nav id="measureNavigator" class="measure-navigator justify-center" aria-label="최대 8마디 작품 탐색">
-        <div class="measure-tabs" role="tablist" aria-label="편집할 마디 선택">
-            <span class="measure-label-prefix">마디:</span>
-            <button class="measure-tab active" type="button" role="tab" aria-selected="true" data-measure-index="0" onclick="switchMeasure(0)" title="1마디"><span>1</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="1" onclick="switchMeasure(1)" title="2마디"><span>2</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="2" onclick="switchMeasure(2)" title="3마디"><span>3</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="3" onclick="switchMeasure(3)" title="4마디"><span>4</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="4" onclick="switchMeasure(4)" title="5마디"><span>5</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="5" onclick="switchMeasure(5)" title="6마디"><span>6</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="6" onclick="switchMeasure(6)" title="7마디"><span>7</span></button>
-            <button class="measure-tab" type="button" role="tab" aria-selected="false" data-measure-index="7" onclick="switchMeasure(7)" title="8마디"><span>8</span></button>
-        </div>
-    </nav>
+    <!-- 세로 해상도 다이어트형 드로잉 영역 + 우측 세로 마디 리모컨 -->
+    <div class="flex flex-1 gap-1.5 sm:gap-2 overflow-hidden items-stretch relative min-h-0">
+        <!-- 중앙: 악보 Canvas 드로잉 영역 -->
+        <main id="canvasArea" class="relative flex-1 paper-bg rounded-2xl border-2 border-slate-400 shadow-md overflow-hidden cursor-default">
+            <!-- 손글씨 그리기 레이어 -->
+            <canvas id="drawingCanvas" class="absolute top-0 left-0 w-full h-full block z-20 touch-none"></canvas>
+            <!-- 오선 악보 및 그리드 레이어 -->
+            <canvas id="rhythmCanvas" class="absolute top-0 left-0 w-full h-full block z-10 pointer-events-none"></canvas>
+            
+            <div id="timeSigArea" class="absolute top-[23%] left-4 transform -translate-y-1/2 w-24 h-28 cursor-pointer z-30" onclick="inputTimeSig()"></div>
+            <div id="cursorIndicator"></div>
+            <div id="popupContainer" class="z-50 text-slate-900"></div>
+            <div id="practiceStatus" role="status" style="display:none;"><span id="practiceStatusText"></span><button id="practiceStatusAction" type="button" onclick="handlePracticeStatusAction()">정답 확인</button></div>
+        </main>
 
-    <!-- 세로 해상도 다이어트형 드로잉 영역 -->
-    <main id="canvasArea" class="relative flex-1 paper-bg rounded-2xl border-2 border-slate-400 shadow-md overflow-hidden cursor-default">
-        <!-- 손글씨 그리기 레이어 -->
-        <canvas id="drawingCanvas" class="absolute top-0 left-0 w-full h-full block z-20 touch-none"></canvas>
-        <!-- 오선 악보 및 그리드 레이어 -->
-        <canvas id="rhythmCanvas" class="absolute top-0 left-0 w-full h-full block z-10 pointer-events-none"></canvas>
-        
-        <div id="timeSigArea" class="absolute top-[23%] left-4 transform -translate-y-1/2 w-24 h-28 cursor-pointer z-30" onclick="inputTimeSig()"></div>
-        <div id="cursorIndicator"></div>
-        <div id="popupContainer" class="z-50 text-slate-900"></div>
-        <div id="practiceStatus" role="status" style="display:none;"><span id="practiceStatusText"></span><button id="practiceStatusAction" type="button" onclick="handlePracticeStatusAction()">정답 확인</button></div>
-    </main>
+        <!-- 우측: 마디 전환 세로 리모컨 (전문가 2차 검사 반영 UI) -->
+        <aside id="sideMeasureRemote" class="side-measure-remote flex flex-col items-center bg-slate-100/95 border-2 border-slate-300 rounded-2xl p-1 sm:p-1.5 shadow-md w-16 sm:w-20 md:w-24 shrink-0 select-none overflow-y-auto z-20 gap-1">
+            <!-- 박자 선택 드롭다운 (크고 또렷한 3/4 박자 표시) -->
+            <div class="w-full text-center pb-1 border-b border-slate-300 mb-0.5">
+                <select id="meterSelect" onchange="handleMeterSelectChange(this)" class="w-full px-1 py-1.5 rounded-xl bg-blue-600 text-white font-black border-2 border-blue-700 text-xs sm:text-sm md:text-base shadow-md cursor-pointer outline-none text-center hover:bg-blue-700 transition">
+                    <option value="4/4" selected>4/4 박자</option>
+                    <option value="3/4">3/4 박자</option>
+                    <option value="2/4">2/4 박자</option>
+                    <option value="6/8">6/8 박자</option>
+                </select>
+            </div>
+            
+            <span class="text-[11px] sm:text-xs font-black text-slate-700 mb-0.5">마디:</span>
+            
+            <div id="sideMeasureButtons" class="flex flex-col gap-1 w-full flex-1 justify-start">
+                <button class="measure-tab side-tab active" type="button" data-measure-index="0" onclick="switchMeasure(0)" title="1마디"><span>1</span></button>
+                <button class="measure-tab side-tab" type="button" data-measure-index="1" onclick="switchMeasure(1)" title="2마디"><span>2</span></button>
+                <button class="measure-tab side-tab" type="button" data-measure-index="2" onclick="switchMeasure(2)" title="3마디"><span>3</span></button>
+                <button class="measure-tab side-tab" type="button" data-measure-index="3" onclick="switchMeasure(3)" title="4마디"><span>4</span></button>
+                <button class="measure-tab side-tab" type="button" data-measure-index="4" onclick="switchMeasure(4)" title="5마디"><span>5</span></button>
+                <button class="measure-tab side-tab" type="button" data-measure-index="5" onclick="switchMeasure(5)" title="6마디"><span>6</span></button>
+                <button class="measure-tab side-tab" type="button" data-measure-index="6" onclick="switchMeasure(6)" title="7마디"><span>7</span></button>
+                <button class="measure-tab side-tab" type="button" data-measure-index="7" onclick="switchMeasure(7)" title="8마디"><span>8</span></button>
+            </div>
+        </aside>
+    </div>
 
     <div id="practiceOverlay" class="choice-dialog" role="dialog" aria-modal="true" aria-labelledby="practiceTitle">
         <div class="choice-card practice-card">
@@ -209,17 +224,20 @@
 
     <!-- 하단 보정 컨트롤 레이아웃 -->
     <footer class="mt-1.5 flex flex-col gap-1.5 shrink-0">
+        <!-- 음표/쉼표 선택표 (유사성의 원리 그룹핑 디자인 반영: 온음표~셋잇단음표 일괄 음표 적용, 점만 구분) -->
         <div class="grid grid-cols-8 gap-px bg-slate-300 rounded-xl overflow-hidden border border-slate-300 shadow-sm select-none text-center">
-            <div class="guide-cell bg-slate-200 text-[10px] font-bold text-slate-800">구분</div>
-            <div class="guide-cell bg-slate-100 text-[10px] font-bold text-slate-700 notation-label" data-label-key="whole">온음표(4)</div>
-            <div class="guide-cell bg-slate-100 text-[10px] font-bold text-slate-700 notation-label" data-label-key="half">2분음표(2)</div>
-            <div class="guide-cell bg-slate-100 text-[10px] font-bold text-slate-700 notation-label" data-label-key="quarter">4분음표(1)</div>
-            <div class="guide-cell bg-slate-100 text-[10px] font-bold text-slate-700 notation-label" data-label-key="eighth">8분음표(1/2)</div>
-            <div class="guide-cell bg-slate-100 text-[10px] font-bold text-slate-700 notation-label" data-label-key="sixteenth">16분음표(1/4)</div>
-            <div class="guide-cell bg-slate-200 text-[10px] font-bold text-slate-800 notation-label" data-label-key="triplet">셋잇단음표(1박)</div>
-            <div class="guide-cell bg-slate-200 text-[10px] font-bold text-slate-800 notation-label" data-label-key="dot">점</div>
+            <!-- Header Row: 음표 6종 (온음표~셋잇단음표) 유사성 통일 & 점(.)만 별도 색 구분 -->
+            <div class="guide-cell bg-slate-200 text-[10px] sm:text-xs font-black text-slate-800">구분</div>
+            <div class="guide-cell bg-slate-100 text-[10px] sm:text-xs font-bold text-slate-700 notation-label" data-label-key="whole">온음표(4)</div>
+            <div class="guide-cell bg-slate-100 text-[10px] sm:text-xs font-bold text-slate-700 notation-label" data-label-key="half">2분음표(2)</div>
+            <div class="guide-cell bg-slate-100 text-[10px] sm:text-xs font-bold text-slate-700 notation-label" data-label-key="quarter">4분음표(1)</div>
+            <div class="guide-cell bg-slate-100 text-[10px] sm:text-xs font-bold text-slate-700 notation-label" data-label-key="eighth">8분음표(1/2)</div>
+            <div class="guide-cell bg-slate-100 text-[10px] sm:text-xs font-bold text-slate-700 notation-label" data-label-key="sixteenth">16분음표(1/4)</div>
+            <div class="guide-cell bg-slate-100 text-[10px] sm:text-xs font-bold text-slate-700 notation-label" data-label-key="triplet">셋잇단음표(1)</div>
+            <!-- 점(.)만 독자적 기능이므로 색 구분 -->
+            <div class="guide-cell bg-amber-100 border-l-2 border-amber-400 text-[10px] sm:text-xs font-black text-amber-950 notation-label" data-label-key="dot">점 (.)</div>
 
-            <!-- 정교화된 음표 버튼 구성 -->
+            <!-- 정교화된 음표 버튼 구성 (셋잇단음표도 일반 음표 셀 bg-white 적용) -->
             <div class="guide-cell bg-slate-200 text-slate-900 text-xs font-extrabold border-r border-slate-200">음표</div>
             <div class="guide-cell bg-white" onclick="addNoteSmart('whole', false)">
                 <svg class="w-7 h-7" viewBox="0 0 100 100">
@@ -263,12 +281,13 @@
                     <line x1="58" y1="66" x2="58" y2="28" stroke="#000000" stroke-width="2.5"/>
                     <line x1="83" y1="66" x2="83" y2="28" stroke="#000000" stroke-width="2.5"/>
                     <path d="M 33 18 L 33 12 L 45 12 M 55 12 L 67 12 L 67 18" stroke="#000000" stroke-width="2" fill="none"/>
-                    <text x="50" y="15" font-size="13" font-weight="extrabold" text-anchor="middle" fill="#000000">3</text>
+                    <text x="50" y="15" font-size="15" font-weight="900" text-anchor="middle" fill="#000000">3</text>
                 </svg>
             </div>
-            <div id="dotButton" class="guide-cell bg-white" onclick="toggleLastDot()">
-                <span class="text-3xl font-extrabold">.</span>
+            <div id="dotButton" class="guide-cell bg-amber-50/70 border-l-2 border-amber-400" onclick="toggleLastDot()">
+                <span class="text-3xl font-black text-amber-950">.</span>
             </div>
+
 
             <!-- 정밀화된 쉼표 버튼 구성 -->
             <div class="guide-cell bg-slate-200 text-slate-900 text-xs font-extrabold border-r border-slate-200">쉼표</div>
@@ -309,7 +328,9 @@
                 </svg>
             </div>
             <div class="guide-cell bg-white text-gray-300 text-xs">—</div>
-            <div class="guide-cell bg-slate-50" aria-hidden="true"></div>
+            <div class="guide-cell bg-amber-50/70 border-l-2 border-amber-400" aria-hidden="true"></div>
+
+
         </div>
 
         <div id="bottomDisplayAndInstrumentOptions" class="playback-controls flex justify-center items-center gap-4 md:gap-6 shrink-0 py-1">

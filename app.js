@@ -706,23 +706,47 @@
         }
 
 
+        function formatFeedbackAlert(config) {
+            const { title, problem, suggestions = [] } = config;
+            const alertTitleEl = document.getElementById('alertTitle');
+            if (alertTitleEl && title) alertTitleEl.textContent = title;
+
+            let html = '';
+            if (problem) {
+                html += `
+                    <div class="alert-section-title">문제점</div>
+                    <div class="alert-problem-text">${problem}</div>
+                `;
+            }
+            if (suggestions && suggestions.length > 0) {
+                html += `
+                    <div class="alert-section-title">제안</div>
+                    <div class="alert-suggestion-list">
+                `;
+                suggestions.forEach(item => {
+                    const cleanItem = item.startsWith('•') ? item : `• ${item}`;
+                    html += `<div class="alert-suggestion-item">${cleanItem}</div>`;
+                });
+                html += `</div>`;
+            }
+            return html;
+        }
+
         function showMeasureOverflowWarning() {
             initAudio();
             const sig = `${timeSignature.top}/${timeSignature.bottom}`;
-            const msg = `
-                <div style="font-size: 15px; font-weight: 800; margin-bottom: 8px; color: #b91c1c;">
-                    ⚠️ ${sig} 마디의 길이를 넘었습니다
-                </div>
-                <div style="font-size: 14px; line-height: 1.65; font-weight: 600; color: #7f1d1d;">
-                    <strong>원인:</strong> 넣으려는 음표(쉼표) 길이가 마디에 남은 박보다 길어요.<br><br>
-                    <strong>수정 방법:</strong><br>
-                    • 더 짧은 음표나 쉼표를 골라 넣어보세요.<br>
-                    • 이미 마디가 다 찼다면 <strong>악보 오른쪽의 + 아이콘</strong> 클릭해서 다음 마디로 이동하세요. 또는 <strong>화면 위의 마디 숫자</strong>를 클릭해서 다음 마디로 이동하세요.<br>
-                    • 중간의 특정 음표를 지우고 싶다면 <strong>악보 위 음표를 더블클릭</strong>하거나 <strong>[🏷️ 선택 삭제]</strong>를 사용하세요.
-                </div>
-            `;
-            showValidationAlert(msg);
+            const html = formatFeedbackAlert({
+                title: `${sig} 마디의 길이를 넘었습니다`,
+                problem: '넣으려는 음표(쉼표) 길이가 마디에 남은 박보다 길어요.',
+                suggestions: [
+                    '더 짧은 음표나 쉼표를 골라 넣어보세요.',
+                    '이미 마디가 다 찼다면 악보 우측의 마디 번호를 클릭하여 다음 마디로 이동하세요.',
+                    '중간의 특정 음표를 지우고 싶다면 [선택 삭제]를 사용하거나 음표를 더블클릭하세요.'
+                ]
+            });
+            showValidationAlert(html, `${sig} 마디의 길이를 넘었습니다`);
         }
+
 
         function plainSpecForDuration(beats) {
             const specs = [
@@ -1048,8 +1072,8 @@
             
             const h = rhythmCanvas.height;
             if (h < 350) {
-                // 모바일 세로/가로 모드: 음표 기둥(stem: -48px)과 박자표가 상단 경계선에 잘리지 않도록 staffY 안전여백 확보 (최소 62px)
-                staffY = Math.max(62, Math.round(h * 0.25));
+                // 모바일 세로/가로 모드: 음표 기둥(stem: -48px), 셋잇단음표 [3] 브래킷 및 박자표가 상단 경계선에 절대 잘리지 않도록 staffY 안전여백 확대 (최소 72px)
+                staffY = Math.max(72, Math.round(h * 0.27));
                 visualizerY = staffY + Math.max(48, Math.round(h * 0.23));
                 blockY = visualizerY + Math.max(48, Math.round(h * 0.24));
             } else if (h > 600) {
@@ -1058,10 +1082,11 @@
                 visualizerY = staffY + Math.min(180, Math.round(h * 0.25));
                 blockY = visualizerY + Math.min(160, Math.round(h * 0.25));
             } else {
-                staffY = Math.max(64, Math.round(h * 0.24));
+                staffY = Math.max(72, Math.round(h * 0.25));
                 visualizerY = staffY + Math.round(h * 0.25);
                 blockY = visualizerY + Math.round(h * 0.26);
             }
+
             
             drawAll();
             redrawAnalog();
@@ -1653,31 +1678,58 @@
                 clearTimeout(warningTimer);
                 warningTimer = null;
             }
-            alertOverlay.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
-            alertOverlay.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            // 모바일 Chrome에서 Tailwind 임의값 클래스(translate-y-[-20px])가 파싱 안 되는 문제 방지: inline style로 제어
+            alertOverlay.style.opacity = '0';
+            alertOverlay.style.pointerEvents = 'none';
+            alertOverlay.style.transform = 'translateX(-50%) translateY(-20px)';
             warningShowing = false;
         }
 
-        function showValidationAlert(msg) {
+        function showValidationAlert(msg, customTitle = null) {
             if (warningShowing && lastWarningMessage === msg) return;
 
             playWarningTone();
             warningShowing = true;
             lastWarningMessage = msg;
 
-            // 오류는 빨간 배너 하나로만 보여 줍니다. 성공 안내용 검은 토스트와 겹치지 않게 숨깁니다.
             toast.style.opacity = '0';
             toast.style.visibility = 'hidden';
 
-            alertText.innerHTML = msg;
-            alertOverlay.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
-            alertOverlay.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            const alertTitleEl = document.getElementById('alertTitle');
+            if (typeof msg === 'string' && !msg.includes('alert-section-title') && !msg.includes('alert-problem-text')) {
+                let title = customTitle || '박자 및 입력 안내';
+                let problem = msg;
+                let suggestions = ['음표 및 쉼표 상태를 확인해 보세요.'];
+
+                if (msg.includes('6/8')) {
+                    title = '6/8 박자 셋잇단음표 제한';
+                    problem = '6/8 박자는 8분음표 3개가 기본 1묶음이 되는 겹박자예요.';
+                    suggestions = [
+                        '셋잇단음표 대신 8분음표나 16분음표 조합을 사용해 보세요.',
+                        '3박 단위 리듬 표현은 기본 8분음표 3개 입력으로 완성할 수 있습니다.'
+                    ];
+                } else if (msg.includes('셋잇단음표')) {
+                    title = '셋잇단음표 입력 안내';
+                    problem = msg;
+                    suggestions = ['다른 음표나 쉼표를 선택하여 넣어보세요.'];
+                }
+
+                alertText.innerHTML = formatFeedbackAlert({ title, problem, suggestions });
+            } else {
+                if (alertTitleEl && customTitle) alertTitleEl.textContent = customTitle;
+                alertText.innerHTML = msg;
+            }
+
+            alertOverlay.style.opacity = '1';
+            alertOverlay.style.pointerEvents = 'auto';
+            alertOverlay.style.transform = 'translateX(-50%) translateY(0)';
 
             if (warningTimer) clearTimeout(warningTimer);
             warningTimer = setTimeout(() => {
                 hideValidationAlert();
             }, 8000);
         }
+
 
         // 절대적 박자 타임라인 내부 빈 공간(Gap)을 먼저 찾아서 정밀 배치해 주는 알고리즘
         function findFirstVacantOffset(duration) {
@@ -1797,16 +1849,15 @@
             const newEnd = newStart + nextDuration;
 
             if (newEnd > limit + 0.001) {
-                const neededEighths = Math.round((newEnd - limit) / 0.5);
-                showValidationAlert(`
-    <div style="font-size: 15px; font-weight: 800; margin-bottom: 6px; color: #fef08a;">
-        ⚠️ ${timeSignature.top}/${timeSignature.bottom} 마디의 길이를 넘었습니다
-    </div>
-    <div style="font-size: 14px; line-height: 1.6;">
-        <strong>원인:</strong> 점을 붙이면 남은 박보다 음표 길이가 길어집니다.<br>
-        <strong>수정:</strong> 뒤 음표/쉼표를 선택 삭제(또는 더블클릭)하여 공간을 만든 후 다시 누르세요.
-    </div>
-`);
+                const html = formatFeedbackAlert({
+                    title: `${timeSignature.top}/${timeSignature.bottom} 마디의 길이를 넘었습니다`,
+                    problem: '점을 붙이면 음표 길이가 1.5배 길어져 마디에 남은 박을 초과해요.',
+                    suggestions: [
+                        '뒤 음표/쉼표를 [선택 삭제]하거나 더블클릭하여 공간을 확보하세요.',
+                        '더 짧은 음표에 점을 붙여보세요.'
+                    ]
+                });
+                showValidationAlert(html, `${timeSignature.top}/${timeSignature.bottom} 마디의 길이를 넘었습니다`);
                 return;
             }
 
@@ -1818,14 +1869,17 @@
             });
 
             if (conflict) {
-                const targetBeat = Math.floor(newStart + 0.0001) + 1;
-                if (Math.floor((newEnd - 0.001) + 0.0001) > Math.floor(newStart + 0.0001)) {
-                    showValidationAlert(`${targetBeat}박 안의 남은 칸이 부족합니다. <strong>원인:</strong> 점을 붙이면 뒤 기호와 겹칩니다. <strong>수정:</strong> 겹치는 뒤 음표나 쉼표를 선택 삭제한 뒤 다시 점을 누르세요.`);
-                } else {
-                    showValidationAlert('점을 붙이면 다음 음표와 겹칩니다. <strong>수정:</strong> 뒤 음표나 쉼표를 선택 삭제한 뒤 다시 점을 누르세요.');
-                }
+                const html = formatFeedbackAlert({
+                    title: '점을 붙이면 다음 음표와 겹칩니다',
+                    problem: '점이 붙어 길어진 음표가 바로 뒤에 있는 음표/쉼표 위치를 침범합니다.',
+                    suggestions: [
+                        '겹치는 뒤 음표나 쉼표를 [선택 삭제]한 뒤 다시 점을 눌러보세요.'
+                    ]
+                });
+                showValidationAlert(html, '점을 붙이면 다음 음표와 겹칩니다');
                 return;
             }
+
 
             pushUndoState();
             target.dotted = !target.dotted;
@@ -3719,28 +3773,28 @@ ${audioDataJs}
                 const scale = getCanvasNoteScale();
                 const stemOffset = 11.2 * scale;
                 const centerX = (first.x + last.x) / 2 + stemOffset;
-                // 모바일 캔버스 상단 잘림 방지: bracketY가 캔버스 탑 선(0px) 위로 나가지 않도록 최소 14px 여백 보장
-                const rawBracketY = staffY - Math.round(56 * scale);
-                const bracketY = Math.max(14, rawBracketY);
+                // 빔은 staffY-48(고정), bracketY는 빔보다 상단에 위치하여 스마트폰에서도 '3'이 절대 잘리지 않고 100% 선명 노출 (최소 18px 확보)
+                const bracketY = Math.max(18, staffY - 58);
 
                 rhythmCtx.strokeStyle = '#0f172a';
-                rhythmCtx.lineWidth = 1.8;
+                rhythmCtx.lineWidth = 2.2;
                 rhythmCtx.lineCap = 'round';
                 rhythmCtx.beginPath();
-                rhythmCtx.moveTo(first.x + stemOffset, bracketY + 6);
+                rhythmCtx.moveTo(first.x + stemOffset, bracketY + 7);
                 rhythmCtx.lineTo(first.x + stemOffset, bracketY);
-                rhythmCtx.lineTo(centerX - 11, bracketY);
-                rhythmCtx.moveTo(last.x + stemOffset, bracketY + 6);
+                rhythmCtx.lineTo(centerX - 14, bracketY);
+                rhythmCtx.moveTo(last.x + stemOffset, bracketY + 7);
                 rhythmCtx.lineTo(last.x + stemOffset, bracketY);
-                rhythmCtx.lineTo(centerX + 11, bracketY);
+                rhythmCtx.lineTo(centerX + 14, bracketY);
                 rhythmCtx.stroke();
 
                 rhythmCtx.fillStyle = '#0f172a';
-                rhythmCtx.font = `bold ${Math.max(12, Math.round(14 * scale))}px sans-serif`;
+                rhythmCtx.font = '900 16px sans-serif';
                 rhythmCtx.textBaseline = 'middle';
                 rhythmCtx.textAlign = 'center';
                 rhythmCtx.fillText('3', centerX, bracketY);
             }
+
 
             rhythmCtx.restore();
         }
@@ -4465,8 +4519,19 @@ ${audioDataJs}
                 body: '화면 아래의 <strong>V자 리듬, 정간보, 강약, 메트로놈</strong> 체크박스로 원하는 표시만 켜거나 끌 수 있습니다. 빠르기 슬라이더와 악기 선택도 여기에 있습니다.',
                 anchor: '#bottomDisplayOnlyOptionsGroup',
                 placement: 'top'
+            },
+            {
+                title: '🎉 축하합니다! 창작 준비 완료',
+                body: '도움말 학습을 모두 마쳤습니다!<br>마무리를 누르면 <strong>깨끗하게 비워진 악보</strong>에서 나만의 멋진 리듬을 직접 창작해볼 수 있습니다.',
+                anchor: null,
+                placement: 'center',
+                onEnter: () => {
+                    if (isPlaying) stopPerformance();
+                    switchMeasure(0);
+                }
             }
         ];
+
         let tutorialIndex = 0;
 
         async function togglePlay() {
@@ -4911,7 +4976,8 @@ ${audioDataJs}
             el.title.textContent = step.title;
             el.body.innerHTML = step.body;
             el.prev.disabled = tutorialIndex === 0;
-            el.next.textContent = tutorialIndex === tutorialSteps.length - 1 ? '시작하기' : '다음';
+            el.next.textContent = tutorialIndex === tutorialSteps.length - 1 ? '창작 시작하기 🎉' : '다음';
+
             hideTutorialNotationPreview();
             requestAnimationFrame(positionTutorialCard);
         }
@@ -4924,7 +4990,18 @@ ${audioDataJs}
             clearTutorialHighlight();
             hideTutorialNotationPreview();
             if (el.overlay) el.overlay.classList.remove('show');
+
+            // 도움말(온보딩) 학습 종료 시 실습 흔적을 깨끗하게 비우고 1마디로 리셋
+            if (isPlaying) stopPerformance();
+            notes = [];
+            scoreMeasures = Array.from({length: 8}, () => []);
+            activeMeasureIndex = 0;
+            syncActiveMeasureState();
+            drawAll();
+
+            showToast('🎉 이제 직접 창작을 해봅시다!', true);
         }
+
 
         function showTutorial(force = false) {
             if (!force && localStorage.getItem(TUTORIAL_STORAGE_KEY) === 'true') return;

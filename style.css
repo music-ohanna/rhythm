@@ -593,3 +593,78 @@ html {
                 border-radius: 8px;
             }
         }
+
+        /* 🎨 전문가 2차 검사 피드백 카드 & 세로 마디 리모컨 커스텀 스타일 */
+        .alert-section-title {
+            font-size: 15px;
+            font-weight: 900;
+            color: #991b1b;
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+        .alert-problem-text {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #374151;
+            line-height: 1.55;
+            margin-left: 2px;
+        }
+        .alert-suggestion-list {
+            margin-top: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .alert-suggestion-item {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #374151;
+            line-height: 1.5;
+            padding-left: 1.2rem;
+            text-indent: -1.2rem;
+        }
+
+        /* 🎛️ 세로 마디 이동 리모컨 바 (.side-tab) */
+        .side-measure-remote {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .measure-tab.side-tab {
+            width: 100%;
+            height: 38px;
+            min-height: 32px;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            color: #1e293b;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .measure-tab.side-tab:hover {
+            background: #f1f5f9;
+            border-color: #64748b;
+            color: #0f172a;
+        }
+        .measure-tab.side-tab.active {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #1d4ed8 !important;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.4) !important;
+        }
+
+        @media screen and (max-width: 639px) {
+            .measure-tab.side-tab {
+                height: 32px;
+                min-height: 30px;
+                font-size: 13px;
+                border-radius: 10px;
+            }
+        }
+
