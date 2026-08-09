@@ -284,16 +284,17 @@ html {
         @media (min-width:768px){.md\:p-3{padding:.75rem}.md\:text-sm{font-size:.875rem}.md\:text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}.md\:text-2xl{font-size:1.5rem}.md\:h-9{height:2.25rem}.md\:h-10{height:2.5rem}.md\:w-9{width:2.25rem}}
         /* 스마트폰 세로 화면: 한 화면(dvh)에 핏 되도록 뷰포트 스케일링 보정 및 세로 스크롤 허용 */
         @media (max-width: 768px) and (orientation: portrait) {
-            body { min-height:100dvh; padding:6px 6px 12px !important; overflow-x:hidden; overflow-y:auto; touch-action:manipulation; display:flex; flex-direction:column; }
-            header { flex-wrap:nowrap; gap:4px; align-items:center; flex-shrink:0; margin-bottom:4px; overflow:visible; }
-            header h1 { font-size:15px !important; line-height:1.15; white-space:nowrap; }
+            body { min-height:100dvh; padding:4px 4px 10px !important; overflow-x:hidden; overflow-y:auto; touch-action:manipulation; display:flex; flex-direction:column; }
+            header { flex-wrap:wrap !important; gap:4px; align-items:center; flex-shrink:0; margin-bottom:4px; overflow:visible; justify-content:space-between; }
+            header h1 { font-size:14px !important; line-height:1.15; white-space:nowrap; }
             header h1 > span { display:none; }
-            header > div:first-child { flex-shrink:0; gap:3px; }
-            header > div:last-child { flex:1 1 0%; min-width:0; display:flex; flex-wrap:nowrap; align-items:center; gap:3px; overflow-x:auto; overflow-y:visible; scrollbar-width:none; justify-content:flex-end; }
-            header > div:last-child::-webkit-scrollbar { display:none; }
-            .text-tool-btn { flex:0 0 auto; padding:5px 7px !important; border-width:1px; font-size:11px !important; white-space:nowrap; min-height:32px !important; }
-            #btn-help-tutorial { flex-shrink:0; margin-left:2px; }
-            .measure-navigator { gap:4px; min-height:34px; padding:2px 4px; margin-bottom:4px; flex-shrink:0; }
+            header > div:first-child { width:100%; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; gap:3px; }
+            header > div:last-child { width:100%; display:flex; flex-wrap:wrap; align-items:center; gap:2px; overflow:visible; justify-content:space-between; }
+            header > div:last-child > select { font-size:11px !important; padding:3px 5px !important; height:29px; }
+            header > div:last-child > div { gap:2px; padding:1px; }
+            .text-tool-btn { flex:0 0 auto; padding:4px 6px !important; border-width:1px; font-size:11px !important; white-space:nowrap; min-height:29px !important; }
+            #btn-help-tutorial { flex-shrink:0; }
+            .measure-navigator { gap:4px; min-height:32px; padding:2px 4px; margin-bottom:3px; flex-shrink:0; }
             .measure-project-label, .next-measure-preview { display:none; }
             .measure-tabs { display:flex; align-items:center; justify-content:center; gap:3px; width:100%; }
             .measure-tab { flex:1; width:auto; min-height:28px; padding:3px 2px; font-size:11.5px; font-weight:700; }
@@ -301,30 +302,44 @@ html {
             .measure-arrow { display:none !important; }
             #canvasNextMeasureBtn { display:none !important; }
             #canvasPrevMeasureBtn { display:none !important; }
-            #canvasArea { flex:1 1 auto !important; width:100%; height:auto !important; min-height:200px !important; max-height:none; border-radius:12px; margin-top:2px; margin-bottom:2px; }
+            #canvasArea { flex:1 1 auto !important; width:100%; height:auto !important; min-height:180px !important; max-height:none; border-radius:12px; margin-top:2px; margin-bottom:2px; }
             #timeSigArea { width:54px; height:80px; left:0; }
             footer { width:100%; flex-shrink:0; }
             footer > .grid-cols-8 { grid-template-columns:repeat(8,minmax(0,1fr)) !important; overflow:hidden; width:100%; gap:2px !important; }
-            .guide-cell { min-height:26px; padding:2px 2px; font-size:10.5px; font-weight:700; }
-            .playback-controls { flex-wrap:wrap; gap:5px !important; padding:4px 6px; font-size:11.5px; }
-            .tempo-range { width:85px; }
-            .play-buttons { grid-template-columns:1fr 1fr; gap:5px; height:38px !important; }
-            .play-buttons button { font-size:12px !important; line-height:1.15; padding:3px 6px; font-weight:800; }
+            .guide-cell { min-height:25px; padding:2px 1px; font-size:10px; font-weight:700; }
+            .playback-controls { flex-wrap:wrap; gap:4px !important; padding:3px 4px; font-size:11px; }
+            .tempo-range { width:80px; }
+            .play-buttons { grid-template-columns:1fr 1fr; gap:4px; height:36px !important; }
+            .play-buttons button { font-size:11.5px !important; line-height:1.15; padding:3px 4px; font-weight:800; }
             #toast { max-width:calc(100vw - 28px); top:10%; padding:7px 12px; font-size:13px; }
         }
 
         /* 폰 가로 모드 (landscape, 최대 900px 너비) */
         @media screen and (max-width: 900px) and (orientation: landscape) {
-            body { padding: 3px 6px !important; }
-            header h1 { font-size: 14px !important; }
-            .text-tool-btn { padding: 3px 6px !important; font-size: 10.5px !important; }
-            .measure-navigator { min-height:30px; margin-bottom:2px; padding:1px 4px; }
-            .measure-tabs { gap:3px; }
-            .measure-tab { min-height:24px; padding:1px 3px; font-size:10.5px; }
-            .measure-label-prefix { font-size:10.5px; margin-right:1px; }
+            body { min-height: 100dvh !important; padding: 2px 4px !important; overflow-x: hidden !important; overflow-y: auto !important; display: flex; flex-direction: column; }
+            header { margin-bottom: 2px !important; padding-bottom: 1px !important; flex-shrink: 0; flex-wrap: nowrap; justify-content: space-between; }
+            header h1 { font-size: 13px !important; }
+            header > div { gap: 2px !important; }
+            .text-tool-btn { padding: 2px 4px !important; font-size: 10px !important; min-height: 24px !important; }
+            #meterSelect { padding: 1px 3px !important; font-size: 10px !important; height: 24px !important; }
+            .measure-navigator { min-height:24px !important; margin-bottom:2px !important; padding:1px 4px; flex-shrink: 0; }
+            .measure-tabs { gap:2px; }
+            .measure-tab { min-height:22px !important; padding:1px 2px !important; font-size:10px !important; }
+            .measure-label-prefix { font-size:10px; margin-right:1px; }
             .next-measure-preview { display:none; }
             #canvasNextMeasureBtn { display:none !important; }
             #canvasPrevMeasureBtn { display:none !important; }
+            #canvasArea { flex: 1 1 auto !important; min-height: 110px !important; height: auto !important; margin-bottom: 2px !important; }
+            footer { flex-shrink: 0; }
+            footer > .grid-cols-8 { grid-template-columns: repeat(8, minmax(0, 1fr)) !important; gap: 1px !important; }
+            .guide-cell { min-height: 18px !important; font-size: 9px !important; padding: 1px !important; }
+            .guide-cell svg { width: 18px !important; height: 18px !important; }
+            .playback-controls { padding: 1px 3px !important; gap: 2px !important; font-size: 9.5px !important; min-height: 22px !important; }
+            .playback-controls label { font-size: 9.5px !important; }
+            .playback-controls input[type="checkbox"] { width: 12px; height: 12px; }
+            .tempo-range { width: 60px !important; }
+            .play-buttons { height: 28px !important; gap: 3px !important; }
+            .play-buttons button { font-size: 10px !important; padding: 1px 3px !important; }
         }
 
         /* 갤럭시 탭 / 아이패드 세로 모드 (768px ~ 1024px, portrait) */
@@ -354,23 +369,26 @@ html {
 
         /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만: 초슬림 자동핏 & 핀치 축소/드래그 이동 해제) */
         @media screen and (orientation: landscape) and (max-height: 500px) {
-            body { min-height: 100dvh !important; padding: 2px 6px !important; overflow-x: auto !important; overflow-y: auto !important; touch-action: manipulation !important; display: flex; flex-direction: column; }
+            body { min-height: 100dvh !important; padding: 2px 4px !important; overflow-x: hidden !important; overflow-y: auto !important; touch-action: manipulation !important; display: flex; flex-direction: column; }
             header { margin-bottom: 2px !important; padding-bottom: 1px !important; flex-shrink: 0; }
-            header h1 { font-size: 13px !important; }
-            .text-tool-btn { padding: 2px 5px !important; font-size: 10px !important; min-height: 24px !important; }
-            .measure-navigator { min-height: 24px !important; margin-bottom: 2px !important; padding: 0 4px; flex-shrink: 0; }
-            .measure-tab { flex: 1; width: auto !important; height: auto !important; min-height: 22px !important; padding: 1px 2px !important; font-size: 10px !important; }
-            .measure-label-prefix { font-size: 10px !important; margin-right: 1px !important; }
+            header h1 { font-size: 12px !important; }
+            .text-tool-btn { padding: 1px 3px !important; font-size: 9.5px !important; min-height: 22px !important; }
+            #meterSelect { padding: 1px 2px !important; font-size: 9.5px !important; height: 22px !important; }
+            .measure-navigator { min-height: 22px !important; margin-bottom: 2px !important; padding: 0 2px; flex-shrink: 0; }
+            .measure-tab { flex: 1; width: auto !important; height: auto !important; min-height: 20px !important; padding: 0 1px !important; font-size: 9.5px !important; }
+            .measure-label-prefix { font-size: 9.5px !important; margin-right: 1px !important; }
             .measure-arrow { display: none !important; }
             #canvasNextMeasureBtn { display: none !important; }
             #canvasPrevMeasureBtn { display: none !important; }
-            #canvasArea { flex: 1 1 0% !important; min-height: 140px !important; height: auto !important; margin-bottom: 2px !important; touch-action: manipulation !important; }
+            #canvasArea { flex: 1 1 0% !important; min-height: 100px !important; height: auto !important; margin-bottom: 2px !important; touch-action: manipulation !important; }
             footer { flex-shrink: 0; }
-            .guide-cell { min-height: 20px !important; font-size: 9.5px !important; padding: 1px !important; }
-            .playback-controls { padding: 2px 4px !important; gap: 3px !important; font-size: 10.5px !important; min-height: 26px !important; }
-            .tempo-range { width: 70px !important; }
-            .play-buttons { height: 30px !important; gap: 3px !important; }
-            .play-buttons button { font-size: 10.5px !important; padding: 2px 4px !important; }
+            .guide-cell { min-height: 18px !important; font-size: 9px !important; padding: 0px !important; }
+            .guide-cell svg { width: 16px !important; height: 16px !important; }
+            .playback-controls { padding: 1px 2px !important; gap: 2px !important; font-size: 9px !important; min-height: 22px !important; }
+            .playback-controls label { font-size: 9px !important; }
+            .tempo-range { width: 60px !important; }
+            .play-buttons { height: 26px !important; gap: 2px !important; }
+            .play-buttons button { font-size: 9.5px !important; padding: 1px 2px !important; }
         }
 
 
