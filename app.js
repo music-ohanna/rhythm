@@ -1072,18 +1072,18 @@
             
             const h = rhythmCanvas.height;
             if (h < 350) {
-                // 모바일 가로 모드: 음표, V자, 정간보, 하단 강약 표기(circlesY)가 160px 캔버스 내부에 100% 안착되도록 컴팩트 수직 배치
-                staffY = Math.max(54, Math.round(h * 0.33));
+                // 모바일 가로 모드(180px): 셋잇단 3 브래킷(staffY-60)이 빔선(staffY-42) 위에 시원하게 뜨고, 강약 circlesY(blockY+27)가 캔버스 바닥 180px 내부에 안착
+                staffY = Math.max(68, Math.round(h * 0.38));
                 visualizerY = staffY + 38;
-                blockY = visualizerY + 36;
+                blockY = visualizerY + 34;
             } else if (h > 600) {
                 staffY = Math.min(130, Math.round(h * 0.22));
                 visualizerY = staffY + Math.min(180, Math.round(h * 0.25));
                 blockY = visualizerY + Math.min(160, Math.round(h * 0.25));
             } else {
-                // 모바일 세로 모드: 240px 캔버스 내부에 강약 표시까지 또렷하게 100% 안착
-                staffY = Math.max(68, Math.round(h * 0.28));
-                visualizerY = staffY + 52;
+                // 모바일 세로 모드(240px): 강약 표시까지 240px 내부에 안착
+                staffY = Math.max(72, Math.round(h * 0.30));
+                visualizerY = staffY + 54;
                 blockY = visualizerY + 48;
             }
 
@@ -3531,7 +3531,10 @@ ${audioDataJs}
 
         function getCanvasNoteScale() {
             if (typeof rhythmCanvas === 'undefined' || !rhythmCanvas?.width) return 1.0;
-            return Math.min(1.0, Math.max(0.78, rhythmCanvas.width / 460));
+            // 너비 기준 스케일과 높이 기준 스케일 중 작은 값 채택 → 폰 가로 슬림 모드에서 음표 크기 확실히 줄임
+            const wScale = Math.min(1.0, Math.max(0.65, rhythmCanvas.width / 520));
+            const hScale = Math.min(1.0, Math.max(0.60, rhythmCanvas.height / 260));
+            return Math.min(wScale, hScale);
         }
 
         // 하단 입력표에서 사용한 음표 비례를 실제 악보에도 동일하게 적용합니다.
@@ -3557,7 +3560,7 @@ ${audioDataJs}
             ctx.lineCap = 'round';
             ctx.beginPath();
             ctx.moveTo(11.2 * scale, 1.5);
-            ctx.lineTo(11.2 * scale, -46);
+            ctx.lineTo(11.2 * scale, -44 * scale);
             ctx.stroke();
             ctx.restore();
         }
@@ -3720,8 +3723,9 @@ ${audioDataJs}
                 drawLearnedNoteHead(rhythmCtx, true);
                 drawLearnedStem(rhythmCtx);
                 if (n.dotted) {
+                    const s = getCanvasNoteScale();
                     rhythmCtx.beginPath();
-                    rhythmCtx.arc(30, -5, 4, 0, Math.PI * 2);
+                    rhythmCtx.arc(19 * s, -5 * s, 3.8 * s, 0, Math.PI * 2);
                     rhythmCtx.fill();
                 }
                 rhythmCtx.restore();
@@ -3740,36 +3744,38 @@ ${audioDataJs}
             };
 
             if (nonRestNotes.length > 1) {
-                const firstStemX = nonRestNotes[0].x + 11.2;
-                const lastStemX = nonRestNotes[nonRestNotes.length - 1].x + 11.2;
-                const beamY = staffY - 42;
-                drawBeamBand(firstStemX, lastStemX, beamY, 6.5);
+                const s = getCanvasNoteScale();
+                const stemOff = 11.2 * s;
+                const firstStemX = nonRestNotes[0].x + stemOff;
+                const lastStemX = nonRestNotes[nonRestNotes.length - 1].x + stemOff;
+                const beamY = staffY - 44 * s;
+                drawBeamBand(firstStemX, lastStemX, beamY, 6.5 * s);
 
                 if (group[0].type !== 'triplet') {
                     const maxLines = Math.max(...group.map(beamLineCount));
                     for (let line = 2; line <= maxLines; line++) {
-                        const y = beamY + (line - 1) * 9;
+                        const y = beamY + (line - 1) * 9 * s;
                         const connected = new Set();
                         for (let idx = 0; idx < group.length - 1; idx++) {
                             const a = group[idx];
                             const b = group[idx + 1];
                             if (beamLineCount(a) >= line && beamLineCount(b) >= line) {
-                                drawBeamBand(a.x + 11.2, b.x + 11.2, y, line === 2 ? 4.5 : 4);
+                                drawBeamBand(a.x + stemOff, b.x + stemOff, y, line === 2 ? 4.5 * s : 4 * s);
                                 connected.add(idx);
                                 connected.add(idx + 1);
                             }
                         }
                         group.forEach((n, idx) => {
                             if (beamLineCount(n) < line || connected.has(idx)) return;
-                            const stemX = n.x + 11.2;
+                            const stemX = n.x + stemOff;
                             const prev = group[idx - 1];
                             const next = group[idx + 1];
                             const neighbor = next || prev;
                             if (!neighbor) return;
                             const direction = next ? 1 : -1;
-                            const neighborDistance = Math.abs((neighbor.x + 11.2) - stemX);
+                            const neighborDistance = Math.abs((neighbor.x + stemOff) - stemX);
                             const stub = Math.min(22, Math.max(14, neighborDistance * 0.42));
-                            drawBeamBand(stemX, stemX + direction * stub, y, line === 2 ? 4.5 : 4);
+                            drawBeamBand(stemX, stemX + direction * stub, y, line === 2 ? 4.5 * s : 4 * s);
                         });
                     }
                 }
@@ -3781,23 +3787,24 @@ ${audioDataJs}
                 const scale = getCanvasNoteScale();
                 const stemOffset = 11.2 * scale;
                 const centerX = (first.x + last.x) / 2 + stemOffset;
-                // 빔선(beamY = staffY - 42) 위 공중(bracketY = staffY - 60)에 꺾쇠와 숫자 '3'을 위치시켜 잘림과 겹침 100% 차단
-                const bracketY = Math.max(4, staffY - 60);
+                // bracketY는 빔선(staffY - 44*scale)보다 최소 14px 위에 '3'이 선명하게 뜨도록 지정
+                const beamY = staffY - 44 * scale;
+                const bracketY = Math.max(4, beamY - 14);
 
                 rhythmCtx.strokeStyle = '#0f172a';
                 rhythmCtx.lineWidth = 2.2;
                 rhythmCtx.lineCap = 'round';
                 rhythmCtx.beginPath();
-                rhythmCtx.moveTo(first.x + stemOffset, bracketY + 7);
+                rhythmCtx.moveTo(first.x + stemOffset, bracketY + 6);
                 rhythmCtx.lineTo(first.x + stemOffset, bracketY);
-                rhythmCtx.lineTo(centerX - 14, bracketY);
-                rhythmCtx.moveTo(last.x + stemOffset, bracketY + 7);
+                rhythmCtx.lineTo(centerX - 12, bracketY);
+                rhythmCtx.moveTo(last.x + stemOffset, bracketY + 6);
                 rhythmCtx.lineTo(last.x + stemOffset, bracketY);
-                rhythmCtx.lineTo(centerX + 14, bracketY);
+                rhythmCtx.lineTo(centerX + 12, bracketY);
                 rhythmCtx.stroke();
 
                 rhythmCtx.fillStyle = '#0f172a';
-                rhythmCtx.font = '900 16px sans-serif';
+                rhythmCtx.font = `900 ${Math.round(13 * scale)}px sans-serif`;
                 rhythmCtx.textBaseline = 'middle';
                 rhythmCtx.textAlign = 'center';
                 rhythmCtx.fillText('3', centerX, bracketY);
@@ -4905,7 +4912,7 @@ ${audioDataJs}
         function positionTutorialCard() {
             const el = getTutorialElements();
             if (!el.card || !el.overlay || !el.overlay.classList.contains('show')) return;
-            const step = tutorialSteps[tutorialIndex];
+            const step = activeTutorialSteps[tutorialIndex] || tutorialSteps[tutorialIndex];
             const targets = normalizeTutorialTargets(getTutorialAnchor(step.anchor));
             const rect = getCombinedRect(targets);
             clearTutorialHighlight();
