@@ -3645,14 +3645,20 @@ ${audioDataJs}
                     rhythmCtx.fill();
                 }
             } else {
+                const rs = getCanvasNoteScale();
                 if (n.type === 'quarter') {
                     usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'quarterRest');
-                    if (!usedImage) drawQuarterRestSymbol(rhythmCtx, noteColor);
+                    if (!usedImage) {
+                        rhythmCtx.save();
+                        rhythmCtx.scale(rs, rs);
+                        drawQuarterRestSymbol(rhythmCtx, noteColor);
+                        rhythmCtx.restore();
+                    }
                 } else if (n.type === 'eighth') {
                     usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'eighthRest');
                     if (!usedImage) {
                         rhythmCtx.save();
-                        rhythmCtx.scale(0.78, 0.78);
+                        rhythmCtx.scale(0.78 * rs, 0.78 * rs);
                         rhythmCtx.lineWidth = 3.0;
                         rhythmCtx.lineCap = 'round';
                         rhythmCtx.lineJoin = 'round';
@@ -3673,7 +3679,7 @@ ${audioDataJs}
                     usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'sixteenthRest');
                     if (!usedImage) {
                         rhythmCtx.save();
-                        rhythmCtx.scale(0.76, 0.76);
+                        rhythmCtx.scale(0.76 * rs, 0.76 * rs);
                         drawSixteenthRestSymbol(rhythmCtx, noteColor);
                         rhythmCtx.restore();
                     }
@@ -3681,7 +3687,7 @@ ${audioDataJs}
                     usedImage = drawNotationImageSymbol(rhythmCtx, 'eighthRest', {height: 60, anchorX: 0.50, anchorY: 0.56});
                     if (!usedImage) {
                         rhythmCtx.save();
-                        rhythmCtx.scale(0.92, 0.92);
+                        rhythmCtx.scale(0.92 * rs, 0.92 * rs);
                         rhythmCtx.lineWidth = 3.7;
                         rhythmCtx.lineCap = 'round';
                         rhythmCtx.lineJoin = 'round';
@@ -3699,16 +3705,25 @@ ${audioDataJs}
                         rhythmCtx.restore();
                     }
                 } else if (n.type === 'whole') {
+                    rhythmCtx.save();
+                    rhythmCtx.scale(rs, rs);
                     rhythmCtx.fill(new Path2D(SVG.restWhole));
+                    rhythmCtx.restore();
                 } else if (n.type === 'half') {
+                    rhythmCtx.save();
+                    rhythmCtx.scale(rs, rs);
                     rhythmCtx.fill(new Path2D(SVG.restHalf));
+                    rhythmCtx.restore();
                 } else if (n.type === 'thirtysecond') {
+                    rhythmCtx.save();
+                    rhythmCtx.scale(rs, rs);
                     drawThirtySecondRestSymbol(rhythmCtx, noteColor);
+                    rhythmCtx.restore();
                 }
 
                 if (n.dotted) {
                     rhythmCtx.beginPath();
-                    rhythmCtx.arc(18, -8, 3.8, 0, Math.PI * 2);
+                    rhythmCtx.arc(18 * rs, -8 * rs, 3.8 * rs, 0, Math.PI * 2);
                     rhythmCtx.fillStyle = noteColor;
                     rhythmCtx.fill();
                 }
