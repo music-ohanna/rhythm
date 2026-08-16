@@ -1072,10 +1072,10 @@
             
             const h = rhythmCanvas.height;
             if (h < 350) {
-                // 모바일 가로 모드 등 슬림 캔버스(140px): 음표 기둥과 셋잇단 브래킷이 상단에 잘리지 않으며, V자와 정간보가 컴팩트하게 노출
-                staffY = Math.max(52, Math.round(h * 0.28));
-                const remaining = Math.max(60, h - staffY - 24);
-                visualizerY = staffY + Math.round(remaining * 0.46);
+                // 모바일 가로 모드: 셋잇단음표 [3] 브래킷(staffY - 60)이 빔선(staffY - 42) 위 공중에 시원하게 떠서 겹치지 않도록 staffY 64px 이상 확보
+                staffY = Math.max(64, Math.round(h * 0.36));
+                const remaining = Math.max(70, h - staffY - 24);
+                visualizerY = staffY + Math.round(remaining * 0.44);
                 blockY = visualizerY + Math.round(remaining * 0.48);
             } else if (h > 600) {
                 staffY = Math.min(130, Math.round(h * 0.22));
@@ -1858,7 +1858,7 @@
             if (newEnd > limit + 0.001) {
                 const html = formatFeedbackAlert({
                     title: `${timeSignature.top}/${timeSignature.bottom} 마디의 길이를 넘었습니다`,
-                    problem: '점(․)을 붙이면 해당 음표나 쉼표 본래 길이의 절반(1/2)이 더 길어져 마디의 남은 박을 초과해요. (※ 32분음표 이하 겹점 박자는 미지원)',
+                    problem: '점(․)을 붙이면 원래 음표나 쉼표 길이의 절반(0.5)만큼 길어져요.',
                     suggestions: [
                         '뒤 음표/쉼표를 [선택 삭제]하거나 더블클릭하여 공간을 확보하세요.',
                         '더 짧은 음표나 쉼표에 점을 붙여보세요.'
@@ -3742,12 +3742,13 @@ ${audioDataJs}
             if (nonRestNotes.length > 1) {
                 const firstStemX = nonRestNotes[0].x + 11.2;
                 const lastStemX = nonRestNotes[nonRestNotes.length - 1].x + 11.2;
-                drawBeamBand(firstStemX, lastStemX, staffY - 48, 6.5);
+                const beamY = staffY - 42;
+                drawBeamBand(firstStemX, lastStemX, beamY, 6.5);
 
                 if (group[0].type !== 'triplet') {
                     const maxLines = Math.max(...group.map(beamLineCount));
                     for (let line = 2; line <= maxLines; line++) {
-                        const y = staffY - 48 + (line - 1) * 9;
+                        const y = beamY + (line - 1) * 9;
                         const connected = new Set();
                         for (let idx = 0; idx < group.length - 1; idx++) {
                             const a = group[idx];
@@ -3780,8 +3781,8 @@ ${audioDataJs}
                 const scale = getCanvasNoteScale();
                 const stemOffset = 11.2 * scale;
                 const centerX = (first.x + last.x) / 2 + stemOffset;
-                // 빔은 staffY-48(고정), bracketY는 빔선(staffY-48)보다 확연히 위쪽 공중에 띄워 '3'과 꺾쇠 브래킷이 빔선 검은 띠에 파묻히지 않게 렌더링
-                const bracketY = Math.max(10, staffY - 66);
+                // 빔선(beamY = staffY - 42) 위 공중(bracketY = staffY - 60)에 꺾쇠와 숫자 '3'을 위치시켜 잘림과 겹침 100% 차단
+                const bracketY = Math.max(4, staffY - 60);
 
                 rhythmCtx.strokeStyle = '#0f172a';
                 rhythmCtx.lineWidth = 2.2;

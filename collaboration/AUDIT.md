@@ -1,9 +1,9 @@
 # 🔍 셀프 감사 보고서 (AUDIT)
 
 > **소유자**: 안티그래비티 (Solo 체제)  
-> **명세 ID**: ANONYMOUS-FOOTER-007 (도움말 카드 z-index: 100005 극대화 및 closeTutorial display=none 닫기 강화 배포)  
+> **명세 ID**: ANONYMOUS-FOOTER-008 (점음표 경고 문구 단축, 폰 가로 셋잇단 [3] 브래킷 빔선 위 공중 띄움 및 160px 슬림 핏팅 배포)  
 > **상태**: AUDIT_PASSED / DEPLOYED  
-> **감사 시각**: 2026-08-16T16:29:00+09:00  
+> **감사 시각**: 2026-08-16T16:34:00+09:00  
 
 ---
 
@@ -12,8 +12,8 @@
 - **구현 브랜치**: `main`
 - **인수인계**: `collaboration/HANDOFF.md`
 - **주요 수정 파일**:
-  - `style.css` — `.tutorial-card` z-index 3에서 100005로 수정, `#tutorialOverlay` backdrop-filter 및 opacity 강화
-  - `app.js` — `closeTutorial` display=none 닫기 집행 강화
+  - `app.js` — 점음표 경고 문구 1줄 정돈, bracketY=staffY-60 지정으로 빔선 위 공중 띄움
+  - `style.css` — 폰 가로 모드 `#canvasArea` `160px` 슬림 핏팅
 
 ---
 
@@ -21,9 +21,9 @@
 
 ### 🔴 P1 — 즉시 수정 필수
 
-- [x] **도움말 카드 z-index 극대화**: z-index: 100005 지정으로 악보 캔버스 투과 비침 현상 100% 해소.
-- [x] **오버레이 배경 가독성 강화**: rgba(15,23,42,0.45) & blur(2px)로 악보 레이어 뒤로 완벽 차단.
-- [x] **closeTutorial 닫기 수동 집행**: display:none 및 classList.remove('show')로 닫기 무결성 확보.
+- [x] **점음표 문구 단순화**: "점(․)을 붙이면 원래 음표나 쉼표 길이의 절반(0.5)만큼 길어져요." 정돈.
+- [x] **폰 가로 셋잇단 [3] 브래킷 공중 이격**: bracketY=staffY-60 지정으로 빔선 위 18px 공중에 띄워 겹침 0%.
+- [x] **폰 가로 160px 슬림 핏팅**: 160px 캔버스 높이 수직 균형으로 요소 간 간섭 무결성.
 
 ---
 
