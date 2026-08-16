@@ -1071,21 +1071,20 @@
             drawingCanvas.height = parent.clientHeight;
             
             const h = rhythmCanvas.height;
-            if (h < 350) {
-                // 모바일 세로/가로 모드: 음표, V자 박자 숫자, 정간보, 하단 강약 표기가 절대 겹치지 않고 슬림하게 핏팅
-                staffY = Math.max(46, Math.round(h * 0.21));
-                const availableForBottom = Math.max(62, h - 36 - staffY);
-                visualizerY = staffY + Math.round(availableForBottom * 0.44);
-                blockY = visualizerY + Math.round(availableForBottom * 0.48);
+            if (h < 380) {
+                // 모바일 세로/가로 모드: 음표 기둥(-48px)과 셋잇단 [3] 브래킷(-66px)이 캔버스 상단선에 절대로 잘리지 않도록 staffY 최소 76px 확보
+                staffY = Math.max(76, Math.round(h * 0.31));
+                const remaining = Math.max(90, h - staffY - 40);
+                visualizerY = staffY + Math.round(remaining * 0.46);
+                blockY = visualizerY + Math.round(remaining * 0.48);
             } else if (h > 600) {
-                // 데스크톱 모드 세로 등 세로 길이가 길 때 간격 과다 벌어짐 방지
                 staffY = Math.min(130, Math.round(h * 0.22));
                 visualizerY = staffY + Math.min(180, Math.round(h * 0.25));
                 blockY = visualizerY + Math.min(160, Math.round(h * 0.25));
             } else {
-                staffY = Math.max(60, Math.round(h * 0.23));
-                visualizerY = staffY + Math.round(h * 0.25);
-                blockY = visualizerY + Math.round(h * 0.25);
+                staffY = Math.max(78, Math.round(h * 0.26));
+                visualizerY = staffY + Math.round((h - staffY - 45) * 0.48);
+                blockY = visualizerY + Math.round((h - staffY - 45) * 0.48);
             }
 
             
@@ -3228,8 +3227,7 @@ ${audioDataJs}
                     rhythmCtx.textBaseline = 'top';
                     const label = isCompoundSixEight() ? ((c / 2) % 3) + 1 : ((c / subdivisionsPerBeat) % timeSignature.top) + 1;
                     const labelCenterOffset = isCompoundSixEight() ? cellWidth : cellWidth * 2;
-                    const vHalf = getVHalfHeight();
-                    rhythmCtx.fillText(`${label}`, cx + labelCenterOffset, visualizerY + vHalf + 3);
+                    rhythmCtx.fillText(`${label}`, cx + labelCenterOffset, visualizerY - 2);
                 }
             }
             rhythmCtx.restore();
