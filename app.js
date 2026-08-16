@@ -1072,10 +1072,10 @@
             
             const h = rhythmCanvas.height;
             if (h < 350) {
-                // 모바일 세로/가로 모드: 음표 기둥(stem), 셋잇단음표 브래킷 및 하단 강약 표기(circlesY+20px)가 절대 잘리지 않도록 동적 비율 배치
-                staffY = Math.max(48, Math.round(h * 0.22));
-                const availableForBottom = Math.max(65, h - 42 - staffY);
-                visualizerY = staffY + Math.round(availableForBottom * 0.46);
+                // 모바일 세로/가로 모드: 음표, V자 박자 숫자, 정간보, 하단 강약 표기가 절대 겹치지 않고 슬림하게 핏팅
+                staffY = Math.max(46, Math.round(h * 0.21));
+                const availableForBottom = Math.max(62, h - 36 - staffY);
+                visualizerY = staffY + Math.round(availableForBottom * 0.44);
                 blockY = visualizerY + Math.round(availableForBottom * 0.48);
             } else if (h > 600) {
                 // 데스크톱 모드 세로 등 세로 길이가 길 때 간격 과다 벌어짐 방지
@@ -1083,7 +1083,7 @@
                 visualizerY = staffY + Math.min(180, Math.round(h * 0.25));
                 blockY = visualizerY + Math.min(160, Math.round(h * 0.25));
             } else {
-                staffY = Math.max(64, Math.round(h * 0.24));
+                staffY = Math.max(60, Math.round(h * 0.23));
                 visualizerY = staffY + Math.round(h * 0.25);
                 blockY = visualizerY + Math.round(h * 0.25);
             }
@@ -1774,6 +1774,13 @@
             }
 
             if (type === 'triplet') {
+                // 셋잇단음표는 한 박(1.0) 단위 시작점(0, 1, 2, 3)에 전체 1박 자리가 완전 비어있을 때만 배치
+                if (Math.abs(vacantOffset - Math.round(vacantOffset)) > 0.001) {
+                    playTone(180, 0.08, 0.05, 'sine');
+                    showValidationAlert('⚠️ 셋잇단음표 입력 안내\n\n셋잇단음표는 1박(한 박자) 단위가 비어 있는 박자에만 입력할 수 있습니다.\n해당 박자의 기존 음표를 지우거나 비어 있는 박에서 선택해 주세요.');
+                    return;
+                }
+
                 pushUndoState();
                 removeOverlappingRange(vacantOffset, vacantOffset + 1.0);
                 notes.push({type: 'triplet', isRest: false, beatOffset: vacantOffset, dotted: false});
@@ -3216,12 +3223,13 @@ ${audioDataJs}
                 const isLabelPosition = isCompoundSixEight() ? c % 2 === 0 : c % subdivisionsPerBeat === 0;
                 if (displayLayers.v && !isCompoundSixEight() && isLabelPosition && c < totalCells) {
                     rhythmCtx.fillStyle = '#ef4444';
-                    rhythmCtx.font = 'bold 15px "Noto Sans KR"';
+                    rhythmCtx.font = 'bold 14px "Noto Sans KR"';
                     rhythmCtx.textAlign = 'center';
                     rhythmCtx.textBaseline = 'top';
                     const label = isCompoundSixEight() ? ((c / 2) % 3) + 1 : ((c / subdivisionsPerBeat) % timeSignature.top) + 1;
                     const labelCenterOffset = isCompoundSixEight() ? cellWidth : cellWidth * 2;
-                    rhythmCtx.fillText(`${label}`, cx + labelCenterOffset, visualizerY + 44);
+                    const vHalf = getVHalfHeight();
+                    rhythmCtx.fillText(`${label}`, cx + labelCenterOffset, visualizerY + vHalf + 3);
                 }
             }
             rhythmCtx.restore();
@@ -3774,8 +3782,8 @@ ${audioDataJs}
                 const scale = getCanvasNoteScale();
                 const stemOffset = 11.2 * scale;
                 const centerX = (first.x + last.x) / 2 + stemOffset;
-                // 빔은 staffY-48(고정), bracketY는 빔보다 상단에 위치하여 스마트폰에서도 '3'이 절대 잘리지 않고 100% 선명 노출 (최소 18px 확보)
-                const bracketY = Math.max(18, staffY - 58);
+                // 빔은 staffY-48(고정), bracketY는 빔선(staffY-48)보다 확연히 위쪽 공중에 띄워 '3'과 꺾쇠 브래킷이 빔선 검은 띠에 파묻히지 않게 렌더링
+                const bracketY = Math.max(10, staffY - 66);
 
                 rhythmCtx.strokeStyle = '#0f172a';
                 rhythmCtx.lineWidth = 2.2;

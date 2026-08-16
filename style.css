@@ -282,9 +282,9 @@ html {
         .-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x,0),var(--tw-translate-y))}.translate-y-\[-20px\]{transform:translateY(-20px)}.translate-y-0{transform:translateY(0)}
         .opacity-0{opacity:0}.opacity-100{opacity:1}.transition{transition:all .15s ease}.transition-all{transition:all .15s ease}.duration-300{transition-duration:.3s}.active\:scale-95:active{transform:scale(.95)}
         @media (min-width:768px){.md\:p-3{padding:.75rem}.md\:text-sm{font-size:.875rem}.md\:text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}.md\:text-2xl{font-size:1.5rem}.md\:h-9{height:2.25rem}.md\:h-10{height:2.5rem}.md\:w-9{width:2.25rem}}
-        /* 스마트폰 세로 화면: 악보(V자, 정간보, 강약)가 100% 선명하게 한눈에 노출되고 푸터 출처는 하단 여유 공간에 스크롤 배치 */
+        /* 스마트폰 세로 화면: 악보(V자, 정간보, 강약)가 100% 컴팩트하고 선명하게 한눈에 노출되고 푸터 출처는 하단 여유 공간에 스크롤 배치 */
         @media (max-width: 768px) and (orientation: portrait) {
-            body { min-height: 100dvh !important; height: auto !important; padding: 4px 4px 20px !important; overflow-x: hidden !important; overflow-y: auto !important; touch-action: manipulation; display: flex; flex-direction: column; }
+            body { min-height: 100dvh !important; height: auto !important; padding: 4px 4px 18px !important; overflow-x: hidden !important; overflow-y: auto !important; touch-action: manipulation; display: flex; flex-direction: column; }
             header { flex-wrap: wrap !important; gap: 4px; align-items: center; flex-shrink: 0; margin-bottom: 4px; overflow: visible; justify-content: space-between; }
             header h1 { font-size: 14px !important; line-height: 1.15; white-space: nowrap; }
             header h1 > span { display: none; }
@@ -302,9 +302,9 @@ html {
             .measure-arrow { display: none !important; }
             #canvasNextMeasureBtn { display: none !important; }
             #canvasPrevMeasureBtn { display: none !important; }
-            #canvasArea { flex: 1 0 auto !important; width: 100%; height: auto !important; min-height: 220px !important; border-radius: 12px; margin-top: 2px; margin-bottom: 4px; }
+            #canvasArea { flex: 0 0 auto !important; width: 100%; height: 195px !important; min-height: 195px !important; border-radius: 12px; margin-top: 2px; margin-bottom: 4px; }
             #timeSigArea { width: 54px; height: 80px; left: 0; }
-            footer { width: 100%; flex-shrink: 0; margin-top: 16px !important; padding-bottom: 16px !important; }
+            footer { width: 100%; flex-shrink: 0; margin-top: 14px !important; padding-bottom: 16px !important; }
             footer > .grid-cols-8 { grid-template-columns: repeat(8, minmax(0, 1fr)) !important; overflow: hidden; width: 100%; gap: 2px !important; }
             .guide-cell { min-height: 25px; padding: 2px 1px; font-size: 10px; font-weight: 700; }
             .playback-controls { flex-wrap: wrap; gap: 4px !important; padding: 3px 4px; font-size: 11px; }
@@ -314,7 +314,7 @@ html {
             #toast { max-width: calc(100vw - 28px); top: 10%; padding: 7px 12px; font-size: 13px; }
         }
 
-        /* 폰 가로 모드 (landscape, 최대 900px 너비): 악보 캔버스가 짓눌리지 않고 V자/정간보/강약이 무조건 또렷하게 노출되도록 min-height 210px 및 세로 스크롤 허용 */
+        /* 폰 가로 모드 (landscape, 최대 900px 너비): 악보 캔버스 155px 슬림 노출 & 하단 음표표/버튼 한 눈 노출 및 세로 스크롤 개방 */
         @media screen and (max-width: 900px) and (orientation: landscape) {
             body { min-height: 100dvh !important; height: auto !important; padding: 2px 4px 16px !important; overflow-x: hidden !important; overflow-y: auto !important; touch-action: manipulation !important; display: flex; flex-direction: column; }
             header { margin-bottom: 2px !important; padding-bottom: 1px !important; flex-shrink: 0; flex-wrap: nowrap; justify-content: space-between; }
@@ -329,8 +329,8 @@ html {
             .next-measure-preview { display:none; }
             #canvasNextMeasureBtn { display:none !important; }
             #canvasPrevMeasureBtn { display:none !important; }
-            #canvasArea { flex: 1 0 auto !important; min-height: 210px !important; height: auto !important; margin-bottom: 4px !important; }
-            footer { flex-shrink: 0; margin-top: 14px !important; padding-bottom: 16px !important; }
+            #canvasArea { flex: 0 0 auto !important; width: 100%; height: 155px !important; min-height: 155px !important; margin-bottom: 3px !important; }
+            footer { flex-shrink: 0; margin-top: 10px !important; padding-bottom: 14px !important; }
             footer > .grid-cols-8 { grid-template-columns: repeat(8, minmax(0, 1fr)) !important; gap: 1px !important; }
             .guide-cell { min-height: 18px !important; font-size: 9px !important; padding: 1px !important; }
             .guide-cell svg { width: 18px !important; height: 18px !important; }
@@ -367,7 +367,7 @@ html {
             .play-buttons button { font-size: 13.5px !important; }
         }
 
-        /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만: 초슬림 자동핏 & 세로 스크롤 개방) */
+        /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만: 슬림 155px 자동핏 & 세로 스크롤 개방) */
         @media screen and (orientation: landscape) and (max-height: 500px) {
             body { min-height: 100dvh !important; height: auto !important; padding: 2px 4px 16px !important; overflow-x: hidden !important; overflow-y: auto !important; touch-action: manipulation !important; display: flex; flex-direction: column; }
             header { margin-bottom: 2px !important; padding-bottom: 1px !important; flex-shrink: 0; }
@@ -380,8 +380,8 @@ html {
             .measure-arrow { display: none !important; }
             #canvasNextMeasureBtn { display: none !important; }
             #canvasPrevMeasureBtn { display: none !important; }
-            #canvasArea { flex: 1 0 auto !important; min-height: 200px !important; height: auto !important; margin-bottom: 4px !important; touch-action: manipulation !important; }
-            footer { flex-shrink: 0; margin-top: 14px !important; padding-bottom: 16px !important; }
+            #canvasArea { flex: 0 0 auto !important; width: 100%; height: 155px !important; min-height: 155px !important; margin-bottom: 3px !important; touch-action: manipulation !important; }
+            footer { flex-shrink: 0; margin-top: 10px !important; padding-bottom: 14px !important; }
             .guide-cell { min-height: 18px !important; font-size: 9px !important; padding: 0px !important; }
             .guide-cell svg { width: 16px !important; height: 16px !important; }
             .playback-controls { padding: 1px 2px !important; gap: 2px !important; font-size: 9px !important; min-height: 22px !important; }
