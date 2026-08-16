@@ -4,25 +4,23 @@
 > **담당자**: 안티그래비티 (Solo 체제)  
 > **상태**: DEPLOYED  
 > **작업 브랜치**: `main`  
-> **관련 수정**: 점음표 문제 텍스트 단축 정정, 폰 가로 셋잇단음표 [3] 브래킷 beamY 위 공중 이격(bracketY = staffY-60), 폰 가로 160px 슬림 핏팅 배포
+> **관련 수정**: 강약 동그라미(circlesY = blockY + blockHeight/2 + 13) 캔버스 하단 안착, 폰 세로/가로 캔버스 수직 간격 밀착, touch-action: pan-y 세로 터치 스크롤 개방 배포
 
 ---
 
-## 💡 2026-08-16 8차 개선 내용 Summary
+## 💡 2026-08-16 9차 정밀 개선 내용 Summary
 
-### ① 점음표 경고 안내 문구 단순화
-- **수정 내용**: 사용자 요청에 따라 32분음표 군더더기 괄호 문구를 100% 제거하고 깔끔하게 단축:
-  `"점(․)을 붙이면 원래 음표나 쉼표 길이의 절반(0.5)만큼 길어져요."`
+### ① 강약 표기(◎ / ○ 동그라미) 세로 및 가로 화면 하단 잘림 완전 해결
+- **원인 분석**: `circlesY`가 기존 `blockY + blockHeight/2 + 25` (약 `blockY + 39px`)로 잡혀 있어서 캔버스 바닥 밖으로 튀어나가 가로/세로 모드에서 강약 동그라미 밑부분이 잘리거나 가려졌던 문제.
+- **수정 내용**: `circlesY` 위치를 **`blockY + blockHeight/2 + 13` (약 `blockY + 27px`)로 정간보 바로 밑 13px 공백 위치에 밀착 안착**시켜, 캔버스 바닥선 위쪽에 여유 있게 강약 표기가 100% 선명히 보이도록 완전 보정.
 
-### ② 폰 가로 화면(Landscape) 셋잇단음표 숫자 '3' 빔선 파묻힘 완벽 해소
-- **원인 분석**: 슬림 캔버스에서 `staffY`가 낮아 `bracketY`가 빔선 위치(`beamY = staffY - 42`)와 동일한 수직선상에 걸쳐 빔선 검은선과 부딪혔던 현상.
-- **수정 내용**: 
-  - `staffY`를 폰 가로 모드에서 최소 **`64px`**로 확보.
-  - 셋잇단음표 브래킷/숫자 '3' 위치(`bracketY`)를 **`staffY - 60`**으로 빔선(`staffY - 42`)보다 **18px 이상 위쪽 공중에 붕 띄워 렌더링**.
-  - **결과**: 숫자 '3'과 [ 3 ] 꺾쇠가 빔선 검은 띠에 1픽셀도 파묻히거나 겹치지 않고 공중에 선명하게 붕 떠서 완벽 노출.
+### ② 수직 스케일 비율 밀착 조율 (`app.js`)
+- **수정 내용**:
+  - 폰 가로 모드(`h < 350`): `staffY = 54px`, `visualizerY = 92px`, `blockY = 128px`, `circlesY = 155px` (160px 캔버스 바닥선 위 100% 완벽 안착).
+  - 폰 세로 모드(`h >= 350`): `staffY = 68px`, `visualizerY = 120px`, `blockY = 168px`, `circlesY = 195px` (240px 캔버스 내부에 시원하게 100% 완벽 안착).
 
-### ③ 폰 가로 화면(Landscape) 160px 슬림 수직 비율 핏팅
-- **수정 내용**: `#canvasArea` 높이를 `160px`로 맞추고 `staffY = 64px`, `visualizerY = 104px`, `blockY = 142px`로 배치하여 악보 화면(4/4, V자, 정간보, 강약)과 하단 음표표/버튼이 가로 화면에서 한눈에 잘 노출되도록 핏팅 완료.
+### ③ 캔버스 터치 시 세로 터치 스크롤 차단 문제 해소 (`style.css`)
+- **수정 내용**: `#canvasArea`와 `#rhythmCanvas`, `#drawingCanvas`에 `touch-action: pan-y !important;`를 설정하여, 손가락으로 캔버스 영역 위를 문질러도 브라우저 세로 터치 스크롤이 막힘없이 자연스럽게 이뤄지도록 보정.
 
 ---
 
@@ -30,16 +28,16 @@
 
 | 검증 항목 | 결과 | 상세 내용 |
 |---|---|---|
-| 점음표 경고 문구 단순화 | ✅ 통과 | "점(․)을 붙이면 원래 음표나 쉼표 길이의 절반(0.5)만큼 길어져요." 1줄 정돈 |
-| 폰 가로 셋잇단 [3] 브래킷 공중 이격 | ✅ 통과 | bracketY = staffY - 60 지정으로 빔선 위 18px 공중에 띄워 겹침 0% |
-| 폰 가로 160px 슬림 핏팅 | ✅ 통과 | 160px 캔버스 높이 수직 균형으로 요소 간 간섭 무결성 |
+| 강약 동그라미(circlesY) 바닥 안착 | ✅ 통과 | blockY + blockHeight/2 + 13 지정으로 가로/세로 화면에서 강약 100% 표출 |
+| 수직 간격 밀착 조율 | ✅ 통과 | staffY, visualizerY, blockY 오밀조밀 안착으로 음표/V자/강약 비례 무결성 |
+| touch-action: pan-y 개방 | ✅ 통과 | #canvasArea 영역 내 세로 드래그 스크롤 자유 개방 완료 |
 
 ---
 
 ## 3. 변경 파일 목록
 
-1. `app.js` — 점음표 경고 문구 단축 정정, `bracketY = staffY - 60` / `beamY = staffY - 42` 지정, `resize()` `staffY = 64px` 확보
-2. `style.css` — 폰 가로 모드 `#canvasArea` `160px` 수직 비율 핏팅
+1. `app.js` — `circlesY = blockY + blockHeight/2 + 13` 수정, `resize()` 수직 오프셋 `staffY`, `visualizerY`, `blockY` 밀착 배치
+2. `style.css` — `#canvasArea` `touch-action: pan-y !important;` 지정으로 세로 스크롤 개방
 3. `collaboration/STATUS.md` — 상태 `DEPLOYED` 갱신
 4. `collaboration/AUDIT.md` — 셀프 감사 완료 기록
 5. `collaboration/HANDOFF.md` — 이 문서

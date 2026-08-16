@@ -1072,19 +1072,19 @@
             
             const h = rhythmCanvas.height;
             if (h < 350) {
-                // 모바일 가로 모드: 셋잇단음표 [3] 브래킷(staffY - 60)이 빔선(staffY - 42) 위 공중에 시원하게 떠서 겹치지 않도록 staffY 64px 이상 확보
-                staffY = Math.max(64, Math.round(h * 0.36));
-                const remaining = Math.max(70, h - staffY - 24);
-                visualizerY = staffY + Math.round(remaining * 0.44);
-                blockY = visualizerY + Math.round(remaining * 0.48);
+                // 모바일 가로 모드: 음표, V자, 정간보, 하단 강약 표기(circlesY)가 160px 캔버스 내부에 100% 안착되도록 컴팩트 수직 배치
+                staffY = Math.max(54, Math.round(h * 0.33));
+                visualizerY = staffY + 38;
+                blockY = visualizerY + 36;
             } else if (h > 600) {
                 staffY = Math.min(130, Math.round(h * 0.22));
                 visualizerY = staffY + Math.min(180, Math.round(h * 0.25));
                 blockY = visualizerY + Math.min(160, Math.round(h * 0.25));
             } else {
-                staffY = Math.max(76, Math.round(h * 0.26));
-                visualizerY = staffY + Math.round((h - staffY - 40) * 0.48);
-                blockY = visualizerY + Math.round((h - staffY - 40) * 0.48);
+                // 모바일 세로 모드: 240px 캔버스 내부에 강약 표시까지 또렷하게 100% 안착
+                staffY = Math.max(68, Math.round(h * 0.28));
+                visualizerY = staffY + 52;
+                blockY = visualizerY + 48;
             }
 
             
@@ -4292,7 +4292,7 @@ ${audioDataJs}
         // 셈여림 표시는 각 박의 첫 번째 정간보 칸 중심 바로 아래에 정렬합니다.
         function drawCountInCircles(startX, beatWidth, totalBeats, blockY, blockHeight) {
             rhythmCtx.save();
-            const circlesY = blockY + blockHeight/2 + 25;
+            const circlesY = blockY + blockHeight/2 + 13;
             const compound = isCompoundSixEight();
             const displayBeatCount = compound ? 6 : totalBeats;
             const displayBeatWidth = compound ? beatWidth / 2 : beatWidth;
