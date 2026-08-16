@@ -1858,10 +1858,10 @@
             if (newEnd > limit + 0.001) {
                 const html = formatFeedbackAlert({
                     title: `${timeSignature.top}/${timeSignature.bottom} 마디의 길이를 넘었습니다`,
-                    problem: '점(․)을 붙이면 본래 음표 길이의 반(0.5배)이 더 길어져 마디의 남은 박을 초과해요.',
+                    problem: '점(․)을 붙이면 해당 음표나 쉼표 본래 길이의 절반(1/2)이 더 길어져 마디의 남은 박을 초과해요. (※ 32분음표 이하 겹점 박자는 미지원)',
                     suggestions: [
                         '뒤 음표/쉼표를 [선택 삭제]하거나 더블클릭하여 공간을 확보하세요.',
-                        '더 짧은 음표에 점을 붙여보세요.'
+                        '더 짧은 음표나 쉼표에 점을 붙여보세요.'
                     ]
                 });
                 showValidationAlert(html, `${timeSignature.top}/${timeSignature.bottom} 마디의 길이를 넘었습니다`);
@@ -3576,7 +3576,6 @@ ${audioDataJs}
 
             if (!n.isRest) {
                 if (n.type === 'half') {
-                    // 2분음표는 가운데 가로선이 보이도록 흰색 채움 없이 얇은 외곽선으로 그립니다.
                     drawLearnedNoteHead(rhythmCtx, false);
                     drawLearnedStem(rhythmCtx);
                 } else if (n.type === 'eighth') {
@@ -3595,7 +3594,6 @@ ${audioDataJs}
                         rhythmCtx.fill(new Path2D(SVG.flag16_2));
                     }
                 } else if (n.type === 'whole') {
-                    // 참고 이미지처럼 작고 선명한 가로 타원으로 그려 중앙선이 관통해 보이게 합니다.
                     rhythmCtx.save();
                     rhythmCtx.rotate(-0.09);
                     rhythmCtx.lineWidth = 3.2;
@@ -3622,7 +3620,9 @@ ${audioDataJs}
 
                 if (n.dotted) {
                     rhythmCtx.beginPath();
-                    rhythmCtx.arc(n.type === 'whole' ? 32 : 30, -5, 4, 0, Math.PI * 2);
+                    // 점 위치: 음표 머리 우측(x=19, y=-5)에 배치하여 뒤따라오는 음표 머리/기둥과 겹침 완전 해소
+                    const dotX = (n.type === 'whole' ? 22 : 19);
+                    rhythmCtx.arc(dotX, -5, 3.8, 0, Math.PI * 2);
                     rhythmCtx.fillStyle = noteColor;
                     rhythmCtx.fill();
                 }
@@ -3690,7 +3690,7 @@ ${audioDataJs}
 
                 if (n.dotted) {
                     rhythmCtx.beginPath();
-                    rhythmCtx.arc(24, -10, 4, 0, Math.PI * 2);
+                    rhythmCtx.arc(18, -8, 3.8, 0, Math.PI * 2);
                     rhythmCtx.fillStyle = noteColor;
                     rhythmCtx.fill();
                 }
