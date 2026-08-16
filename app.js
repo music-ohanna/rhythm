@@ -1072,19 +1072,20 @@
             
             const h = rhythmCanvas.height;
             if (h < 350) {
-                // 모바일 세로/가로 모드: 음표 기둥(stem: -48px), 셋잇단음표 [3] 브래킷 및 박자표가 상단 경계선에 절대 잘리지 않도록 staffY 안전여백 확대 (최소 72px)
-                staffY = Math.max(72, Math.round(h * 0.27));
-                visualizerY = staffY + Math.max(48, Math.round(h * 0.23));
-                blockY = visualizerY + Math.max(48, Math.round(h * 0.24));
+                // 모바일 세로/가로 모드: 음표 기둥(stem), 셋잇단음표 브래킷 및 하단 강약 표기(circlesY+20px)가 절대 잘리지 않도록 동적 비율 배치
+                staffY = Math.max(48, Math.round(h * 0.22));
+                const availableForBottom = Math.max(65, h - 42 - staffY);
+                visualizerY = staffY + Math.round(availableForBottom * 0.46);
+                blockY = visualizerY + Math.round(availableForBottom * 0.48);
             } else if (h > 600) {
                 // 데스크톱 모드 세로 등 세로 길이가 길 때 간격 과다 벌어짐 방지
                 staffY = Math.min(130, Math.round(h * 0.22));
                 visualizerY = staffY + Math.min(180, Math.round(h * 0.25));
                 blockY = visualizerY + Math.min(160, Math.round(h * 0.25));
             } else {
-                staffY = Math.max(72, Math.round(h * 0.25));
+                staffY = Math.max(64, Math.round(h * 0.24));
                 visualizerY = staffY + Math.round(h * 0.25);
-                blockY = visualizerY + Math.round(h * 0.26);
+                blockY = visualizerY + Math.round(h * 0.25);
             }
 
             
