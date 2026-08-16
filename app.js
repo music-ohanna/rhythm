@@ -3586,15 +3586,25 @@ ${audioDataJs}
                     if (!usedImage) {
                         drawLearnedNoteHead(rhythmCtx, true);
                         drawLearnedStem(rhythmCtx);
+                        // 꼬리(flag)를 scale 변환 후 그려서 기둥 끝에 정확히 밀착
+                        rhythmCtx.save();
+                        const fs = getCanvasNoteScale();
+                        rhythmCtx.scale(fs, fs);
                         rhythmCtx.fill(new Path2D(SVG.flag8));
+                        rhythmCtx.restore();
                     }
                 } else if (n.type === 'sixteenth') {
                     usedImage = !n.practiceGhost && drawNotationImageSymbol(rhythmCtx, 'sixteenthNote');
                     if (!usedImage) {
                         drawLearnedNoteHead(rhythmCtx, true);
                         drawLearnedStem(rhythmCtx);
+                        // 꼬리(flag)를 scale 변환 후 그려서 기둥 끝에 정확히 밀착
+                        rhythmCtx.save();
+                        const fs = getCanvasNoteScale();
+                        rhythmCtx.scale(fs, fs);
                         rhythmCtx.fill(new Path2D(SVG.flag16_1));
                         rhythmCtx.fill(new Path2D(SVG.flag16_2));
+                        rhythmCtx.restore();
                     }
                 } else if (n.type === 'whole') {
                     rhythmCtx.save();
@@ -3613,9 +3623,13 @@ ${audioDataJs}
                 } else if (n.type === 'thirtysecond') {
                     drawLearnedNoteHead(rhythmCtx, true);
                     drawLearnedStem(rhythmCtx);
+                    rhythmCtx.save();
+                    const fs = getCanvasNoteScale();
+                    rhythmCtx.scale(fs, fs);
                     rhythmCtx.fill(new Path2D(SVG.flag16_1));
                     rhythmCtx.fill(new Path2D(SVG.flag16_2));
                     rhythmCtx.fill(new Path2D(SVG.flag32_3));
+                    rhythmCtx.restore();
                 } else if (n.type === 'triplet') {
                     drawLearnedNoteHead(rhythmCtx, true);
                     drawLearnedStem(rhythmCtx);
@@ -3623,9 +3637,10 @@ ${audioDataJs}
 
                 if (n.dotted) {
                     rhythmCtx.beginPath();
-                    // 점 위치: 음표 머리 우측(x=19, y=-5)에 배치하여 뒤따라오는 음표 머리/기둥과 겹침 완전 해소
-                    const dotX = (n.type === 'whole' ? 22 : 19);
-                    rhythmCtx.arc(dotX, -5, 3.8, 0, Math.PI * 2);
+                    // 점 위치: 음표 머리 우측에 scale 비례 배치
+                    const ds = getCanvasNoteScale();
+                    const dotX = (n.type === 'whole' ? 22 : 19) * ds;
+                    rhythmCtx.arc(dotX, -5 * ds, 3.8 * ds, 0, Math.PI * 2);
                     rhythmCtx.fillStyle = noteColor;
                     rhythmCtx.fill();
                 }
