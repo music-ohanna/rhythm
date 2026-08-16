@@ -282,36 +282,36 @@ html {
         .-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x,0),var(--tw-translate-y))}.translate-y-\[-20px\]{transform:translateY(-20px)}.translate-y-0{transform:translateY(0)}
         .opacity-0{opacity:0}.opacity-100{opacity:1}.transition{transition:all .15s ease}.transition-all{transition:all .15s ease}.duration-300{transition-duration:.3s}.active\:scale-95:active{transform:scale(.95)}
         @media (min-width:768px){.md\:p-3{padding:.75rem}.md\:text-sm{font-size:.875rem}.md\:text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}.md\:text-2xl{font-size:1.5rem}.md\:h-9{height:2.25rem}.md\:h-10{height:2.5rem}.md\:w-9{width:2.25rem}}
-        /* 스마트폰 세로 화면: 한 화면(dvh)에 핏 되도록 뷰포트 스케일링 보정 및 세로 스크롤 허용 */
+        /* 스마트폰 세로 화면: 한 화면(dvh) 핏 및 세로 스크롤을 통해 푸터 출처 100% 노출 보장 */
         @media (max-width: 768px) and (orientation: portrait) {
-            body { min-height:100dvh; padding:4px 4px 10px !important; overflow-x:hidden; overflow-y:auto; touch-action:manipulation; display:flex; flex-direction:column; }
-            header { flex-wrap:wrap !important; gap:4px; align-items:center; flex-shrink:0; margin-bottom:4px; overflow:visible; justify-content:space-between; }
-            header h1 { font-size:14px !important; line-height:1.15; white-space:nowrap; }
-            header h1 > span { display:none; }
-            header > div:first-child { width:100%; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; gap:3px; }
-            header > div:last-child { width:100%; display:flex; flex-wrap:wrap; align-items:center; gap:2px; overflow:visible; justify-content:space-between; }
-            header > div:last-child > select { font-size:11px !important; padding:3px 5px !important; height:29px; }
-            header > div:last-child > div { gap:2px; padding:1px; }
-            .text-tool-btn { flex:0 0 auto; padding:4px 6px !important; border-width:1px; font-size:11px !important; white-space:nowrap; min-height:29px !important; }
-            #btn-help-tutorial { flex-shrink:0; }
-            .measure-navigator { gap:4px; min-height:32px; padding:2px 4px; margin-bottom:3px; flex-shrink:0; }
-            .measure-project-label, .next-measure-preview { display:none; }
-            .measure-tabs { display:flex; align-items:center; justify-content:center; gap:3px; width:100%; }
-            .measure-tab { flex:1; width:auto; min-height:28px; padding:3px 2px; font-size:11.5px; font-weight:700; }
-            .measure-label-prefix { font-size:11.5px; margin-right:2px; }
-            .measure-arrow { display:none !important; }
-            #canvasNextMeasureBtn { display:none !important; }
-            #canvasPrevMeasureBtn { display:none !important; }
-            #canvasArea { flex:1 1 auto !important; width:100%; height:auto !important; min-height:180px !important; max-height:none; border-radius:12px; margin-top:2px; margin-bottom:2px; }
-            #timeSigArea { width:54px; height:80px; left:0; }
-            footer { width:100%; flex-shrink:0; }
-            footer > .grid-cols-8 { grid-template-columns:repeat(8,minmax(0,1fr)) !important; overflow:hidden; width:100%; gap:2px !important; }
-            .guide-cell { min-height:25px; padding:2px 1px; font-size:10px; font-weight:700; }
-            .playback-controls { flex-wrap:wrap; gap:4px !important; padding:3px 4px; font-size:11px; }
-            .tempo-range { width:80px; }
-            .play-buttons { grid-template-columns:1fr 1fr; gap:4px; height:36px !important; }
-            .play-buttons button { font-size:11.5px !important; line-height:1.15; padding:3px 4px; font-weight:800; }
-            #toast { max-width:calc(100vw - 28px); top:10%; padding:7px 12px; font-size:13px; }
+            body { min-height: 100dvh !important; height: auto !important; padding: 4px 4px 16px !important; overflow-x: hidden !important; overflow-y: auto !important; touch-action: manipulation; display: flex; flex-direction: column; }
+            header { flex-wrap: wrap !important; gap: 4px; align-items: center; flex-shrink: 0; margin-bottom: 4px; overflow: visible; justify-content: space-between; }
+            header h1 { font-size: 14px !important; line-height: 1.15; white-space: nowrap; }
+            header h1 > span { display: none; }
+            header > div:first-child { width: 100%; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 3px; }
+            header > div:last-child { width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 2px; overflow: visible; justify-content: space-between; }
+            header > div:last-child > select { font-size: 11px !important; padding: 3px 5px !important; height: 29px; }
+            header > div:last-child > div { gap: 2px; padding: 1px; }
+            .text-tool-btn { flex: 0 0 auto; padding: 4px 6px !important; border-width: 1px; font-size: 11px !important; white-space: nowrap; min-height: 29px !important; }
+            #btn-help-tutorial { flex-shrink: 0; }
+            .measure-navigator { gap: 4px; min-height: 32px; padding: 2px 4px; margin-bottom: 3px; flex-shrink: 0; }
+            .measure-project-label, .next-measure-preview { display: none; }
+            .measure-tabs { display: flex; align-items: center; justify-content: center; gap: 3px; width: 100%; }
+            .measure-tab { flex: 1; width: auto; min-height: 28px; padding: 3px 2px; font-size: 11.5px; font-weight: 700; }
+            .measure-label-prefix { font-size: 11.5px; margin-right: 2px; }
+            .measure-arrow { display: none !important; }
+            #canvasNextMeasureBtn { display: none !important; }
+            #canvasPrevMeasureBtn { display: none !important; }
+            #canvasArea { flex: 1 1 auto !important; width: 100%; height: auto !important; min-height: 160px !important; max-height: none; border-radius: 12px; margin-top: 2px; margin-bottom: 2px; }
+            #timeSigArea { width: 54px; height: 80px; left: 0; }
+            footer { width: 100%; flex-shrink: 0; margin-top: 4px; padding-bottom: 12px; }
+            footer > .grid-cols-8 { grid-template-columns: repeat(8, minmax(0, 1fr)) !important; overflow: hidden; width: 100%; gap: 2px !important; }
+            .guide-cell { min-height: 25px; padding: 2px 1px; font-size: 10px; font-weight: 700; }
+            .playback-controls { flex-wrap: wrap; gap: 4px !important; padding: 3px 4px; font-size: 11px; }
+            .tempo-range { width: 80px; }
+            .play-buttons { grid-template-columns: 1fr 1fr; gap: 4px; height: 36px !important; }
+            .play-buttons button { font-size: 11.5px !important; line-height: 1.15; padding: 3px 4px; font-weight: 800; }
+            #toast { max-width: calc(100vw - 28px); top: 10%; padding: 7px 12px; font-size: 13px; }
         }
 
         /* 폰 가로 모드 (landscape, 최대 900px 너비) */
