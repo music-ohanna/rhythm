@@ -1,9 +1,9 @@
 # 🔍 셀프 감사 보고서 (AUDIT)
 
 > **소유자**: 안티그래비티 (Solo 체제)  
-> **명세 ID**: ANONYMOUS-FOOTER-006 (점음표/점쉼표 절반 이론 서술, 튜토리얼 팝업 flex 겹침 해결, 부점리듬 점X좌표 19px 이격 배포)  
+> **명세 ID**: ANONYMOUS-FOOTER-007 (도움말 카드 z-index: 100005 극대화 및 closeTutorial display=none 닫기 강화 배포)  
 > **상태**: AUDIT_PASSED / DEPLOYED  
-> **감사 시각**: 2026-08-16T16:22:00+09:00  
+> **감사 시각**: 2026-08-16T16:29:00+09:00  
 
 ---
 
@@ -12,8 +12,8 @@
 - **구현 브랜치**: `main`
 - **인수인계**: `collaboration/HANDOFF.md`
 - **주요 수정 파일**:
-  - `app.js` — 점음표/점쉼표 1/2 절반 음악 이론 서술 교정, 32분음표 미지원 안내 추가, dotX=19px 점 위치 정정
-  - `style.css` — `.tutorial-card` flex column 레이아웃 적용으로 모바일 팝업 겹침 해결
+  - `style.css` — `.tutorial-card` z-index 3에서 100005로 수정, `#tutorialOverlay` backdrop-filter 및 opacity 강화
+  - `app.js` — `closeTutorial` display=none 닫기 집행 강화
 
 ---
 
@@ -21,9 +21,9 @@
 
 ### 🔴 P1 — 즉시 수정 필수
 
-- [x] **점음표/점쉼표 이론 및 32분음표 미지원 고지**: "점(․)을 붙이면 해당 음표나 쉼표 본래 길이의 절반(1/2)이 더 길어져 (32분음표 미지원)" 정정.
-- [x] **튜토리얼 팝업 카드 모바일 겹침 해소**: `.tutorial-card` flex-column 적용으로 텍스트 및 버튼 상하 겹침 100% 해소.
-- [x] **부점리듬 점8분음표 점 위치 보정**: 음표 머리 직후 `x=19px` 안착으로 뒤 16분음표 머리/기둥과 겹침 0%.
+- [x] **도움말 카드 z-index 극대화**: z-index: 100005 지정으로 악보 캔버스 투과 비침 현상 100% 해소.
+- [x] **오버레이 배경 가독성 강화**: rgba(15,23,42,0.45) & blur(2px)로 악보 레이어 뒤로 완벽 차단.
+- [x] **closeTutorial 닫기 수동 집행**: display:none 및 classList.remove('show')로 닫기 무결성 확보.
 
 ---
 

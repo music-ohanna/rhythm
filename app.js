@@ -4999,7 +4999,10 @@ ${audioDataJs}
             }
             clearTutorialHighlight();
             hideTutorialNotationPreview();
-            if (el.overlay) el.overlay.classList.remove('show');
+            if (el.overlay) {
+                el.overlay.classList.remove('show');
+                el.overlay.style.display = 'none';
+            }
 
             // 도움말(온보딩) 학습 종료 시 실습 흔적을 깨끗하게 비우고 1마디로 리셋
             if (isPlaying) stopPerformance();
@@ -5017,6 +5020,8 @@ ${audioDataJs}
             if (!force && localStorage.getItem(TUTORIAL_STORAGE_KEY) === 'true') return;
             const el = getTutorialElements();
             if (!el.overlay) return;
+            el.overlay.style.display = 'block';
+            el.overlay.classList.add('show');
             // 모바일(세로 폰) 화면에서는 + 버튼이 없으므로 skipOnMobile 스텝 제외
             const isMobile = window.matchMedia('(max-width: 768px) and (orientation: portrait)').matches
                 || (window.innerWidth <= 768 && window.innerHeight > window.innerWidth);
