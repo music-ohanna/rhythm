@@ -309,12 +309,11 @@ html {
             .guide-cell { min-height: 25px; padding: 2px 1px; font-size: 10px; font-weight: 700; }
             .playback-controls { flex-wrap: wrap; gap: 4px !important; padding: 3px 4px; font-size: 11px; }
             .tempo-range { width: 80px; }
-            .play-buttons { grid-template-columns: 1fr 1fr; gap: 4px; height: 36px !important; }
             .play-buttons button { font-size: 11.5px !important; line-height: 1.15; padding: 3px 4px; font-weight: 800; }
             #toast { max-width: calc(100vw - 28px); top: 10%; padding: 7px 12px; font-size: 13px; }
         }
 
-        /* 폰 가로 모드 (landscape, 최대 900px 너비): 악보 캔버스 185px 노출 & 하단 음표표/버튼 한 눈 노출 및 세로 스크롤 개방 */
+        /* 폰 가로 모드 (landscape, 최대 900px 너비): 악보 캔버스 145px 슬림 노출 & 하단 음표표/버튼 한 눈 노출 및 세로 스크롤 개방 */
         @media screen and (max-width: 900px) and (orientation: landscape) {
             body { min-height: 100dvh !important; height: auto !important; padding: 2px 4px 12px !important; overflow-x: hidden !important; overflow-y: auto !important; touch-action: manipulation !important; display: flex; flex-direction: column; }
             header { margin-bottom: 2px !important; padding-bottom: 1px !important; flex-shrink: 0; flex-wrap: nowrap; justify-content: space-between; }
@@ -329,7 +328,7 @@ html {
             .next-measure-preview { display:none; }
             #canvasNextMeasureBtn { display:none !important; }
             #canvasPrevMeasureBtn { display:none !important; }
-            #canvasArea { flex: 0 0 auto !important; width: 100%; height: 185px !important; min-height: 185px !important; margin-bottom: 3px !important; }
+            #canvasArea { flex: 0 0 auto !important; width: 100%; height: 145px !important; min-height: 145px !important; margin-bottom: 3px !important; }
             footer { flex-shrink: 0; margin-top: 8px !important; padding-bottom: 10px !important; }
             footer > .grid-cols-8 { grid-template-columns: repeat(8, minmax(0, 1fr)) !important; gap: 1px !important; }
             .guide-cell { min-height: 18px !important; font-size: 9px !important; padding: 1px !important; }
@@ -367,7 +366,7 @@ html {
             .play-buttons button { font-size: 13.5px !important; }
         }
 
-        /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만: 슬림 185px 자동핏 & 세로 스크롤 개방) */
+        /* 폰 가로 모드 범용 (orientation: landscape, 높이 500px 미만: 슬림 145px 자동핏 & 세로 스크롤 개방) */
         @media screen and (orientation: landscape) and (max-height: 500px) {
             body { min-height: 100dvh !important; height: auto !important; padding: 2px 4px 12px !important; overflow-x: hidden !important; overflow-y: auto !important; touch-action: manipulation !important; display: flex; flex-direction: column; }
             header { margin-bottom: 2px !important; padding-bottom: 1px !important; flex-shrink: 0; }
@@ -380,15 +379,14 @@ html {
             .measure-arrow { display: none !important; }
             #canvasNextMeasureBtn { display: none !important; }
             #canvasPrevMeasureBtn { display: none !important; }
-            #canvasArea { flex: 0 0 auto !important; width: 100%; height: 185px !important; min-height: 185px !important; margin-bottom: 3px !important; touch-action: manipulation !important; }
+            #canvasArea { flex: 0 0 auto !important; width: 100%; height: 145px !important; min-height: 145px !important; margin-bottom: 3px !important; touch-action: manipulation !important; }
             footer { flex-shrink: 0; margin-top: 8px !important; padding-bottom: 10px !important; }
             .guide-cell { min-height: 18px !important; font-size: 9px !important; padding: 0px !important; }
             .guide-cell svg { width: 16px !important; height: 16px !important; }
-            .playback-controls { padding: 1px 2px !important; gap: 2px !important; font-size: 9px !important; min-height: 22px !important; }
+            .playback-controls { padding: 1px 3px !important; gap: 2px !important; font-size: 9px !important; min-height: 22px !important; }
             .playback-controls label { font-size: 9px !important; }
-            .tempo-range { width: 60px !important; }
-            .play-buttons { height: 26px !important; gap: 2px !important; }
             .play-buttons button { font-size: 9.5px !important; padding: 1px 2px !important; }
+        }
         }
 
 

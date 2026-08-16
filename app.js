@@ -1071,10 +1071,10 @@
             drawingCanvas.height = parent.clientHeight;
             
             const h = rhythmCanvas.height;
-            if (h < 380) {
-                // 모바일 세로/가로 모드: 음표 기둥(-48px)과 셋잇단 [3] 브래킷(-66px)이 캔버스 상단선에 절대로 잘리지 않도록 staffY 최소 76px 확보
-                staffY = Math.max(76, Math.round(h * 0.31));
-                const remaining = Math.max(90, h - staffY - 40);
+            if (h < 350) {
+                // 모바일 가로 모드 등 슬림 캔버스(140px): 음표 기둥과 셋잇단 브래킷이 상단에 잘리지 않으며, V자와 정간보가 컴팩트하게 노출
+                staffY = Math.max(52, Math.round(h * 0.28));
+                const remaining = Math.max(60, h - staffY - 24);
                 visualizerY = staffY + Math.round(remaining * 0.46);
                 blockY = visualizerY + Math.round(remaining * 0.48);
             } else if (h > 600) {
@@ -1082,9 +1082,9 @@
                 visualizerY = staffY + Math.min(180, Math.round(h * 0.25));
                 blockY = visualizerY + Math.min(160, Math.round(h * 0.25));
             } else {
-                staffY = Math.max(78, Math.round(h * 0.26));
-                visualizerY = staffY + Math.round((h - staffY - 45) * 0.48);
-                blockY = visualizerY + Math.round((h - staffY - 45) * 0.48);
+                staffY = Math.max(76, Math.round(h * 0.26));
+                visualizerY = staffY + Math.round((h - staffY - 40) * 0.48);
+                blockY = visualizerY + Math.round((h - staffY - 40) * 0.48);
             }
 
             
@@ -1858,7 +1858,7 @@
             if (newEnd > limit + 0.001) {
                 const html = formatFeedbackAlert({
                     title: `${timeSignature.top}/${timeSignature.bottom} 마디의 길이를 넘었습니다`,
-                    problem: '점을 붙이면 음표 길이가 1.5배 길어져 마디에 남은 박을 초과해요.',
+                    problem: '점(․)을 붙이면 본래 음표 길이의 반(0.5배)이 더 길어져 마디의 남은 박을 초과해요.',
                     suggestions: [
                         '뒤 음표/쉼표를 [선택 삭제]하거나 더블클릭하여 공간을 확보하세요.',
                         '더 짧은 음표에 점을 붙여보세요.'
@@ -3224,10 +3224,10 @@ ${audioDataJs}
                     rhythmCtx.fillStyle = '#ef4444';
                     rhythmCtx.font = 'bold 14px "Noto Sans KR"';
                     rhythmCtx.textAlign = 'center';
-                    rhythmCtx.textBaseline = 'top';
+                    rhythmCtx.textBaseline = 'middle';
                     const label = isCompoundSixEight() ? ((c / 2) % 3) + 1 : ((c / subdivisionsPerBeat) % timeSignature.top) + 1;
                     const labelCenterOffset = isCompoundSixEight() ? cellWidth : cellWidth * 2;
-                    rhythmCtx.fillText(`${label}`, cx + labelCenterOffset, visualizerY - 2);
+                    rhythmCtx.fillText(`${label}`, cx + labelCenterOffset, visualizerY - 4);
                 }
             }
             rhythmCtx.restore();
