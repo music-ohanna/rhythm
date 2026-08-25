@@ -4962,7 +4962,7 @@ ${audioDataJs}
             el.card.style.setProperty('--arrow-left', '50%');
             el.card.style.setProperty('--arrow-top', '50%');
 
-            if (!rect || step.placement === 'center') {
+            if (!rect) {
                 el.card.style.left = '50%';
                 el.card.style.top = '50%';
                 el.card.style.transform = 'translate(-50%, -50%)';
