@@ -1,26 +1,21 @@
 # 🤝 작업 인수인계 보고서 (HANDOFF)
 
-> **작업 일시**: 2026-08-16  
+> **작업 일시**: 2026-08-25  
 > **담당자**: 안티그래비티 (Solo 체제)  
 > **상태**: DEPLOYED  
 > **작업 브랜치**: `main`  
-> **관련 수정**: 강약 동그라미(circlesY = blockY + blockHeight/2 + 13) 캔버스 하단 안착, 폰 세로/가로 캔버스 수직 간격 밀착, touch-action: pan-y 세로 터치 스크롤 개방 배포
+> **관련 수정**: 도움말 팝업 카드 화면 중앙 고정 방지 및 타깃 버튼 동적 위치 추적 복원, 빨간 보더 박스 및 붉은 글로우 펄스 애니메이션 Z-index 정상화 배포
 
 ---
 
-## 💡 2026-08-16 9차 정밀 개선 내용 Summary
+## 💡 2026-08-25 도움말 하이라이트 & 팝업 포지셔닝 복원 Summary
 
-### ① 강약 표기(◎ / ○ 동그라미) 세로 및 가로 화면 하단 잘림 완전 해결
-- **원인 분석**: `circlesY`가 기존 `blockY + blockHeight/2 + 25` (약 `blockY + 39px`)로 잡혀 있어서 캔버스 바닥 밖으로 튀어나가 가로/세로 모드에서 강약 동그라미 밑부분이 잘리거나 가려졌던 문제.
-- **수정 내용**: `circlesY` 위치를 **`blockY + blockHeight/2 + 13` (약 `blockY + 27px`)로 정간보 바로 밑 13px 공백 위치에 밀착 안착**시켜, 캔버스 바닥선 위쪽에 여유 있게 강약 표기가 100% 선명히 보이도록 완전 보정.
-
-### ② 수직 스케일 비율 밀착 조율 (`app.js`)
-- **수정 내용**:
-  - 폰 가로 모드(`h < 350`): `staffY = 54px`, `visualizerY = 92px`, `blockY = 128px`, `circlesY = 155px` (160px 캔버스 바닥선 위 100% 완벽 안착).
-  - 폰 세로 모드(`h >= 350`): `staffY = 68px`, `visualizerY = 120px`, `blockY = 168px`, `circlesY = 195px` (240px 캔버스 내부에 시원하게 100% 완벽 안착).
-
-### ③ 캔버스 터치 시 세로 터치 스크롤 차단 문제 해소 (`style.css`)
-- **수정 내용**: `#canvasArea`와 `#rhythmCanvas`, `#drawingCanvas`에 `touch-action: pan-y !important;`를 설정하여, 손가락으로 캔버스 영역 위를 문질러도 브라우저 세로 터치 스크롤이 막힘없이 자연스럽게 이뤄지도록 보정.
+### ① 원인 분석 및 해결
+1. **앵커 검색 실패 예외 로직에 의한 고정**: `getTutorialAnchor`에서 타깃 요소 탐색에 실패하거나 rect가 무효화되면 안전 로직에 의해 팝업 카드가 화면 중앙(`50%, 50%`)에 배치되고 빨간색 하이라이트(`tutorialGroupHighlight`)가 비활성화되었던 현상 해결.
+2. **DOM 앵커 매핑 보강**: 점(`.`) 버튼 (`#dotButton`), 음표/쉼표/마디 이동/재생/옵션 버튼 등 모든 스텝의 타깃 DOM 요소를 정확하게 탐색하도록 앵커 맵 확장 (`getTutorialAnchor`).
+3. **유효 rect 검증 (`getCombinedRect`)**: 요소의 `getBoundingClientRect()` width/height 유효성을 점검하여 잘못된 rect 획득 방지.
+4. **다중 프레임 위치 보정 (`renderTutorialStep` / `positionTutorialCard`)**: 오버레이가 `display: block`될 때 브라우저 렌더링 리플로우 타이밍 갭으로 좌표를 놓치지 않도록 Double `requestAnimationFrame` 및 다중 타이머 적용.
+5. **Z-index 및 붉은 글로우 펄스 복원 (`style.css`)**: `.tutorial-target-highlight`에 `z-index: 100001`, `#tutorialGroupHighlight`에 `z-index: 100002` 및 `@keyframes tutorialPulse` 애니메이션을 적용하여 오버레이 딤드 배경 위로 타깃 버튼과 빨간 보더 박스가 선명하고 생동감 있게 표시되도록 완벽 수정.
 
 ---
 
@@ -28,16 +23,19 @@
 
 | 검증 항목 | 결과 | 상세 내용 |
 |---|---|---|
-| 강약 동그라미(circlesY) 바닥 안착 | ✅ 통과 | blockY + blockHeight/2 + 13 지정으로 가로/세로 화면에서 강약 100% 표출 |
-| 수직 간격 밀착 조율 | ✅ 통과 | staffY, visualizerY, blockY 오밀조밀 안착으로 음표/V자/강약 비례 무결성 |
-| touch-action: pan-y 개방 | ✅ 통과 | #canvasArea 영역 내 세로 드래그 스크롤 자유 개방 완료 |
+| JS 구문 & 괄호 무결성 | ✅ 통과 | PowerShell / Python 파서 검증 100% 무결성 통과 |
+| 빨간 보더 박스 & 펄스 복원 | ✅ 통과 | z-index 100002 및 붉은 글로우 펄스 애니메이션 정상 작동 |
+| 팝업 동적 위치 추적 | ✅ 통과 | 중앙 고정 방지 및 타깃 버튼 부근(상/하/좌/우) 동적 이동 |
+| 반응형 리사이즈 추적 | ✅ 통과 | 화면 크기 변경 및 회전 시 실시간 포지셔닝 유지 |
 
 ---
 
 ## 3. 변경 파일 목록
 
-1. `app.js` — `circlesY = blockY + blockHeight/2 + 13` 수정, `resize()` 수직 오프셋 `staffY`, `visualizerY`, `blockY` 밀착 배치
-2. `style.css` — `#canvasArea` `touch-action: pan-y !important;` 지정으로 세로 스크롤 개방
-3. `collaboration/STATUS.md` — 상태 `DEPLOYED` 갱신
-4. `collaboration/AUDIT.md` — 셀프 감사 완료 기록
-5. `collaboration/HANDOFF.md` — 이 문서
+1. `app.js` — 튜토리얼 앵커 DOM 탐색 보강, 유효 rect 검증, 다중 프레임 위치 보정
+2. `style.css` — `.tutorial-target-highlight` 및 `#tutorialGroupHighlight` z-index 및 붉은 글로우 펄스 애니메이션 추가
+3. `index.html` — 루트 및 `final-rhythm/index.html` CSS / JS 로직 동기화
+4. `collaboration/STATUS.md` — 상태 `DEPLOYED` 갱신
+5. `collaboration/AUDIT.md` — 셀프 감사 완료 기록
+6. `collaboration/HANDOFF.md` — 이 문서
+

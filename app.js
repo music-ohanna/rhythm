@@ -4901,9 +4901,15 @@ ${audioDataJs}
                 return document.getElementById('bottomDisplayAndInstrumentOptions');
             }
             if (anchor === 'dotButton' || anchor === '#dotButton') {
-                return document.getElementById('dotButton') || Array.from(document.querySelectorAll('.guide-cell[onclick]')).find(el => (el.getAttribute('onclick') || '').includes('toggleLastDot'));
+                return document.getElementById('dotButton') || document.querySelector('#dotButton') || Array.from(document.querySelectorAll('.guide-cell[onclick]')).find(el => (el.getAttribute('onclick') || '').includes('toggleLastDot'));
             }
-            return document.querySelector(anchor);
+            if (typeof anchor === 'string') {
+                const cleanId = anchor.replace(/^#/, '');
+                const elById = document.getElementById(cleanId);
+                if (elById) return elById;
+                try { return document.querySelector(anchor); } catch(e) { return null; }
+            }
+            return null;
         }
 
         function normalizeTutorialTargets(target) {
@@ -4912,8 +4918,13 @@ ${audioDataJs}
         }
 
         function getCombinedRect(targets) {
-            const rects = normalizeTutorialTargets(targets).map(el => el.getBoundingClientRect());
-            if (!rects.length) return null;
+            const validTargets = normalizeTutorialTargets(targets).filter(el => {
+                if (!el || typeof el.getBoundingClientRect !== 'function') return false;
+                const r = el.getBoundingClientRect();
+                return r.width > 0 || r.height > 0;
+            });
+            if (!validTargets.length) return null;
+            const rects = validTargets.map(el => el.getBoundingClientRect());
             const left = Math.min(...rects.map(r => r.left));
             const top = Math.min(...rects.map(r => r.top));
             const right = Math.max(...rects.map(r => r.right));
@@ -4951,7 +4962,7 @@ ${audioDataJs}
             el.card.style.setProperty('--arrow-left', '50%');
             el.card.style.setProperty('--arrow-top', '50%');
 
-            if (!rect) {
+            if (!rect || step.placement === 'center') {
                 el.card.style.left = '50%';
                 el.card.style.top = '50%';
                 el.card.style.transform = 'translate(-50%, -50%)';
@@ -4972,10 +4983,7 @@ ${audioDataJs}
             let left = rect.left + rect.width / 2 - cardRect.width / 2;
             let top = rect.bottom + gap;
 
-            if (placement === 'center') {
-                left = rect.left + rect.width / 2 - cardRect.width / 2;
-                top = rect.top + rect.height / 2 - cardRect.height / 2;
-            } else if (placement === 'bottom') {
+            if (placement === 'bottom') {
                 top = rect.bottom + gap;
                 if (top + cardRect.height > vh - pad) placement = 'top';
             } else if (placement === 'top') {
@@ -5027,7 +5035,12 @@ ${audioDataJs}
             el.next.textContent = tutorialIndex === activeTutorialSteps.length - 1 ? '창작 시작하기 🎉' : '다음';
 
             hideTutorialNotationPreview();
-            requestAnimationFrame(positionTutorialCard);
+            requestAnimationFrame(() => {
+                positionTutorialCard();
+                requestAnimationFrame(positionTutorialCard);
+            });
+            setTimeout(positionTutorialCard, 50);
+            setTimeout(positionTutorialCard, 150);
         }
 
         function closeTutorial() {

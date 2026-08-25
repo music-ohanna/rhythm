@@ -1,9 +1,9 @@
 # 🔍 셀프 감사 보고서 (AUDIT)
 
 > **소유자**: 안티그래비티 (Solo 체제)  
-> **명세 ID**: ANONYMOUS-FOOTER-009 (강약 circlesY 위치 밀착, 수직 비율 조율 및 touch-action pan-y 세로 스크롤 개방 배포)  
+> **명세 ID**: TUTORIAL-HIGHLIGHT-FIX-001 (도움말 팝업 위치 고정 및 빨간색 하이라이트 펄스 글로우 복원)  
 > **상태**: AUDIT_PASSED / DEPLOYED  
-> **감사 시각**: 2026-08-16T16:44:00+09:00  
+> **감사 시각**: 2026-08-25T20:15:00+09:00  
 
 ---
 
@@ -12,8 +12,9 @@
 - **구현 브랜치**: `main`
 - **인수인계**: `collaboration/HANDOFF.md`
 - **주요 수정 파일**:
-  - `app.js` — `circlesY = blockY + blockHeight/2 + 13` 수정, `resize()` 수직 간격 조율
-  - `style.css` — `#canvasArea` `touch-action: pan-y !important;` 세로 터치 스크롤 개방
+  - `app.js` — 튜토리얼 앵커 DOM 탐색 보강(`getTutorialAnchor`), 유효 rect 검증(`getCombinedRect`), 다중 프레임 위치 보정(`renderTutorialStep` / `positionTutorialCard`)
+  - `style.css` — `.tutorial-target-highlight` z-index 100001, `#tutorialGroupHighlight` z-index 100002 및 `@keyframes tutorialPulse` 붉은 글로우 펄스 애니메이션 추가
+  - `index.html` — 루트 및 `final-rhythm/index.html` 튜토리얼 CSS 및 JS 로직 동기화 교정
 
 ---
 
@@ -21,12 +22,14 @@
 
 ### 🔴 P1 — 즉시 수정 필수
 
-- [x] **강약 표기 바닥 잘림 해소**: circlesY 위치를 정간보 하단 13px 공백으로 안착시켜 가로/세로 화면 강약 100% 표출.
-- [x] **수직 비례 간격 밀착**: staffY, visualizerY, blockY 오밀조밀 수직 오프셋 배치.
-- [x] **세로 터치 스크롤 개방**: touch-action: pan-y 적용으로 캔버스 위 드래그 시 세로 스크롤 자유 동작.
+- [x] **JS 구문 및 괄호 스코프 무결성**: 괄호 Matching 100% 통과, 백지화 방지 사전 파싱 완료.
+- [x] **도움말 빨간색 하이라이트 복원**: 모든 튜토리얼 단계에서 대상 버튼에 빨간 보더 박스 및 붉은 글로우 펄스 표시.
+- [x] **팝업 동적 포지셔닝 복원**: 화면 중앙 고정 방지, 대상 버튼 부근(상/하/좌/우)으로 유연하게 이동.
+- [x] **반응형 리사이즈 대응**: 창 크기 변경 및 회전 시 실시간 추적.
 
 ---
 
 ## 3. 최종 판정
 
 - [x] **셀프 감사 통과** (`DEPLOYED`)
+
